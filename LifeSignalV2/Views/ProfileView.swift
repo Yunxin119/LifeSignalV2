@@ -93,27 +93,6 @@ struct ProfileView: View {
                     }
                 }
                 
-                // Account Settings
-                Section(header: Text("ACCOUNT SETTINGS")) {
-                    NavigationLink(destination: EmptyView()) {
-                        HStack {
-                            Image(systemName: "person.crop.circle.badge.exclamationmark")
-                                .foregroundColor(.red)
-                            Text("Emergency Contacts")
-                        }
-                    }
-                    
-                    // Notification Settings
-                    NavigationLink(destination: EmptyView()) {
-                        HStack {
-                            Image(systemName: "bell")
-                                .foregroundColor(.blue)
-                            Text("Notification Settings")
-                        }
-                    }
-                    
-                }
-                
                 // App Settings
                 Section(header: Text("APP SETTINGS")) {
                     NavigationLink(destination: EmptyView()) {

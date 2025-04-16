@@ -60,6 +60,24 @@ def get_health_history():
     serializable_history = []
     for item in history:
         item['_id'] = str(item['_id'])
+        
+        # Check if recommendations are missing, and generate them if needed
+        if 'recommendations' not in item:
+            risk_score = 0
+            # Get risk score from analysis_result if available
+            if 'analysis_result' in item and 'risk_score' in item['analysis_result']:
+                risk_score = item['analysis_result']['risk_score']
+            
+            # Generate recommendations based on health data
+            recommendations = HealthService.generate_recommendations(
+                risk_score=risk_score,
+                heart_rate=item.get('heart_rate', 0),
+                blood_oxygen=item.get('blood_oxygen', 0)
+            )
+            
+            # Add recommendations to the item
+            item['recommendations'] = recommendations
+        
         serializable_history.append(item)
     
     return jsonify({

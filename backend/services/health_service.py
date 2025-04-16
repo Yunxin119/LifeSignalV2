@@ -63,8 +63,13 @@ class HealthService:
             prediction = anomaly_detector.predict(features)
             is_anomaly = prediction[0] == -1
             
-            # Calculate risk score
+            # Calculate base risk score
             risk_score = cls.calculate_risk_score(heart_rate, blood_oxygen)
+            
+            # If the ML model detected an anomaly, increase the risk score
+            if is_anomaly and risk_score < 40:
+                # Boost the risk score if ML detected an anomaly but calculated risk is low
+                risk_score = max(risk_score, 40)  # Ensure at least moderate risk for ML-detected anomalies
             
             # Get user context for AI analysis
             user = User.get_by_id(user_id)
@@ -100,18 +105,32 @@ class HealthService:
             metrics_to_save = {}
             if additional_metrics:
                 metrics_to_save.update(additional_metrics)
+            
+            # Get recommendations based on risk score and metrics
+            recommendations = cls.generate_recommendations(risk_score, heart_rate, blood_oxygen)
+            
+            # Store analysis results and recommendations at top level and in nested object
             metrics_to_save['analysis_result'] = {
                 'is_anomaly': bool(is_anomaly),
-                'risk_score': risk_score
+                'risk_score': risk_score,
+                'recommendations': recommendations  # Include recommendations in analysis_result
             }
             
-            # Save data to database
+            # Save data to database with recommendations at top level 
             health_data_id = HealthData.create(
                 user_id=user_id,
                 heart_rate=heart_rate,
                 blood_oxygen=blood_oxygen,
                 additional_metrics=metrics_to_save
             )
+            
+            # Update the document to add recommendations at top level
+            HealthData.update(health_data_id, {
+                'recommendations': recommendations,
+                'is_anomaly': bool(is_anomaly),
+                'risk_score': risk_score,
+                'ai_analysis': ai_analysis
+            })
             
             result['health_data_id'] = health_data_id
             
@@ -139,14 +158,19 @@ class HealthService:
         hr_normal_low, hr_normal_high = 60, 100
         bo_normal_low = 95
         
-        # Calculate heart rate risk
+        # Calculate heart rate risk with improved sensitivity to high heart rates
         if hr_normal_low <= heart_rate <= hr_normal_high:
             hr_risk = 0
         else:
-            # Calculate how far from normal range
-            hr_deviation = min(abs(heart_rate - hr_normal_low), 
-                             abs(heart_rate - hr_normal_high))
-            hr_risk = min(100, (hr_deviation / 20) * 100)  # 20 BPM deviation = 100% risk
+            # Calculate deviation and apply a non-linear scaling for higher values
+            if heart_rate > hr_normal_high:
+                # Higher risk for elevated heart rates (exponential scaling)
+                hr_deviation = heart_rate - hr_normal_high
+                hr_risk = min(100, 25 + (hr_deviation / 10) * 75)  # Start at 25% risk at 101 BPM
+            else:
+                # Lower heart rate (below normal)
+                hr_deviation = hr_normal_low - heart_rate
+                hr_risk = min(100, (hr_deviation / 20) * 100)
         
         # Calculate blood oxygen risk
         if blood_oxygen >= bo_normal_low:
@@ -195,6 +219,16 @@ class HealthService:
                 "Continue monitoring your vital signs",
                 "Consider contacting your healthcare provider if symptoms persist",
                 "Take rest and stay hydrated"
+            ])
+        
+        # Add specific heart rate recommendations regardless of overall risk
+        elif heart_rate > 100 and heart_rate <= 150:
+            # Specific recommendations for elevated heart rate
+            hr_severity = "significantly " if heart_rate > 120 else ""
+            recommendations.extend([
+                f"Heart rate is {hr_severity}elevated at {int(heart_rate)} BPM",
+                "Consider resting and monitoring for other symptoms",
+                "If heart rate remains elevated, contact your healthcare provider"
             ])
         
         # Low risk or normal conditions

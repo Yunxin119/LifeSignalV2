@@ -24,8 +24,8 @@ struct HealthData: Identifiable, Decodable, Equatable {
         case id = "_id"
         case heartRate = "heart_rate"
         case bloodOxygen = "blood_oxygen"
-        case timestamp
-        case createdAt = "created_at"
+        case timestamp = "created_at"  // Use created_at as the primary timestamp field
+        case updatedAt = "updated_at"
         case additionalMetrics = "additional_metrics"
         case aiAnalysis = "ai_analysis"
         case recommendations
@@ -34,6 +34,8 @@ struct HealthData: Identifiable, Decodable, Equatable {
         case anomalyScore = "anomaly_score"
         case trendAnalysis = "trend_analysis"
         case analysisResult = "analysis_result"
+        case activityLevel = "activity_level"
+        case temperature
     }
     
     enum AdditionalMetricsKeys: String, CodingKey {
@@ -54,73 +56,96 @@ struct HealthData: Identifiable, Decodable, Equatable {
         heartRate = try container.decode(Double.self, forKey: .heartRate)
         bloodOxygen = try container.decode(Double.self, forKey: .bloodOxygen)
         
-        // Handle the timestamp - try multiple field names
+        // Handle the timestamp
         if let timestampValue = try? container.decode(String.self, forKey: .timestamp) {
             timestamp = timestampValue
-        } else if let createdAtValue = try? container.decode(String.self, forKey: .createdAt) {
-            timestamp = createdAtValue
         } else {
-            print("Warning: Could not find timestamp or created_at in response")
+            print("Warning: Could not find created_at timestamp in response")
             timestamp = ISO8601DateFormatter().string(from: Date())
         }
         
-        // Try direct access to analysis_result at top level
-        if let analysisResultContainer = try? container.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult) {
-            isAnomaly = (try? analysisResultContainer.decode(Bool.self, forKey: .isAnomaly)) ?? false
-            riskScore = (try? analysisResultContainer.decode(Double.self, forKey: .riskScore)) ?? 0.0
-            
-            if let recArray = try? analysisResultContainer.decode([String].self, forKey: .recommendations) {
-                recommendations = recArray
-            } else if let singleRec = try? analysisResultContainer.decode(String.self, forKey: .recommendations) {
-                recommendations = [singleRec]
-            }
-        } else if let topLevelIsAnomaly = try? container.decode(Bool.self, forKey: .isAnomaly) {
-            isAnomaly = topLevelIsAnomaly
-        } else {
-            do {
-                let additionalMetrics = try container.nestedContainer(keyedBy: AdditionalMetricsKeys.self, forKey: .additionalMetrics)
-                let analysisResult = try additionalMetrics.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult)
-                isAnomaly = try analysisResult.decode(Bool.self, forKey: .isAnomaly)
-            } catch {
-                print("Warning: Could not find isAnomaly in expected locations: \(error)")
-                isAnomaly = false
-            }
-        }
+        // Default values for required properties
+        var foundIsAnomaly = false
+        var foundRiskScore = false
+        var foundRecommendations = false
+        isAnomaly = false
+        riskScore = 0.0
+        recommendations = []
         
-        // Recommendation logic - this might not be in the response at all,
-        // so initialize it here if we haven't already
+        // Try to get recommendations from top level first
         if let topLevelRecommendations = try? container.decode([String].self, forKey: .recommendations) {
             recommendations = topLevelRecommendations
+            foundRecommendations = true
         } else if let singleRec = try? container.decode(String.self, forKey: .recommendations) {
             recommendations = [singleRec]
-        } else {
-            // If not set in analysis_result block above and not present at top level
-            do {
-                let additionalMetrics = try container.nestedContainer(keyedBy: AdditionalMetricsKeys.self, forKey: .additionalMetrics)
-                let analysisResult = try additionalMetrics.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult)
-                if let recArray = try? analysisResult.decode([String].self, forKey: .recommendations) {
+            foundRecommendations = true
+        }
+        
+        // Try to get anomaly flag from top level
+        if let topLevelIsAnomaly = try? container.decode(Bool.self, forKey: .isAnomaly) {
+            isAnomaly = topLevelIsAnomaly
+            foundIsAnomaly = true
+        }
+        
+        // Try to get risk score from top level
+        if let topLevelRiskScore = try? container.decode(Double.self, forKey: .riskScore) {
+            riskScore = topLevelRiskScore
+            foundRiskScore = true
+        }
+        
+        // Try to get values from analysis_result at top level
+        if let analysisResultContainer = try? container.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult) {
+            // Get anomaly flag if not already found
+            if !foundIsAnomaly {
+                isAnomaly = (try? analysisResultContainer.decode(Bool.self, forKey: .isAnomaly)) ?? false
+                foundIsAnomaly = true
+            }
+            
+            // Get risk score if not already found
+            if !foundRiskScore {
+                riskScore = (try? analysisResultContainer.decode(Double.self, forKey: .riskScore)) ?? 0.0
+                foundRiskScore = true
+            }
+            
+            // Get recommendations if not already found
+            if !foundRecommendations {
+                if let recArray = try? analysisResultContainer.decode([String].self, forKey: .recommendations) {
                     recommendations = recArray
-                } else if let singleRec = try? analysisResult.decode(String.self, forKey: .recommendations) {
+                    foundRecommendations = true
+                } else if let singleRec = try? analysisResultContainer.decode(String.self, forKey: .recommendations) {
                     recommendations = [singleRec]
-                } else {
-                    recommendations = []
+                    foundRecommendations = true
                 }
-            } catch {
-                print("Warning: Could not find recommendations in any expected location")
-                recommendations = []
             }
         }
         
-        if let topLevelRiskScore = try? container.decode(Double.self, forKey: .riskScore) {
-            riskScore = topLevelRiskScore
-        } else {
+        // If still not found, try in additional_metrics -> analysis_result
+        if !foundIsAnomaly || !foundRiskScore || !foundRecommendations {
             do {
-                let additionalMetrics = try container.nestedContainer(keyedBy: AdditionalMetricsKeys.self, forKey: .additionalMetrics)
-                let analysisResult = try additionalMetrics.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult)
-                riskScore = try analysisResult.decode(Double.self, forKey: .riskScore)
+                if let additionalMetrics = try? container.nestedContainer(keyedBy: AdditionalMetricsKeys.self, forKey: .additionalMetrics),
+                   let analysisResult = try? additionalMetrics.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult) {
+                    
+                    // Get anomaly flag if not already found
+                    if !foundIsAnomaly {
+                        isAnomaly = (try? analysisResult.decode(Bool.self, forKey: .isAnomaly)) ?? false
+                    }
+                    
+                    // Get risk score if not already found
+                    if !foundRiskScore {
+                        riskScore = (try? analysisResult.decode(Double.self, forKey: .riskScore)) ?? 0.0
+                    }
+                    
+                    // Get recommendations if not already found
+                    if !foundRecommendations {
+                        if let recArray = try? analysisResult.decode([String].self, forKey: .recommendations) {
+                            recommendations = recArray
+                        } else if let singleRec = try? analysisResult.decode(String.self, forKey: .recommendations) {
+                            recommendations = [singleRec]
+                        }
+                    }
+                }
             } catch {
-                print("Warning: Could not find riskScore in expected locations: \(error)")
-                riskScore = 0
+                print("Warning: Could not decode from additional_metrics.analysis_result: \(error)")
             }
         }
         
@@ -134,12 +159,12 @@ struct HealthData: Identifiable, Decodable, Equatable {
         }
         
         // Try to decode AI analysis if present
-        if let aiResponse = try? container.decode([String: String].self, forKey: .aiAnalysis) {
-            // If it's a dictionary, extract the relevant part
-            aiAnalysis = aiResponse["ai_response"] ?? aiResponse.description
-        } else if let aiResponseString = try? container.decode(String.self, forKey: .aiAnalysis) {
+        if let aiResponseString = try? container.decode(String.self, forKey: .aiAnalysis) {
             // If it's a string, use it directly
             aiAnalysis = aiResponseString
+        } else if let aiResponse = try? container.decode([String: String].self, forKey: .aiAnalysis) {
+            // If it's a dictionary, extract the relevant part
+            aiAnalysis = aiResponse["ai_response"] ?? aiResponse.description
         } else {
             aiAnalysis = nil
         }
@@ -178,6 +203,16 @@ struct HealthData: Identifiable, Decodable, Equatable {
         iso8601DateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         
         if let date = iso8601DateFormatter.date(from: timestamp) {
+            return date
+        }
+        
+        // Try RFC 1123 date format (the format used by the backend)
+        let rfc1123DateFormatter = DateFormatter()
+        rfc1123DateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        rfc1123DateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+        rfc1123DateFormatter.timeZone = TimeZone(abbreviation: "GMT")
+        
+        if let date = rfc1123DateFormatter.date(from: timestamp) {
             return date
         }
         
