@@ -14,7 +14,7 @@ class PairingService:
     PAIRING_COLLECTION = "pairing_codes"
     USER_COLLECTION = "users"
     
-    # Pairing code expiration time (in minutes)
+    # Pairing code expiration time
     EXPIRATION_MINUTES = 10
     
     @staticmethod

@@ -1,7 +1,8 @@
 import numpy as np
 from sklearn.ensemble import IsolationForest
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
+import pandas as pd
 from config import DEBUG
 from models.health_data import HealthData
 from models.user import User
@@ -222,4 +223,94 @@ class HealthService:
             return HealthData.get_by_user_id(user_id, limit=limit)
         except Exception as e:
             logger.error(f"Error getting user health history: {e}")
-            return [] 
+            return []
+    
+    @classmethod
+    def get_health_trends(cls, user_id, days=30):
+        """
+        Analyze health data trends for a user over a specified period
+        
+        Args:
+            user_id (str): User ID
+            days (int): Number of days to analyze
+            
+        Returns:
+            dict: Health trends analysis
+        """
+        try:
+            # Get health data for the specified period
+            collection = HealthData.get_collection()
+            start_date = datetime.now() - timedelta(days=days)
+            
+            # Query database for data points in the period
+            cursor = collection.find({
+                'user_id': user_id,
+                'created_at': {'$gte': start_date}
+            }).sort('created_at', 1)  # Sort by timestamp ascending
+            
+            # Convert to list
+            data_points = list(cursor)
+            
+            if not data_points:
+                return {
+                    'error': 'Not enough data for analysis',
+                    'message': f'No health data available for the past {days} days'
+                }
+            
+            # Extract heart rate and blood oxygen values
+            heart_rates = [float(dp.get('heart_rate', 0)) for dp in data_points if 'heart_rate' in dp]
+            blood_oxygen = [float(dp.get('blood_oxygen', 0)) for dp in data_points if 'blood_oxygen' in dp]
+            
+            if not heart_rates or not blood_oxygen:
+                return {
+                    'error': 'Incomplete data for analysis',
+                    'message': 'Missing heart rate or blood oxygen data'
+                }
+                
+            # Calculate statistics
+            hr_stats = {
+                'mean': np.mean(heart_rates),
+                'std': np.std(heart_rates),
+                'min': np.min(heart_rates),
+                'max': np.max(heart_rates)
+            }
+            
+            bo_stats = {
+                'mean': np.mean(blood_oxygen),
+                'std': np.std(blood_oxygen),
+                'min': np.min(blood_oxygen),
+                'max': np.max(blood_oxygen)
+            }
+            
+            # Determine trends
+            if len(heart_rates) >= 3:
+                # Calculate linear regression slope for heart rate trend
+                x = list(range(len(heart_rates)))
+                hr_coef = np.polyfit(x, heart_rates, 1)[0]
+                hr_trend = "increasing" if hr_coef > 0.5 else "decreasing" if hr_coef < -0.5 else "stable"
+                
+                # Calculate linear regression slope for blood oxygen trend
+                bo_coef = np.polyfit(x, blood_oxygen, 1)[0]
+                bo_trend = "increasing" if bo_coef > 0.05 else "decreasing" if bo_coef < -0.05 else "stable"
+            else:
+                hr_trend = "stable"
+                bo_trend = "stable"
+                
+            # Add trends to stats
+            hr_stats['trend'] = hr_trend
+            bo_stats['trend'] = bo_trend
+            
+            # Create response
+            return {
+                'days_analyzed': days,
+                'data_points': len(data_points),
+                'heart_rate': hr_stats,
+                'blood_oxygen': bo_stats
+            }
+            
+        except Exception as e:
+            logger.error(f"Error analyzing health trends: {e}")
+            return {
+                'error': str(e),
+                'message': 'Failed to analyze health trends'
+            } 

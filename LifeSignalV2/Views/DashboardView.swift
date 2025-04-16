@@ -8,181 +8,6 @@
 import SwiftUI
 import Combine
 
-// Health data models
-struct HealthData: Identifiable, Decodable, Equatable {
-    let id: String
-    let heartRate: Double
-    let bloodOxygen: Double
-    let timestamp: Date
-    let isAnomaly: Bool
-    let riskScore: Double
-    let recommendations: [String]
-    var aiAnalysis: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id = "_id"
-        case heartRate = "heart_rate"
-        case bloodOxygen = "blood_oxygen"
-        case timestamp = "created_at"
-        case additionalMetrics = "additional_metrics"
-        case aiAnalysis = "ai_analysis"
-    }
-    
-    enum AdditionalMetricsKeys: String, CodingKey {
-        case analysisResult = "analysis_result"
-    }
-    
-    enum AnalysisResultKeys: String, CodingKey {
-        case isAnomaly = "is_anomaly"
-        case riskScore = "risk_score"
-        case recommendations
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(String.self, forKey: .id)
-        heartRate = try container.decode(Double.self, forKey: .heartRate)
-        bloodOxygen = try container.decode(Double.self, forKey: .bloodOxygen)
-        
-        let timestampString = try container.decode(String.self, forKey: .timestamp)
-        let dateFormatter = ISO8601DateFormatter()
-        timestamp = dateFormatter.date(from: timestampString) ?? Date()
-        
-        let additionalMetrics = try container.nestedContainer(keyedBy: AdditionalMetricsKeys.self, forKey: .additionalMetrics)
-        let analysisResult = try additionalMetrics.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult)
-        
-        isAnomaly = try analysisResult.decode(Bool.self, forKey: .isAnomaly)
-        riskScore = try analysisResult.decode(Double.self, forKey: .riskScore)
-        recommendations = try analysisResult.decode([String].self, forKey: .recommendations)
-        
-        aiAnalysis = try? container.decode(String.self, forKey: .aiAnalysis)
-    }
-    
-    // Use this initializer for preview data
-    init(id: String, heartRate: Double, bloodOxygen: Double, timestamp: Date, isAnomaly: Bool, riskScore: Double, recommendations: [String], aiAnalysis: String? = nil) {
-        self.id = id
-        self.heartRate = heartRate
-        self.bloodOxygen = bloodOxygen
-        self.timestamp = timestamp
-        self.isAnomaly = isAnomaly
-        self.riskScore = riskScore
-        self.recommendations = recommendations
-        self.aiAnalysis = aiAnalysis
-    }
-    
-    // Implementation of Equatable
-    static func == (lhs: HealthData, rhs: HealthData) -> Bool {
-        return lhs.id == rhs.id &&
-               lhs.heartRate == rhs.heartRate &&
-               lhs.bloodOxygen == rhs.bloodOxygen &&
-               lhs.timestamp == rhs.timestamp &&
-               lhs.isAnomaly == rhs.isAnomaly &&
-               lhs.riskScore == rhs.riskScore &&
-               lhs.recommendations == rhs.recommendations &&
-               lhs.aiAnalysis == rhs.aiAnalysis
-    }
-}
-
-struct HealthHistoryResponse: Decodable {
-    let history: [HealthData]
-    let count: Int
-}
-
-// Health Service for API calls
-class HealthService: ObservableObject {
-    @Published var latestHealthData: HealthData?
-    @Published var healthHistory: [HealthData] = []
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-    @Published var anomalyDetected = false
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    func fetchHealthHistory(token: String) {
-        guard let url = URL(string: "\(Config.apiBaseURL)/api/health/history") else {
-            self.errorMessage = "Invalid URL"
-            return
-        }
-        
-        isLoading = true
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTaskPublisher(for: request)
-            .map(\.data)
-            .decode(type: HealthHistoryResponse.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                self.isLoading = false
-                
-                if case .failure(let error) = completion {
-                    self.errorMessage = "Failed to load health data: \(error.localizedDescription)"
-                }
-            } receiveValue: { response in
-                self.healthHistory = response.history
-                if let latest = response.history.first {
-                    self.latestHealthData = latest
-                    self.anomalyDetected = latest.isAnomaly
-                }
-            }
-            .store(in: &cancellables)
-    }
-    
-    // Mock data for preview
-    static var previewData: HealthData {
-        HealthData(
-            id: "1",
-            heartRate: 75,
-            bloodOxygen: 98,
-            timestamp: Date(),
-            isAnomaly: false,
-            riskScore: 12,
-            recommendations: ["Stay hydrated", "Continue regular monitoring"],
-            aiAnalysis: "Your vital signs are within normal ranges. Keep up the good work with regular exercise and proper hydration."
-        )
-    }
-    
-    static var previewAnomalyData: HealthData {
-        HealthData(
-            id: "2",
-            heartRate: 120,
-            bloodOxygen: 92,
-            timestamp: Date().addingTimeInterval(-3600),
-            isAnomaly: true,
-            riskScore: 68,
-            recommendations: ["Rest and avoid physical exertion", "Monitor vital signs closely", "Contact your healthcare provider if symptoms persist"],
-            aiAnalysis: "Your heart rate is elevated and blood oxygen is slightly below normal. This could be due to physical exertion, stress, or an underlying condition."
-        )
-    }
-    
-    static var previewHistory: [HealthData] {
-        [
-            previewData,
-            previewAnomalyData,
-            HealthData(
-                id: "3",
-                heartRate: 68,
-                bloodOxygen: 97,
-                timestamp: Date().addingTimeInterval(-7200),
-                isAnomaly: false,
-                riskScore: 8,
-                recommendations: ["Maintain healthy lifestyle"]
-            ),
-            HealthData(
-                id: "4",
-                heartRate: 72,
-                bloodOxygen: 99,
-                timestamp: Date().addingTimeInterval(-10800),
-                isAnomaly: false,
-                riskScore: 5,
-                recommendations: ["Continue normal activities"]
-            )
-        ]
-    }
-}
-
 struct DashboardView: View {
     @StateObject private var healthService = HealthService()
     @EnvironmentObject private var authModel: UserAuthModel
@@ -192,6 +17,7 @@ struct DashboardView: View {
     @State private var showingHistorySheet = false
     @State private var refreshTrigger = false
     @State private var hasShownAnomalyNotification = false
+    @Binding var selectedTab: Int
     
     var body: some View {
         NavigationStack {
@@ -284,13 +110,120 @@ struct DashboardView: View {
             .sheet(isPresented: $showingHistorySheet) {
                 HealthHistoryView(healthHistory: healthService.healthHistory)
             }
-            .alert("Error", isPresented: .init(get: { healthService.errorMessage != nil }, set: { if !$0 { healthService.errorMessage = nil } })) {
+            .alert("Error", isPresented: Binding<Bool>(
+                get: { self.healthService.errorMessage != nil },
+                set: { if !$0 { self.healthService.errorMessage = nil } }
+            )) {
                 Button("OK", role: .cancel) {
                     healthService.errorMessage = nil
+                }
+                if healthService.healthHistory.isEmpty {
+                    Button("Create Test Data") {
+                        healthService.errorMessage = nil
+                        createTestHealthData()
+                    }
                 }
             } message: {
                 if let errorMessage = healthService.errorMessage {
                     Text(errorMessage)
+                }
+            }
+//            .overlay(
+//                Group {
+//                    #if DEBUG
+//                    if let rawResponse = healthService.rawResponseData {
+//                        VStack {
+//                            Spacer()
+//                            Button("Show Raw Response") {
+//                                showRawResponseDebug()
+//                            }
+//                            .padding()
+//                            .background(Color.gray.opacity(0.8))
+//                            .foregroundColor(.white)
+//                            .cornerRadius(8)
+//                        }
+//                        .padding()
+//                    }
+//                    #endif
+//                }
+//            )
+        }
+    }
+    
+//    private func showRawResponseDebug() {
+//        if let rawResponse = healthService.rawResponseData,
+//           let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+//            let fileURL = documentsDirectory.appendingPathComponent("response_debug.json")
+//            do {
+//                // Convert Data to String first, then write the string to file
+//                if let jsonString = String(data: rawResponse, encoding: .utf8) {
+//                    try jsonString.write(to: fileURL, atomically: true, encoding: .utf8)
+//                    print("Debug response saved to: \(fileURL.path)")
+//                }
+//            } catch {
+//                print("Failed to save debug file: \(error)")
+//            }
+//        }
+//    }
+    
+    private func createTestHealthData() {
+        if let token = authModel.token {
+            let submissionService = HealthDataSubmissionService()
+            
+            let alert = UIAlertController(
+                title: "Creating Test Data",
+                message: "Generating multiple health data points for analysis...",
+                preferredStyle: .alert
+            )
+            
+            // Add a progress indicator
+            let progressView = UIProgressView(progressViewStyle: .default)
+            progressView.progress = 0
+            progressView.translatesAutoresizingMaskIntoConstraints = false
+            alert.view.addSubview(progressView)
+            
+            NSLayoutConstraint.activate([
+                progressView.leadingAnchor.constraint(equalTo: alert.view.leadingAnchor, constant: 20),
+                progressView.trailingAnchor.constraint(equalTo: alert.view.trailingAnchor, constant: -20),
+                progressView.topAnchor.constraint(equalTo: alert.view.bottomAnchor, constant: -60),
+                progressView.heightAnchor.constraint(equalToConstant: 2)
+            ])
+            
+            // Present the alert
+            UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true)
+            
+            // Create 10 data points to ensure there's enough for analysis
+            submissionService.createMultipleTestDataPoints(token: token, count: 10) { success in
+                // Update progress
+                DispatchQueue.main.async {
+                    // Dismiss the alert
+                    alert.dismiss(animated: true) {
+                        if success {
+                            print("Successfully created multiple test health data points")
+                            self.refreshData() // Refresh data after creation
+                        } else {
+                            print("Failed to create test health data points")
+                            // Show error message if needed
+                            if let error = submissionService.submissionError {
+                                self.healthService.errorMessage = error
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Set up a timer to update the progress bar
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+                DispatchQueue.main.async {
+                    if submissionService.totalToSubmit > 0 {
+                        let progress = Float(submissionService.currentProgress) / Float(submissionService.totalToSubmit)
+                        progressView.progress = progress
+                        alert.message = "Generating health data points (\(submissionService.currentProgress)/\(submissionService.totalToSubmit))..."
+                    }
+                    
+                    if !submissionService.isSubmitting || submissionService.currentProgress >= submissionService.totalToSubmit {
+                        timer.invalidate()
+                    }
                 }
             }
         }
@@ -323,7 +256,9 @@ struct DashboardView: View {
     }
     
     
-    private func timeAgo(from date: Date) -> String {
+    private func timeAgo(from timestamp: String) -> String {
+        let date = HealthData(id: "", heartRate: 0, bloodOxygen: 0, timestamp: timestamp, isAnomaly: false, riskScore: 0, recommendations: []).getDate()
+        
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
         return formatter.localizedString(for: date, relativeTo: Date())
@@ -441,6 +376,25 @@ struct DashboardView: View {
                     color: .blue
                 ) {
                     showingHistorySheet = true
+                }
+                
+                // Health Trends
+                QuickActionButton(
+                    title: "Health Trends",
+                    icon: "chart.line.uptrend.xyaxis",
+                    color: .purple
+                ) {
+                    // Navigate to Trends Tab
+                    selectedTab = 1
+                }
+
+                // AI Analysis
+                QuickActionButton(
+                    title: "AI Report",
+                    icon: "brain",
+                    color: .indigo
+                ) {
+                    selectedTab = 2
                 }
                 
             }
@@ -652,11 +606,11 @@ struct HealthHistoryRow: View {
         HStack {
             // Date and time
             VStack(alignment: .leading) {
-                Text(dateFormatter.string(from: healthData.timestamp))
+                Text(dateFormatter.string(from: healthData.getDate()))
                     .font(.subheadline)
                     .fontWeight(.medium)
                 
-                Text(timeFormatter.string(from: healthData.timestamp))
+                Text(timeFormatter.string(from: healthData.getDate()))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -869,13 +823,15 @@ struct HealthHistoryView: View {
     private var filteredHistory: [HealthData] {
         let now = Date()
         return healthHistory.filter { data in
+            // Convert string timestamp to Date for comparison
+            let dataDate = data.getDate()
             switch selectedTimeRange {
             case .day:
-                return data.timestamp > now.addingTimeInterval(-86400) // 24 hours
+                return dataDate > now.addingTimeInterval(-86400) // 24 hours
             case .week:
-                return data.timestamp > now.addingTimeInterval(-604800) // 7 days
+                return dataDate > now.addingTimeInterval(-604800) // 7 days
             case .month:
-                return data.timestamp > now.addingTimeInterval(-2592000) // 30 days
+                return dataDate > now.addingTimeInterval(-2592000) // 30 days
             }
         }
     }
@@ -895,10 +851,10 @@ struct HealthHistoryDetailRow: View {
             }) {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text(dateFormatter.string(from: healthData.timestamp))
+                        Text(dateFormatter.string(from: healthData.getDate()))
                             .font(.headline)
                         
-                        Text(timeFormatter.string(from: healthData.timestamp))
+                        Text(timeFormatter.string(from: healthData.getDate()))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -1014,20 +970,21 @@ struct HealthHistoryDetailRow: View {
 // MARK: - Preview Provider
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
+        // Create a custom HealthService for preview
         let healthService = HealthService()
-        healthService.latestHealthData = HealthService.previewData
-        healthService.healthHistory = HealthService.previewHistory
+        // Add the preview data to the healthData array instead of computed properties
+        healthService.healthData = [HealthService.previewData, HealthService.previewAnomalyData]
         
         return Group {
-            DashboardView()
+            DashboardView(selectedTab: .constant(0))
                 .environmentObject(UserAuthModel())
                 .environmentObject(NotificationService())
                 .preferredColorScheme(.light)
             
-            DashboardView()
+            DashboardView(selectedTab: .constant(0))
                 .environmentObject(UserAuthModel())
                 .environmentObject(NotificationService())
                 .preferredColorScheme(.dark)
         }
     }
-} 
+}
