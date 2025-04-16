@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct LifeSignalV2Watch_Watch_AppApp: App {
+    @StateObject private var authService = WatchAuthService.shared
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(authService)
         }
     }
 }

@@ -65,6 +65,7 @@ fastlane/test_output
 */.vscode/
 */.venv*/
 */__pycache__/
+*/*/__pycache__/
 */dist/
 */.coverage*
 */htmlcov/

@@ -11,6 +11,7 @@ from config import FLASK_ENV, FLASK_HOST, FLASK_PORT, DEBUG
 # Import routes
 from routes.auth_routes import auth_bp
 from routes.health_routes import health_bp
+from routes.pair_routes import pair_bp
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG if DEBUG else logging.INFO,
@@ -63,6 +64,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(health_bp)
+    app.register_blueprint(pair_bp)
     
     return app
 

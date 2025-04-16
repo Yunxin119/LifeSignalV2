@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authService: WatchAuthService
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if authService.isPaired {
+                WatchDashboardView()
+                    .environmentObject(authService)
+            } else {
+                WatchPairingView()
+                    .environmentObject(authService)
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(WatchAuthService.shared)
 }
