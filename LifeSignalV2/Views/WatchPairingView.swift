@@ -200,7 +200,7 @@ struct WatchPairingView: View {
             return
         }
         
-        let url = URL(string: "\(Config.apiBaseURL)/api/watch/generate-pairing-code")!
+        let url = URL(string: "\(Config.apiBaseURL)/api/pair/generate-code")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -226,7 +226,7 @@ struct WatchPairingView: View {
                 }
             }
             .store(in: &cancellables)
-        */
+         */
     }
     
     private func checkPairingStatus() {
@@ -235,12 +235,11 @@ struct WatchPairingView: View {
         
         // TODO: CHECK OUT WHETHER IT IS CONNECTED TO THE WATCH
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            // For demo purposes, simulate a successful pairing
+            // TODO: DELETE IT AFTER REAL API CALL IS IMPORT
             isPaired = true
             isLoading = false
         }
         
-        // WE MAY DO IT LIKE THIS:
         /*
         guard let token = authModel.token else {
             pairingError = "Authentication token missing"
@@ -249,7 +248,7 @@ struct WatchPairingView: View {
             return
         }
         
-        let url = URL(string: "\(Config.apiBaseURL)/api/watch/check-pairing-status")!
+        let url = URL(string: "\(Config.apiBaseURL)/api/pair/status")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -274,7 +273,7 @@ struct WatchPairingView: View {
                 }
             }
             .store(in: &cancellables)
-        */
+         */
     }
 }
 

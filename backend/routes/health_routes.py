@@ -60,9 +60,82 @@ def get_health_history():
     serializable_history = []
     for item in history:
         item['_id'] = str(item['_id'])
+        
+        # Check if recommendations are missing, and generate them if needed
+        if 'recommendations' not in item:
+            risk_score = 0
+            # Get risk score from analysis_result if available
+            if 'analysis_result' in item and 'risk_score' in item['analysis_result']:
+                risk_score = item['analysis_result']['risk_score']
+            
+            # Generate recommendations based on health data
+            recommendations = HealthService.generate_recommendations(
+                risk_score=risk_score,
+                heart_rate=item.get('heart_rate', 0),
+                blood_oxygen=item.get('blood_oxygen', 0)
+            )
+            
+            # Add recommendations to the item
+            item['recommendations'] = recommendations
+        
         serializable_history.append(item)
     
     return jsonify({
         'history': serializable_history,
         'count': len(serializable_history)
-    }), 200 
+    }), 200
+
+@health_bp.route('/trends', methods=['GET'])
+@token_required
+def get_health_trends():
+    """Get health trend analysis for current user"""
+    # Extract user_id from token (added by token_required decorator)
+    user_id = request.user_id
+    
+    # Get days parameter
+    days = request.args.get('days', default=30, type=int)
+    
+    # Call health service
+    trends = HealthService.get_health_trends(user_id, days=days)
+    
+    # Check for errors
+    if 'error' in trends:
+        return jsonify(trends), 400
+    
+    return jsonify(trends), 200
+
+@health_bp.route('/trends/analyze', methods=['GET'])
+@token_required
+def analyze_trends_with_ai():
+    """Get AI-powered analysis of health trends"""
+    user_id = request.user_id
+    
+    # Get days
+    days = request.args.get('days', default=30, type=int)
+    
+    trends = HealthService.get_health_trends(user_id, days=days)
+    
+    if 'error' in trends:
+        return jsonify(trends), 400
+    
+    from models.user import User
+    user = User.get_by_id(user_id)
+    user_context = {}
+    if user:
+        if 'age' in user:
+            user_context['age'] = user['age']
+        if 'gender' in user:
+            user_context['gender'] = user['gender']
+        if 'medical_history' in user:
+            user_context['medical_history'] = user['medical_history']
+    
+    # Call Gemini for analysis
+    from gemini_client import gemini
+    analysis = gemini.analyze_health_trends(trends, user_context)
+    
+    response = {
+        'trends': trends,
+        'ai_analysis': analysis
+    }
+    
+    return jsonify(response), 200 

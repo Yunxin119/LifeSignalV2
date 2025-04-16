@@ -70,18 +70,18 @@ struct RegisterView: View {
                     }
                     
                     // Terms and conditions
-                    HStack {
-                        Text("By registering, you agree to our ")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                    // HStack {
+                    //     Text("By registering, you agree to our ")
+                    //         .font(.caption)
+                    //         .foregroundColor(.secondary)
                         
-                        Button("Terms & Conditions") {
-                            // Show terms and conditions
-                        }
-                        .font(.caption)
-                        .foregroundColor(.blue)
-                    }
-                    .padding(.top, 8)
+                    //     Button("Terms & Conditions") {
+                    //         // Show terms and conditions
+                    //     }
+                    //     .font(.caption)
+                    //     .foregroundColor(.blue)
+                    // }
+                    // .padding(.top, 8)
                     
                     // Register button
                     Button(action: performRegistration) {

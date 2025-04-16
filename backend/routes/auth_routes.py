@@ -56,6 +56,14 @@ def login():
     else:
         return jsonify({'error': result.get('message', 'Authentication failed')}), 401
 
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    """Logout a user"""
+    data = request.get_json()
+    token = data.get('token')
+    AuthService.logout(token)
+    return jsonify({'success': True}), 200
 # Middleware function to verify JWT token
 def token_required(f):
     """Decorator for routes that require authentication"""
