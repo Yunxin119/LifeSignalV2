@@ -1,0 +1,996 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		29FB18F22DAF5FCD002B899B /* LifeSignalV2Watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 29FB18CF2DAF5FCB002B899B /* LifeSignalV2Watch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		29FB189D2DAF510A002B899B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29FB187F2DAF5108002B899B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29FB18862DAF5108002B899B;
+			remoteInfo = LifeSignalV2;
+		};
+		29FB18A72DAF510A002B899B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29FB187F2DAF5108002B899B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29FB18862DAF5108002B899B;
+			remoteInfo = LifeSignalV2;
+		};
+		29FB18DF2DAF5FCD002B899B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29FB187F2DAF5108002B899B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29FB18CE2DAF5FCB002B899B;
+			remoteInfo = "LifeSignalV2Watch Watch App";
+		};
+		29FB18E92DAF5FCD002B899B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29FB187F2DAF5108002B899B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29FB18CE2DAF5FCB002B899B;
+			remoteInfo = "LifeSignalV2Watch Watch App";
+		};
+		29FB18F02DAF5FCD002B899B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29FB187F2DAF5108002B899B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29FB18CE2DAF5FCB002B899B;
+			remoteInfo = "LifeSignalV2Watch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		29FB18F62DAF5FCD002B899B /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				29FB18F22DAF5FCD002B899B /* LifeSignalV2Watch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		29FB18872DAF5108002B899B /* LifeSignalV2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LifeSignalV2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		29FB189C2DAF510A002B899B /* LifeSignalV2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LifeSignalV2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		29FB18A62DAF510A002B899B /* LifeSignalV2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LifeSignalV2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		29FB18CF2DAF5FCB002B899B /* LifeSignalV2Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LifeSignalV2Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		29FB18DE2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LifeSignalV2Watch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		29FB18E82DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LifeSignalV2Watch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		29FB18FE2DAF60D6002B899B /* Exceptions for "LifeSignalV2Watch Watch AppUITests" folder in "LifeSignalV2Watch Watch AppUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"LifeSignalV2Watch-Watch-AppUITests-Info.plist",
+			);
+			target = 29FB18E72DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests */;
+		};
+		29FB19002DAF61C2002B899B /* Exceptions for "LifeSignalV2" folder in "LifeSignalV2" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 29FB18862DAF5108002B899B /* LifeSignalV2 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		29FB18892DAF5108002B899B /* LifeSignalV2 */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				29FB19002DAF61C2002B899B /* Exceptions for "LifeSignalV2" folder in "LifeSignalV2" target */,
+			);
+			path = LifeSignalV2;
+			sourceTree = "<group>";
+		};
+		29FB189F2DAF510A002B899B /* LifeSignalV2Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LifeSignalV2Tests;
+			sourceTree = "<group>";
+		};
+		29FB18A92DAF510A002B899B /* LifeSignalV2UITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LifeSignalV2UITests;
+			sourceTree = "<group>";
+		};
+		29FB18D02DAF5FCC002B899B /* LifeSignalV2Watch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "LifeSignalV2Watch Watch App";
+			sourceTree = "<group>";
+		};
+		29FB18E12DAF5FCD002B899B /* LifeSignalV2Watch Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "LifeSignalV2Watch Watch AppTests";
+			sourceTree = "<group>";
+		};
+		29FB18EB2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				29FB18FE2DAF60D6002B899B /* Exceptions for "LifeSignalV2Watch Watch AppUITests" folder in "LifeSignalV2Watch Watch AppUITests" target */,
+			);
+			path = "LifeSignalV2Watch Watch AppUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		29FB18842DAF5108002B899B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18992DAF510A002B899B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18A32DAF510A002B899B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18CC2DAF5FCB002B899B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18DB2DAF5FCD002B899B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18E52DAF5FCD002B899B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		29FB187E2DAF5108002B899B = {
+			isa = PBXGroup;
+			children = (
+				29FB18892DAF5108002B899B /* LifeSignalV2 */,
+				29FB189F2DAF510A002B899B /* LifeSignalV2Tests */,
+				29FB18A92DAF510A002B899B /* LifeSignalV2UITests */,
+				29FB18D02DAF5FCC002B899B /* LifeSignalV2Watch Watch App */,
+				29FB18E12DAF5FCD002B899B /* LifeSignalV2Watch Watch AppTests */,
+				29FB18EB2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests */,
+				29FB18882DAF5108002B899B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		29FB18882DAF5108002B899B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				29FB18872DAF5108002B899B /* LifeSignalV2.app */,
+				29FB189C2DAF510A002B899B /* LifeSignalV2Tests.xctest */,
+				29FB18A62DAF510A002B899B /* LifeSignalV2UITests.xctest */,
+				29FB18CF2DAF5FCB002B899B /* LifeSignalV2Watch Watch App.app */,
+				29FB18DE2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppTests.xctest */,
+				29FB18E82DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		29FB18862DAF5108002B899B /* LifeSignalV2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29FB18B02DAF510A002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2" */;
+			buildPhases = (
+				29FB18832DAF5108002B899B /* Sources */,
+				29FB18842DAF5108002B899B /* Frameworks */,
+				29FB18852DAF5108002B899B /* Resources */,
+				29FB18F62DAF5FCD002B899B /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				29FB18F12DAF5FCD002B899B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				29FB18892DAF5108002B899B /* LifeSignalV2 */,
+			);
+			name = LifeSignalV2;
+			packageProductDependencies = (
+			);
+			productName = LifeSignalV2;
+			productReference = 29FB18872DAF5108002B899B /* LifeSignalV2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		29FB189B2DAF510A002B899B /* LifeSignalV2Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29FB18B32DAF510A002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2Tests" */;
+			buildPhases = (
+				29FB18982DAF510A002B899B /* Sources */,
+				29FB18992DAF510A002B899B /* Frameworks */,
+				29FB189A2DAF510A002B899B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				29FB189E2DAF510A002B899B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				29FB189F2DAF510A002B899B /* LifeSignalV2Tests */,
+			);
+			name = LifeSignalV2Tests;
+			packageProductDependencies = (
+			);
+			productName = LifeSignalV2Tests;
+			productReference = 29FB189C2DAF510A002B899B /* LifeSignalV2Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		29FB18A52DAF510A002B899B /* LifeSignalV2UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29FB18B62DAF510A002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2UITests" */;
+			buildPhases = (
+				29FB18A22DAF510A002B899B /* Sources */,
+				29FB18A32DAF510A002B899B /* Frameworks */,
+				29FB18A42DAF510A002B899B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				29FB18A82DAF510A002B899B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				29FB18A92DAF510A002B899B /* LifeSignalV2UITests */,
+			);
+			name = LifeSignalV2UITests;
+			packageProductDependencies = (
+			);
+			productName = LifeSignalV2UITests;
+			productReference = 29FB18A62DAF510A002B899B /* LifeSignalV2UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		29FB18CE2DAF5FCB002B899B /* LifeSignalV2Watch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29FB18F32DAF5FCD002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2Watch Watch App" */;
+			buildPhases = (
+				29FB18CB2DAF5FCB002B899B /* Sources */,
+				29FB18CC2DAF5FCB002B899B /* Frameworks */,
+				29FB18CD2DAF5FCB002B899B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				29FB18D02DAF5FCC002B899B /* LifeSignalV2Watch Watch App */,
+			);
+			name = "LifeSignalV2Watch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "LifeSignalV2Watch Watch App";
+			productReference = 29FB18CF2DAF5FCB002B899B /* LifeSignalV2Watch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		29FB18DD2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29FB18F72DAF5FCD002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2Watch Watch AppTests" */;
+			buildPhases = (
+				29FB18DA2DAF5FCD002B899B /* Sources */,
+				29FB18DB2DAF5FCD002B899B /* Frameworks */,
+				29FB18DC2DAF5FCD002B899B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				29FB18E02DAF5FCD002B899B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				29FB18E12DAF5FCD002B899B /* LifeSignalV2Watch Watch AppTests */,
+			);
+			name = "LifeSignalV2Watch Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "LifeSignalV2Watch Watch AppTests";
+			productReference = 29FB18DE2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		29FB18E72DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29FB18FA2DAF5FCD002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2Watch Watch AppUITests" */;
+			buildPhases = (
+				29FB18E42DAF5FCD002B899B /* Sources */,
+				29FB18E52DAF5FCD002B899B /* Frameworks */,
+				29FB18E62DAF5FCD002B899B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				29FB18EA2DAF5FCD002B899B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				29FB18EB2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests */,
+			);
+			name = "LifeSignalV2Watch Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "LifeSignalV2Watch Watch AppUITests";
+			productReference = 29FB18E82DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29FB187F2DAF5108002B899B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					29FB18862DAF5108002B899B = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					29FB189B2DAF510A002B899B = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 29FB18862DAF5108002B899B;
+					};
+					29FB18A52DAF510A002B899B = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 29FB18862DAF5108002B899B;
+					};
+					29FB18CE2DAF5FCB002B899B = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					29FB18DD2DAF5FCD002B899B = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 29FB18CE2DAF5FCB002B899B;
+					};
+					29FB18E72DAF5FCD002B899B = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 29FB18CE2DAF5FCB002B899B;
+					};
+				};
+			};
+			buildConfigurationList = 29FB18822DAF5108002B899B /* Build configuration list for PBXProject "LifeSignalV2" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 29FB187E2DAF5108002B899B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 29FB18882DAF5108002B899B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				29FB18862DAF5108002B899B /* LifeSignalV2 */,
+				29FB189B2DAF510A002B899B /* LifeSignalV2Tests */,
+				29FB18A52DAF510A002B899B /* LifeSignalV2UITests */,
+				29FB18CE2DAF5FCB002B899B /* LifeSignalV2Watch Watch App */,
+				29FB18DD2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppTests */,
+				29FB18E72DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		29FB18852DAF5108002B899B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB189A2DAF510A002B899B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18A42DAF510A002B899B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18CD2DAF5FCB002B899B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18DC2DAF5FCD002B899B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18E62DAF5FCD002B899B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		29FB18832DAF5108002B899B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18982DAF510A002B899B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18A22DAF510A002B899B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18CB2DAF5FCB002B899B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18DA2DAF5FCD002B899B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FB18E42DAF5FCD002B899B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		29FB189E2DAF510A002B899B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29FB18862DAF5108002B899B /* LifeSignalV2 */;
+			targetProxy = 29FB189D2DAF510A002B899B /* PBXContainerItemProxy */;
+		};
+		29FB18A82DAF510A002B899B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29FB18862DAF5108002B899B /* LifeSignalV2 */;
+			targetProxy = 29FB18A72DAF510A002B899B /* PBXContainerItemProxy */;
+		};
+		29FB18E02DAF5FCD002B899B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29FB18CE2DAF5FCB002B899B /* LifeSignalV2Watch Watch App */;
+			targetProxy = 29FB18DF2DAF5FCD002B899B /* PBXContainerItemProxy */;
+		};
+		29FB18EA2DAF5FCD002B899B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29FB18CE2DAF5FCB002B899B /* LifeSignalV2Watch Watch App */;
+			targetProxy = 29FB18E92DAF5FCD002B899B /* PBXContainerItemProxy */;
+		};
+		29FB18F12DAF5FCD002B899B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29FB18CE2DAF5FCB002B899B /* LifeSignalV2Watch Watch App */;
+			targetProxy = 29FB18F02DAF5FCD002B899B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		29FB18AE2DAF510A002B899B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		29FB18AF2DAF510A002B899B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		29FB18B12DAF510A002B899B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LifeSignalV2/Preview Content\"";
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LifeSignalV2/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunxin.LifeSignalV2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		29FB18B22DAF510A002B899B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LifeSignalV2/Preview Content\"";
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LifeSignalV2/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunxin.LifeSignalV2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		29FB18B42DAF510A002B899B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunxin.LifeSignalV2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LifeSignalV2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LifeSignalV2";
+			};
+			name = Debug;
+		};
+		29FB18B52DAF510A002B899B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunxin.LifeSignalV2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LifeSignalV2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LifeSignalV2";
+			};
+			name = Release;
+		};
+		29FB18B72DAF510A002B899B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunxin.LifeSignalV2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LifeSignalV2;
+			};
+			name = Debug;
+		};
+		29FB18B82DAF510A002B899B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunxin.LifeSignalV2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LifeSignalV2;
+			};
+			name = Release;
+		};
+		29FB18F42DAF5FCD002B899B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LifeSignalV2Watch Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "LifeSignalV2Watch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = LifeSignalV2Watch;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "LifeSignal needs access to your health data to monitor your health and alert caregivers in case of emergency.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "LifeSignal needs to update your health data to provide accurate monitoring and emergency alerts.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.yunxin.LifeSignalV2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunxin.LifeSignalV2.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		29FB18F52DAF5FCD002B899B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LifeSignalV2Watch Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "LifeSignalV2Watch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = LifeSignalV2Watch;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "LifeSignal needs access to your health data to monitor your health and alert caregivers in case of emergency.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "LifeSignal needs to update your health data to provide accurate monitoring and emergency alerts.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.yunxin.LifeSignalV2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunxin.LifeSignalV2.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
+		29FB18F82DAF5FCD002B899B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yunxin.LifeSignalV2.LifeSignalV2Watch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LifeSignalV2Watch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LifeSignalV2Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		29FB18F92DAF5FCD002B899B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yunxin.LifeSignalV2.LifeSignalV2Watch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LifeSignalV2Watch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LifeSignalV2Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
+		29FB18FB2DAF5FCD002B899B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "LifeSignalV2Watch-Watch-AppUITests-Info.plist";
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "LifeSignal will need your health data for monitor and notification";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "LifeSignal will need your health data for notification";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yunxin.LifeSignalV2.LifeSignalV2Watch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "LifeSignalV2Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		29FB18FC2DAF5FCD002B899B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DNT8J82W6P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "LifeSignalV2Watch-Watch-AppUITests-Info.plist";
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "LifeSignal will need your health data for monitor and notification";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "LifeSignal will need your health data for notification";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yunxin.LifeSignalV2.LifeSignalV2Watch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "LifeSignalV2Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		29FB18822DAF5108002B899B /* Build configuration list for PBXProject "LifeSignalV2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29FB18AE2DAF510A002B899B /* Debug */,
+				29FB18AF2DAF510A002B899B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29FB18B02DAF510A002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29FB18B12DAF510A002B899B /* Debug */,
+				29FB18B22DAF510A002B899B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29FB18B32DAF510A002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29FB18B42DAF510A002B899B /* Debug */,
+				29FB18B52DAF510A002B899B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29FB18B62DAF510A002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29FB18B72DAF510A002B899B /* Debug */,
+				29FB18B82DAF510A002B899B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29FB18F32DAF5FCD002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2Watch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29FB18F42DAF5FCD002B899B /* Debug */,
+				29FB18F52DAF5FCD002B899B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29FB18F72DAF5FCD002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2Watch Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29FB18F82DAF5FCD002B899B /* Debug */,
+				29FB18F92DAF5FCD002B899B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29FB18FA2DAF5FCD002B899B /* Build configuration list for PBXNativeTarget "LifeSignalV2Watch Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29FB18FB2DAF5FCD002B899B /* Debug */,
+				29FB18FC2DAF5FCD002B899B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29FB187F2DAF5108002B899B /* Project object */;
+}
