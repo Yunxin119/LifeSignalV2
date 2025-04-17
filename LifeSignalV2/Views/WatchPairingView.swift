@@ -8,15 +8,109 @@
 import SwiftUI
 import Combine
 
-struct WatchPairingView: View {
-    @EnvironmentObject private var authModel: UserAuthModel
-    @State private var pairingCode: String = ""
-    @State private var pairingError: String?
-    @State private var showingError = false
-    @State private var isPaired = false
-    @State private var isLoading = false
+// 创建一个ViewModel来管理状态和网络请求
+class WatchPairingViewModel: ObservableObject {
+    @Published var pairingCode: String = ""
+    @Published var pairingError: String?
+    @Published var showingError = false
+    @Published var isPaired = false
+    @Published var isLoading = false
     
     private var cancellables = Set<AnyCancellable>()
+    private let authModel: UserAuthModel
+    
+    init(authModel: UserAuthModel) {
+        self.authModel = authModel
+    }
+    
+    func generatePairingCode() {
+        // 设置加载状态
+        isLoading = true
+        
+        guard let token = authModel.token else {
+            pairingError = "Authentication token missing"
+            showingError = true
+            isLoading = false
+            return
+        }
+        
+        // 使用您的API端点
+        let url = URL(string: "\(Config.apiBaseURL)/api/pair/generate-code")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: PairingResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                self.isLoading = false
+                
+                if case .failure(let error) = completion {
+                    self.pairingError = error.localizedDescription
+                    self.showingError = true
+                }
+            } receiveValue: { response in
+                if response.success {
+                    self.pairingCode = response.pairing_code
+                } else {
+                    self.pairingError = response.error ?? "Failed to generate pairing code"
+                    self.showingError = true
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func checkPairingStatus() {
+        // 设置加载状态
+        isLoading = true
+        
+        guard let token = authModel.token else {
+            pairingError = "Authentication token missing"
+            showingError = true
+            isLoading = false
+            return
+        }
+        
+        let url = URL(string: "\(Config.apiBaseURL)/api/pair/status")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: PairingStatusResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                self.isLoading = false
+                
+                if case .failure(let error) = completion {
+                    self.pairingError = error.localizedDescription
+                    self.showingError = true
+                }
+            } receiveValue: { response in
+                if response.success && response.is_paired {
+                    self.isPaired = true
+                } else {
+                    self.pairingError = "Watch not yet paired. Please enter the code on your watch."
+                    self.showingError = true
+                }
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// 视图结构体
+struct WatchPairingView: View {
+    @EnvironmentObject private var authModel: UserAuthModel
+    @StateObject private var viewModel: WatchPairingViewModel
+    
+    init() {
+        // 创建ViewModel并注入依赖
+        _viewModel = StateObject(wrappedValue: WatchPairingViewModel(authModel: UserAuthModel()))
+    }
     
     var body: some View {
         ScrollView {
@@ -35,8 +129,8 @@ struct WatchPairingView: View {
                 
                 // Pairing Code Display
                 VStack {
-                    if !pairingCode.isEmpty {
-                        Text(pairingCode)
+                    if !viewModel.pairingCode.isEmpty {
+                        Text(viewModel.pairingCode)
                             .font(.system(size: 48, weight: .bold, design: .monospaced))
                             .kerning(10)
                             .padding()
@@ -52,7 +146,7 @@ struct WatchPairingView: View {
                                 .frame(height: 100)
                                 .cornerRadius(10)
                             
-                            if isLoading {
+                            if viewModel.isLoading {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle())
                             } else {
@@ -100,8 +194,8 @@ struct WatchPairingView: View {
                 .padding(.horizontal)
                 
                 // Retry Button (if needed)
-                if pairingCode.isEmpty && !isLoading {
-                    Button(action: generatePairingCode) {
+                if viewModel.pairingCode.isEmpty && !viewModel.isLoading {
+                    Button(action: viewModel.generatePairingCode) {
                         Text("Generate New Code")
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
@@ -114,8 +208,8 @@ struct WatchPairingView: View {
                 }
                 
                 // Check Pairing Status button
-                if !pairingCode.isEmpty {
-                    Button(action: checkPairingStatus) {
+                if !viewModel.pairingCode.isEmpty {
+                    Button(action: viewModel.checkPairingStatus) {
                         Text("Check Pairing Status")
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
@@ -125,21 +219,24 @@ struct WatchPairingView: View {
                             .cornerRadius(10)
                             .padding(.horizontal)
                     }
-                    .disabled(isLoading)
+                    .disabled(viewModel.isLoading)
                 }
                 
                 Spacer()
             }
             .padding()
-            .onAppear(perform: generatePairingCode)
-            .alert(isPresented: $showingError) {
+            .onAppear {
+                // 在onAppear时调用ViewModel的方法
+                viewModel.generatePairingCode()
+            }
+            .alert(isPresented: $viewModel.showingError) {
                 Alert(
                     title: Text("Error"),
-                    message: Text(pairingError ?? "Unknown error occurred"),
+                    message: Text(viewModel.pairingError ?? "Unknown error occurred"),
                     dismissButton: .default(Text("OK"))
                 )
             }
-            .sheet(isPresented: $isPaired) {
+            .sheet(isPresented: $viewModel.isPaired) {
                 pairingSuccessView
             }
         }
@@ -163,7 +260,7 @@ struct WatchPairingView: View {
                 .padding()
             
             Button(action: {
-                isPaired = false
+                viewModel.isPaired = false
             }) {
                 Text("Continue")
                     .fontWeight(.semibold)
@@ -178,103 +275,21 @@ struct WatchPairingView: View {
         }
         .padding()
     }
-    
-    private func generatePairingCode() {
-        // Set loading state
-        isLoading = true
-        
-        // TODO: CHANGE THIS TO REAL API CALL IN APP
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            // Generate a random 6-digit code
-            let code = String(format: "%06d", Int.random(in: 100000...999999))
-            pairingCode = code
-            isLoading = false
-        }
-        
-        // WE MIGHT DO IT LIKE THIS - I'S NOT SURE IT DEPENDS ON BACKEND SITUATION
-        /*
-        guard let token = authModel.token else {
-            pairingError = "Authentication token missing"
-            showingError = true
-            isLoading = false
-            return
-        }
-        
-        let url = URL(string: "\(Config.apiBaseURL)/api/pair/generate-code")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTaskPublisher(for: request)
-            .map(\.data)
-            .decode(type: PairingResponse.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                isLoading = false
-                
-                if case .failure(let error) = completion {
-                    pairingError = error.localizedDescription
-                    showingError = true
-                }
-            } receiveValue: { response in
-                if let code = response.code {
-                    pairingCode = code
-                } else {
-                    pairingError = response.error ?? "Failed to generate pairing code"
-                    showingError = true
-                }
-            }
-            .store(in: &cancellables)
-         */
-    }
-    
-    private func checkPairingStatus() {
-        // Set loading state
-        isLoading = true
-        
-        // TODO: CHECK OUT WHETHER IT IS CONNECTED TO THE WATCH
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            // TODO: DELETE IT AFTER REAL API CALL IS IMPORT
-            isPaired = true
-            isLoading = false
-        }
-        
-        /*
-        guard let token = authModel.token else {
-            pairingError = "Authentication token missing"
-            showingError = true
-            isLoading = false
-            return
-        }
-        
-        let url = URL(string: "\(Config.apiBaseURL)/api/pair/status")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTaskPublisher(for: request)
-            .map(\.data)
-            .decode(type: PairingStatusResponse.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                isLoading = false
-                
-                if case .failure(let error) = completion {
-                    pairingError = error.localizedDescription
-                    showingError = true
-                }
-            } receiveValue: { response in
-                if response.isPaired {
-                    isPaired = true
-                } else {
-                    pairingError = "Watch not yet paired. Please enter the code on your watch."
-                    showingError = true
-                }
-            }
-            .store(in: &cancellables)
-         */
-    }
+}
+
+// 响应模型
+struct PairingResponse: Decodable {
+    let success: Bool
+    let pairing_code: String
+    let expiration_minutes: Int
+    let error: String?
+}
+
+struct PairingStatusResponse: Decodable {
+    let success: Bool
+    let is_paired: Bool
+    let device_type: String
+    let error: String?
 }
 
 // preview
@@ -283,4 +298,4 @@ struct WatchPairingView_Previews: PreviewProvider {
         WatchPairingView()
             .environmentObject(UserAuthModel())
     }
-} 
+}

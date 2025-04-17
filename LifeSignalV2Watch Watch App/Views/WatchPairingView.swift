@@ -3,7 +3,6 @@ import SwiftUI
 struct WatchPairingView: View {
     @EnvironmentObject var authService: WatchAuthService
     @State private var pairingCode = ""
-    @State private var isSubmitting = false
     @State private var showAlert = false
     @State private var alertMessage = ""
     
@@ -32,7 +31,7 @@ struct WatchPairingView: View {
                     .cornerRadius(8)
                 
                 Button(action: submitPairingCode) {
-                    if isSubmitting {
+                    if authService.isLoading {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle())
                     } else {
@@ -42,7 +41,7 @@ struct WatchPairingView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(.blue)
-                .disabled(pairingCode.isEmpty || isSubmitting)
+                .disabled(pairingCode.isEmpty || authService.isLoading)
                 .padding(.top, 10)
                 
                 if let error = authService.error {
@@ -67,15 +66,11 @@ struct WatchPairingView: View {
     private func submitPairingCode() {
         guard !pairingCode.isEmpty else { return }
         
-        isSubmitting = true
-        
         Task {
             let success = await authService.submitPairingCode(pairingCode: pairingCode)
             
-            DispatchQueue.main.async {
-                isSubmitting = false
-                
-                if !success && authService.error != nil {
+            if !success {
+                DispatchQueue.main.async {
                     alertMessage = authService.error ?? "Failed to pair device"
                     showAlert = true
                 }
@@ -87,4 +82,4 @@ struct WatchPairingView: View {
 #Preview {
     WatchPairingView()
         .environmentObject(WatchAuthService.shared)
-} 
+}

@@ -62,26 +62,20 @@ def validate_pairing_code():
         
         if user_info is not None:
             # Generate a token for the paired device
-            token_result = AuthService.generate_token(user_info["_id"])
+            token = AuthService.generate_token(user_info)  # 生成 token，返回的是字符串
             
-            if token_result.get('success'):
-                return jsonify({
-                    'success': True,
-                    'message': 'Device paired successfully',
-                    'user': user_info,
-                    'token': token_result.get('token')
-                }), 200
-            else:
-                return jsonify({
-                    'success': False,
-                    'error': 'Failed to generate token for paired device'
-                }), 500
+            return jsonify({
+                'success': True,
+                'message': 'Device paired successfully',
+                'user': user_info,  # 直接返回 user_info 对象
+                'token': token  # 直接返回生成的 token
+            }), 200
         else:
             return jsonify({
                 'success': False,
                 'error': 'Invalid or expired pairing code'
             }), 400
-            
+
     except Exception as e:
         logger.error(f"Error validating pairing code: {str(e)}")
         return jsonify({
