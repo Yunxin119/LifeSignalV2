@@ -72,13 +72,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		29FB18FE2DAF60D6002B899B /* Exceptions for "LifeSignalV2Watch Watch AppUITests" folder in "LifeSignalV2Watch Watch AppUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"LifeSignalV2Watch-Watch-AppUITests-Info.plist",
-			);
-			target = 29FB18E72DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests */;
-		};
 		29FB19002DAF61C2002B899B /* Exceptions for "LifeSignalV2" folder in "LifeSignalV2" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -119,9 +112,6 @@
 		};
 		29FB18EB2DAF5FCD002B899B /* LifeSignalV2Watch Watch AppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				29FB18FE2DAF60D6002B899B /* Exceptions for "LifeSignalV2Watch Watch AppUITests" folder in "LifeSignalV2Watch Watch AppUITests" target */,
-			);
 			path = "LifeSignalV2Watch Watch AppUITests";
 			sourceTree = "<group>";
 		};
