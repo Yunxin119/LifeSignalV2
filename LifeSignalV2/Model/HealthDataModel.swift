@@ -19,6 +19,7 @@ struct HealthData: Identifiable, Decodable, Equatable {
     var anomalyScore: Double?
     var trendAnalysis: [String: String]?
     var additionalMetrics: [String: Double]?
+    var severity: String?
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -36,6 +37,7 @@ struct HealthData: Identifiable, Decodable, Equatable {
         case analysisResult = "analysis_result"
         case activityLevel = "activity_level"
         case temperature
+        case severity
     }
     
     enum AdditionalMetricsKeys: String, CodingKey {
@@ -48,6 +50,7 @@ struct HealthData: Identifiable, Decodable, Equatable {
         case recommendations
         case anomalyScore = "anomaly_score"
         case trendAnalysis = "trend_analysis"
+        case severity
     }
     
     init(from decoder: Decoder) throws {
@@ -68,9 +71,17 @@ struct HealthData: Identifiable, Decodable, Equatable {
         var foundIsAnomaly = false
         var foundRiskScore = false
         var foundRecommendations = false
+        var foundSeverity = false
         isAnomaly = false
         riskScore = 0.0
         recommendations = []
+        severity = nil
+        
+        // Try to get severity from top level
+        if let topLevelSeverity = try? container.decode(String.self, forKey: .severity) {
+            severity = topLevelSeverity
+            foundSeverity = true
+        }
         
         // Try to get recommendations from top level first
         if let topLevelRecommendations = try? container.decode([String].self, forKey: .recommendations) {
@@ -117,10 +128,16 @@ struct HealthData: Identifiable, Decodable, Equatable {
                     foundRecommendations = true
                 }
             }
+            
+            // Get severity if not already found
+            if !foundSeverity {
+                severity = try? analysisResultContainer.decode(String.self, forKey: .severity)
+                foundSeverity = true
+            }
         }
         
         // If still not found, try in additional_metrics -> analysis_result
-        if !foundIsAnomaly || !foundRiskScore || !foundRecommendations {
+        if !foundIsAnomaly || !foundRiskScore || !foundRecommendations || !foundSeverity {
             do {
                 if let additionalMetrics = try? container.nestedContainer(keyedBy: AdditionalMetricsKeys.self, forKey: .additionalMetrics),
                    let analysisResult = try? additionalMetrics.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult) {
@@ -142,6 +159,11 @@ struct HealthData: Identifiable, Decodable, Equatable {
                         } else if let singleRec = try? analysisResult.decode(String.self, forKey: .recommendations) {
                             recommendations = [singleRec]
                         }
+                    }
+                    
+                    // Get severity if not already found
+                    if !foundSeverity {
+                        severity = try? analysisResult.decode(String.self, forKey: .severity)
                     }
                 }
             } catch {
@@ -182,7 +204,7 @@ struct HealthData: Identifiable, Decodable, Equatable {
         additionalMetrics = try? container.decode([String: Double].self, forKey: .additionalMetrics)
     }
     
-    init(id: String, heartRate: Double, bloodOxygen: Double, timestamp: String, isAnomaly: Bool, riskScore: Double, recommendations: [String], aiAnalysis: String? = nil, additionalMetrics: [String: Double]? = nil) {
+    init(id: String, heartRate: Double, bloodOxygen: Double, timestamp: String, isAnomaly: Bool, riskScore: Double, recommendations: [String], aiAnalysis: String? = nil, additionalMetrics: [String: Double]? = nil, severity: String? = nil) {
         self.id = id
         self.heartRate = heartRate
         self.bloodOxygen = bloodOxygen
@@ -194,6 +216,7 @@ struct HealthData: Identifiable, Decodable, Equatable {
         self.anomalyScore = nil
         self.trendAnalysis = nil
         self.additionalMetrics = additionalMetrics
+        self.severity = severity
     }
     
     // Returns a date object from the timestamp string
@@ -253,7 +276,8 @@ struct HealthData: Identifiable, Decodable, Equatable {
                lhs.isAnomaly == rhs.isAnomaly &&
                lhs.riskScore == rhs.riskScore &&
                lhs.recommendations == rhs.recommendations &&
-               lhs.aiAnalysis == rhs.aiAnalysis
+               lhs.aiAnalysis == rhs.aiAnalysis &&
+               lhs.severity == rhs.severity
     }
 }
 

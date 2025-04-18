@@ -63,6 +63,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		29688DA92DB1C56000D19A14 /* LifeSignalV2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LifeSignalV2.xcodeproj; sourceTree = SOURCE_ROOT; };
 		29FB18872DAF5108002B899B /* LifeSignalV2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LifeSignalV2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29FB189C2DAF510A002B899B /* LifeSignalV2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LifeSignalV2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		29FB18A62DAF510A002B899B /* LifeSignalV2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LifeSignalV2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,6 +167,7 @@
 		29FB187E2DAF5108002B899B = {
 			isa = PBXGroup;
 			children = (
+				29688DA92DB1C56000D19A14 /* LifeSignalV2.xcodeproj */,
 				29FB18892DAF5108002B899B /* LifeSignalV2 */,
 				29FB189F2DAF510A002B899B /* LifeSignalV2Tests */,
 				29FB18A92DAF510A002B899B /* LifeSignalV2UITests */,

@@ -61,6 +61,11 @@ struct APIService {
         return makeRequest(endpoint: endpoint, method: "POST", body: body)
     }
     
+    static func registerWithHealthProfile(body: [String: Any]) -> AnyPublisher<AuthResponse, APIError> {
+        let endpoint = "/api/auth/register"
+        return makeRequest(endpoint: endpoint, method: "POST", body: body)
+    }
+    
     // MARK: - Helper methods
     
     private static func makeRequest<T: Decodable>(endpoint: String, method: String, body: [String: Any]? = nil, token: String? = nil) -> AnyPublisher<T, APIError> {

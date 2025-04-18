@@ -4,6 +4,33 @@ from services.auth_service import AuthService
 # Create authentication blueprint
 auth_bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
+# Define standard condition mapping
+STANDARD_CONDITIONS = {
+    'none': ['none', 'healthy', 'no condition', 'no medical condition'],
+    'hypertension': ['hypertension', 'high blood pressure', 'hbp'],
+    'asthma': ['asthma'],
+    'COPD': ['copd', 'emphysema', 'chronic bronchitis', 'chronic obstructive pulmonary disease'],
+    'heart_disease': ['heart disease', 'heart failure', 'chf', 'coronary artery disease', 'cad'],
+    'sleep_apnea': ['sleep apnea', 'osa'],
+    'anemia': ['anemia'],
+    'diabetes': ['diabetes', 'type 1 diabetes', 'type 2 diabetes']
+}
+
+def normalize_condition(condition):
+    """Normalize condition string to standard format"""
+    if not condition:
+        return 'none'
+        
+    condition_lower = condition.lower().strip()
+    
+    # Look for match in standard conditions
+    for standard, variations in STANDARD_CONDITIONS.items():
+        if any(variation in condition_lower for variation in variations):
+            return standard
+            
+    # Default to none if no match found
+    return 'none'
+
 @auth_bp.route('/register', methods=['POST'])
 def register():
     """Register a new user"""
@@ -26,6 +53,50 @@ def register():
     for field in optional_fields:
         if field in data:
             kwargs[field] = data.get(field)
+    
+    # Handle health profile data if provided
+    health_profile = data.get('health_profile')
+    if health_profile and isinstance(health_profile, dict):
+        # Extract health profile fields
+        if 'age' in health_profile:
+            kwargs['age'] = health_profile.get('age')
+        if 'gender' in health_profile:
+            kwargs['gender'] = health_profile.get('gender')
+        if 'activity_level' in health_profile:
+            activity_level = health_profile.get('activity_level', '').lower()
+            
+            # Normalize activity level to match our categories
+            if activity_level in ['inactive', 'sedentary']:
+                kwargs['activity_level'] = 'sedentary'
+            elif activity_level in ['light', 'low']:
+                kwargs['activity_level'] = 'light'
+            elif activity_level in ['moderate', 'medium']:
+                kwargs['activity_level'] = 'moderate'
+            elif activity_level in ['high', 'active', 'intense', 'vigorous']:
+                kwargs['activity_level'] = 'high'
+            else:
+                kwargs['activity_level'] = 'light'  # Default
+                
+        if 'medical_history' in health_profile:
+            kwargs['medical_history'] = health_profile.get('medical_history')
+            
+        # Handle pre-existing medical conditions 
+        if 'medical_conditions' in health_profile:
+            conditions = health_profile.get('medical_conditions')
+            
+            if isinstance(conditions, list):
+                # Normalize all conditions in the list
+                normalized_conditions = [normalize_condition(condition) for condition in conditions]
+                # Filter out duplicates and 'none' if other conditions exist
+                normalized_conditions = list(set(normalized_conditions))
+                if len(normalized_conditions) > 1 and 'none' in normalized_conditions:
+                    normalized_conditions.remove('none')
+                kwargs['medical_conditions'] = normalized_conditions
+            elif isinstance(conditions, str) and conditions.strip():
+                # Single condition provided as string
+                kwargs['medical_conditions'] = [normalize_condition(conditions)]
+            else:
+                kwargs['medical_conditions'] = ['none']
     
     # Call register service
     result = AuthService.register(username, email, password, **kwargs)

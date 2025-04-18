@@ -15,7 +15,7 @@ class User:
         return get_collection(cls.COLLECTION_NAME)
     
     @classmethod
-    def create(cls, username, email, password, full_name=None, age=None, medical_history=None):
+    def create(cls, username, email, password, full_name=None, age=None, medical_history=None, gender=None, activity_level=None, medical_conditions=None):
         """
         Create a new user
         
@@ -26,6 +26,9 @@ class User:
             full_name (str, optional): User's full name
             age (int, optional): User's age
             medical_history (dict, optional): User's medical history
+            gender (str, optional): User's gender
+            activity_level (str, optional): User's activity level
+            medical_conditions (list, optional): User's pre-existing medical conditions
             
         Returns:
             str: ID of the created user document
@@ -58,6 +61,14 @@ class User:
             document['age'] = age
         if medical_history and isinstance(medical_history, dict):
             document['medical_history'] = medical_history
+        elif medical_history and isinstance(medical_history, str):
+            document['medical_history'] = medical_history
+        if gender:
+            document['gender'] = gender
+        if activity_level:
+            document['activity_level'] = activity_level
+        if medical_conditions and isinstance(medical_conditions, list):
+            document['medical_conditions'] = medical_conditions
         
         # Insert document and return ID
         result = collection.insert_one(document)

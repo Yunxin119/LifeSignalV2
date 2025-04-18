@@ -149,6 +149,80 @@ class UserAuthModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func registerWithHealthProfile(username: String, email: String, password: String, confirmPassword: String, healthProfile: [String: Any]?) {
+        registrationError = nil
+        isLoading = true
+        
+        // Simple validation
+        if username.isEmpty || email.isEmpty || password.isEmpty {
+            registrationError = "All fields are required"
+            isLoading = false
+            return
+        }
+        
+        if !email.contains("@") {
+            registrationError = "Please enter a valid email"
+            isLoading = false
+            return
+        }
+        
+        if password.count < 6 {
+            registrationError = "Password must be at least 6 characters"
+            isLoading = false
+            return
+        }
+        
+        if password != confirmPassword {
+            registrationError = "Passwords do not match"
+            isLoading = false
+            return
+        }
+        
+        // Create registration payload with health profile if provided
+        var body: [String: Any] = [
+            "username": username,
+            "email": email,
+            "password": password
+        ]
+        
+        // Add health profile data if available
+        if let healthProfile = healthProfile {
+            body["health_profile"] = healthProfile
+        }
+        
+        // Call API service with health profile data
+        APIService.registerWithHealthProfile(body: body)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
+                    
+                    if case .failure(let error) = completion {
+                        self?.registrationError = error.message
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    if response.success, let token = response.token, let userData = response.user {
+                        // Store token and user data securely
+                        self?.saveToKeychain(token: token, user: userData)
+                        
+                        // Update current user
+                        self?.currentUser = User(
+                            id: userData.id,
+                            username: userData.username,
+                            email: userData.email
+                        )
+                        
+                        // Set authenticated state
+                        self?.isAuthenticated = true
+                    } else {
+                        self?.registrationError = response.error ?? "Registration failed"
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
     func logout() {
         // Clear stored token and user data
         removeFromKeychain()

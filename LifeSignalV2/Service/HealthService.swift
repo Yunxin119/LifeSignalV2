@@ -134,16 +134,23 @@ class HealthService: ObservableObject {
                             var isAnomaly = false
                             var riskScore = 0.0
                             var recommendations: [String] = []
+                            var severity: String? = nil
                             
                             if let analysisResult = item["analysis_result"] as? [String: Any] {
                                 isAnomaly = analysisResult["is_anomaly"] as? Bool ?? false
                                 riskScore = analysisResult["risk_score"] as? Double ?? 0.0
+                                severity = analysisResult["severity"] as? String
                                 
                                 if let recs = analysisResult["recommendations"] as? [String] {
                                     recommendations = recs
                                 } else if let rec = analysisResult["recommendations"] as? String {
                                     recommendations = [rec]
                                 }
+                            }
+                            
+                            // Check for severity at the top level if not found in analysis_result
+                            if severity == nil {
+                                severity = item["severity"] as? String
                             }
                             
                             // Create health data object
@@ -154,7 +161,8 @@ class HealthService: ObservableObject {
                                 timestamp: timestamp,
                                 isAnomaly: isAnomaly,
                                 riskScore: riskScore,
-                                recommendations: recommendations
+                                recommendations: recommendations,
+                                severity: severity
                             )
                             parsedHealthData.append(healthData)
                             print("Manually parsed data: \(id), HR: \(heartRate), BO: \(bloodOxygen)")
@@ -195,6 +203,9 @@ class HealthService: ObservableObject {
                                 recommendations = [rec]
                             }
                             
+                            // Get severity if available
+                            let severity = item["severity"] as? String
+                            
                             let healthData = HealthData(
                                 id: id,
                                 heartRate: heartRate,
@@ -204,7 +215,8 @@ class HealthService: ObservableObject {
                                 riskScore: item["risk_score"] as? Double ?? 0.0,
                                 recommendations: recommendations,
                                 aiAnalysis: item["ai_analysis"] as? String,
-                                additionalMetrics: additionalMetrics
+                                additionalMetrics: additionalMetrics,
+                                severity: severity
                             )
                             parsedHealthData.append(healthData)
                         }
@@ -248,18 +260,28 @@ class HealthService: ObservableObject {
                     var riskScore = 0.0
                     
                     if heartRateAnomalyLow {
-                        riskScore += (50 - data.heartRate) / 10
+                        riskScore += (50 - data.heartRate) / 10 * 10  // Scale by 10
                     }
                     
                     if heartRateAnomalyHigh {
-                        riskScore += (data.heartRate - 100) / 10
+                        riskScore += (data.heartRate - 100) / 10 * 10  // Scale by 10
                     }
                     
                     if bloodOxygenAnomaly {
-                        riskScore += (92 - data.bloodOxygen) * 2
+                        riskScore += (92 - data.bloodOxygen) * 20  // Scale by 20
                     }
                     
-                    updatedData.riskScore = min(max(riskScore, 0), 10)
+                    // Cap risk score between 0 and 100
+                    updatedData.riskScore = min(max(riskScore, 0), 100)
+                    
+                    // Set severity based on risk score
+                    if updatedData.riskScore >= 70 {
+                        updatedData.severity = "severe"
+                    } else if updatedData.riskScore >= 40 {
+                        updatedData.severity = "moderate"
+                    } else {
+                        updatedData.severity = "mild"
+                    }
                     
                     // Add simple recommendations
                     if updatedData.recommendations.isEmpty {
@@ -357,7 +379,8 @@ class HealthService: ObservableObject {
             isAnomaly: false,
             riskScore: 12,
             recommendations: ["Stay hydrated", "Continue regular monitoring"],
-            aiAnalysis: "Your vital signs are within normal ranges. Keep up the good work with regular exercise and proper hydration."
+            aiAnalysis: "Your vital signs are within normal ranges. Keep up the good work with regular exercise and proper hydration.",
+            severity: "mild"
         )
     }
     
@@ -371,7 +394,8 @@ class HealthService: ObservableObject {
             isAnomaly: true,
             riskScore: 68,
             recommendations: ["Rest and avoid physical exertion", "Monitor vital signs closely", "Contact your healthcare provider if symptoms persist"],
-            aiAnalysis: "Your heart rate is elevated and blood oxygen is slightly below normal. This could be due to physical exertion, stress, or an underlying condition."
+            aiAnalysis: "Your heart rate is elevated and blood oxygen is slightly below normal. This could be due to physical exertion, stress, or an underlying condition.",
+            severity: "moderate"
         )
     }
     
@@ -387,7 +411,8 @@ class HealthService: ObservableObject {
                 timestamp: dateFormatter.string(from: Date().addingTimeInterval(-7200)),
                 isAnomaly: false,
                 riskScore: 8,
-                recommendations: ["Maintain healthy lifestyle"]
+                recommendations: ["Maintain healthy lifestyle"],
+                severity: "mild"
             ),
             HealthData(
                 id: "4",
@@ -396,7 +421,8 @@ class HealthService: ObservableObject {
                 timestamp: dateFormatter.string(from: Date().addingTimeInterval(-10800)),
                 isAnomaly: false,
                 riskScore: 5,
-                recommendations: ["Continue normal activities"]
+                recommendations: ["Continue normal activities"],
+                severity: "mild"
             )
         ]
     }

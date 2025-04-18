@@ -69,6 +69,11 @@ struct DashboardView: View {
                         riskAssessmentView(for: healthData)
                     }
                     
+                    // Always show recommendations, even if no anomaly
+                    if let healthData = healthService.latestHealthData, !healthData.recommendations.isEmpty, !healthData.isAnomaly {
+                        recommendationsView(for: healthData)
+                    }
+                    
                     // Quick Actions
                     quickActionsView()
                     
@@ -241,7 +246,8 @@ struct DashboardView: View {
     // Check for anomalies and send notifications if needed
     private func checkForAnomalies() {
         if healthService.anomalyDetected && !hasShownAnomalyNotification,
-           let healthData = healthService.latestHealthData {
+           let healthData = healthService.latestHealthData,
+           healthData.riskScore >= 60 {  // Only notify for high or critical risk scores (increased from 40)
             // Send a notification for the anomaly
             notificationService.sendHealthAnomalyNotification(
                 heartRate: healthData.heartRate,
@@ -251,7 +257,7 @@ struct DashboardView: View {
             hasShownAnomalyNotification = true
             
             // Debug info
-            print("🔔 Sending anomaly notification for: Heart Rate \(Int(healthData.heartRate)) BPM, Blood Oxygen \(Int(healthData.bloodOxygen))%")
+            print("🔔 Sending anomaly notification for: Heart Rate \(Int(healthData.heartRate)) BPM, Blood Oxygen \(Int(healthData.bloodOxygen))%, Risk Score: \(Int(healthData.riskScore))%")
         }
     }
     
@@ -273,8 +279,8 @@ struct DashboardView: View {
                     value: "\(Int(healthData.heartRate))",
                     unit: "BPM",
                     icon: "heart.fill",
-                    color: healthData.isAnomaly && healthData.heartRate > 100 ? .red : .pink,
-                    isAnomalous: healthData.isAnomaly && (healthData.heartRate > 100 || healthData.heartRate < 60)
+                    color: healthData.isAnomaly && healthData.heartRate > 100 && healthData.riskScore >= 60 ? .red : .pink,
+                    isAnomalous: healthData.isAnomaly && (healthData.heartRate > 100 || healthData.heartRate < 60) && healthData.riskScore >= 60
                 )
                 
                 // Blood Oxygen Card
@@ -283,8 +289,8 @@ struct DashboardView: View {
                     value: String(format: "%.1f", healthData.bloodOxygen),
                     unit: "%",
                     icon: "lungs.fill",
-                    color: healthData.isAnomaly && healthData.bloodOxygen < 95 ? .red : .blue,
-                    isAnomalous: healthData.isAnomaly && healthData.bloodOxygen < 95
+                    color: healthData.isAnomaly && healthData.bloodOxygen < 95 && healthData.riskScore >= 60 ? .red : .blue,
+                    isAnomalous: healthData.isAnomaly && healthData.bloodOxygen < 95 && healthData.riskScore >= 60
                 )
             }
             
@@ -317,7 +323,14 @@ struct DashboardView: View {
                     .foregroundColor(.yellow)
                 Text("Health Alert")
                     .font(.headline)
-                Spacer()
+                
+                if let severity = healthData.severity {
+                    Spacer()
+                    Text(severity.capitalized)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(getSeverityColor(severity: severity))
+                }
             }
             
             Divider()
@@ -335,23 +348,69 @@ struct DashboardView: View {
             
             Spacer(minLength: 10)
             
-            Button(action: {
-                showingEmergencySheet = true
-            }) {
-                HStack {
-                    Image(systemName: "phone.fill")
-                    Text("Contact Emergency Services")
+            // Only show emergency button if risk score is high enough
+            if healthData.riskScore >= 60 {
+                Button(action: {
+                    showingEmergencySheet = true
+                }) {
+                    HStack {
+                        Image(systemName: "phone.fill")
+                        Text("Contact Emergency Services")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.red)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.red)
-                .foregroundColor(.white)
-                .cornerRadius(10)
             }
         }
         .padding()
         .background(Color(.systemGray6))
         .cornerRadius(12)
+    }
+    
+    // New function to show recommendations without the alert styling
+    private func recommendationsView(for healthData: HealthData) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "list.bullet.clipboard")
+                    .foregroundColor(.blue)
+                Text("Health Recommendations")
+                    .font(.headline)
+            }
+            
+            Divider()
+            
+            ForEach(healthData.recommendations, id: \.self) { recommendation in
+                HStack(alignment: .top) {
+                    Image(systemName: "checkmark.circle")
+                        .font(.system(size: 12))
+                        .foregroundColor(.green)
+                        .padding(.top, 3)
+                    Text(recommendation)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+    }
+    
+    // Helper function to get color based on severity
+    private func getSeverityColor(severity: String) -> Color {
+        switch severity.lowercased() {
+        case "mild":
+            return .yellow
+        case "moderate":
+            return .orange
+        case "severe":
+            return .red
+        case "critical":
+            return .purple
+        default:
+            return .green
+        }
     }
     
     private func quickActionsView() -> some View {
@@ -510,8 +569,8 @@ struct RiskScoreView: View {
     private var riskLevel: String {
         switch score {
         case 0..<20: return "Low"
-        case 20..<40: return "Moderate"
-        case 40..<60: return "Elevated"
+        case 20..<40: return "Mild"
+        case 40..<60: return "Moderate"
         case 60..<80: return "High"
         default: return "Critical"
         }
@@ -639,9 +698,10 @@ struct HealthHistoryRow: View {
             }
             .frame(width: 60)
             
-            // Status indicator
+            // Status indicator - only show as red if risk score is moderate or higher
             Circle()
-                .fill(healthData.isAnomaly ? Color.red : Color.green)
+                .fill(healthData.isAnomaly && healthData.riskScore >= 40 ? Color.red : 
+                      healthData.isAnomaly ? Color.yellow : Color.green)
                 .frame(width: 12, height: 12)
         }
         .padding(.vertical, 8)
@@ -940,7 +1000,9 @@ struct HealthHistoryDetailRow: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(healthData.isAnomaly ? Color.red.opacity(0.5) : Color.clear, lineWidth: healthData.isAnomaly ? 1 : 0)
+                .stroke(healthData.isAnomaly && healthData.riskScore >= 40 ? Color.red.opacity(0.5) : 
+                        healthData.isAnomaly ? Color.yellow.opacity(0.5) : Color.clear, 
+                       lineWidth: healthData.isAnomaly ? 1 : 0)
         )
     }
     
