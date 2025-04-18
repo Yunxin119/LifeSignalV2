@@ -209,5 +209,89 @@ class GeminiClient:
             logger.error(f"Error analyzing health trends with Gemini: {e}")
             return {"error": str(e)}
 
+    def generate_health_recommendations(self, health_data, user_context=None):
+        """
+        Generate specific health recommendations based on user data
+        
+        Args:
+            health_data (dict): Current health metrics (heart_rate, blood_oxygen, risk_score)
+            user_context (dict, optional): User information like age and health conditions
+            
+        Returns:
+            list: List of tailored health recommendations
+        """
+        try:
+            # Format health data for prompt
+            metrics = []
+            for key, value in health_data.items():
+                metrics.append(f"{key}: {value}")
+            
+            metrics_str = "\n".join(metrics)
+            
+            # Process user context if available
+            context = ""
+            if user_context:
+                context_items = []
+                for key, value in user_context.items():
+                    if key == 'health_conditions' and isinstance(value, list):
+                        context_items.append(f"health_conditions: {', '.join(value)}")
+                    else:
+                        context_items.append(f"{key}: {value}")
+                context = "User context:\n" + "\n".join(context_items)
+            
+            # Create prompt for Gemini
+            prompt = f"""
+            Based on the following health metrics and user information, provide specific, actionable health recommendations:
+            
+            {metrics_str}
+            
+            {context}
+            
+            As a health AI assistant, provide:
+            
+            1. 3-5 specific, actionable recommendations tailored to this user
+            2. Take into account their health conditions if provided
+            3. Consider their risk score when determining urgency and type of recommendations
+            
+            Format your response as a list of recommendations ONLY, without any introductory text or explanations.
+            Each recommendation should be clear, specific, and actionable.
+            """
+            
+            # Generate response from Gemini
+            response = self.model.generate_content(prompt)
+            
+            # Process the response to get a list of recommendations
+            content = response.text.strip()
+            
+            # Extract recommendations assuming numbered or bullet list format
+            recommendations = []
+            for line in content.split('\n'):
+                line = line.strip()
+                # Skip empty lines
+                if not line:
+                    continue
+                
+                # Try to extract recommendation removing numbering/bullets
+                # Handle numbered lists (1. 2. etc)
+                if line[0].isdigit() and line[1:].startswith('. '):
+                    recommendations.append(line[3:].strip())
+                # Handle bullet lists (• - * etc)
+                elif line[0] in ['•', '-', '*', '–', '—'] and len(line) > 1 and line[1] == ' ':
+                    recommendations.append(line[2:].strip())
+                # Just add the line if it doesn't match a list format
+                else:
+                    recommendations.append(line)
+            
+            # If we couldn't parse recommendations properly, return a default set
+            if not recommendations:
+                logger.warning("Could not parse recommendations from Gemini response")
+                return ["Monitor your vital signs", "Stay hydrated", "Contact healthcare provider if symptoms worsen"]
+            
+            return recommendations
+                
+        except Exception as e:
+            logger.error(f"Error generating health recommendations with Gemini: {e}")
+            return ["Monitor your vital signs", "Stay hydrated", "Contact healthcare provider if symptoms persist"]
+
 # Create a singleton instance
 gemini = GeminiClient() 

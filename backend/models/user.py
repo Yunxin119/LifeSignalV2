@@ -15,7 +15,7 @@ class User:
         return get_collection(cls.COLLECTION_NAME)
     
     @classmethod
-    def create(cls, username, email, password, full_name=None, age=None, medical_history=None):
+    def create(cls, username, email, password, full_name=None, age=None, medical_history=None, health_conditions=None):
         """
         Create a new user
         
@@ -26,6 +26,7 @@ class User:
             full_name (str, optional): User's full name
             age (int, optional): User's age
             medical_history (dict, optional): User's medical history
+            health_conditions (list, optional): User's health conditions (e.g., anxiety, COPD, heart disease)
             
         Returns:
             str: ID of the created user document
@@ -58,6 +59,8 @@ class User:
             document['age'] = age
         if medical_history and isinstance(medical_history, dict):
             document['medical_history'] = medical_history
+        if health_conditions and isinstance(health_conditions, list):
+            document['health_conditions'] = health_conditions
         
         # Insert document and return ID
         result = collection.insert_one(document)
@@ -144,6 +147,20 @@ class User:
         )
         
         return result.modified_count > 0
+    
+    @classmethod
+    def update_health_conditions(cls, user_id, health_conditions):
+        """
+        Update user's health conditions
+        
+        Args:
+            user_id (str): User ID
+            health_conditions (list): List of health conditions
+            
+        Returns:
+            bool: True if update was successful
+        """
+        return cls.update(user_id, {'health_conditions': health_conditions})
     
     @classmethod
     def delete(cls, user_id):

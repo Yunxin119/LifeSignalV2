@@ -16,6 +16,16 @@ struct RegisterView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
+    @State private var age: String = ""
+    @State private var showHealthConditionsSheet = false
+    @State private var selectedHealthConditions: [String] = []
+    
+    // Common health conditions
+    private let healthConditions = [
+        "Anxiety", "Depression", "Asthma", "COPD", 
+        "Heart Disease", "Hypertension", "Diabetes", 
+        "Arthritis", "Cancer", "None"
+    ]
     
     var body: some View {
         ScrollView {
@@ -62,26 +72,33 @@ struct RegisterView: View {
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                     
+                    TextField("Age", text: $age)
+                        .keyboardType(.numberPad)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                    
+                    Button(action: {
+                        showHealthConditionsSheet = true
+                    }) {
+                        HStack {
+                            Text(selectedHealthConditions.isEmpty ? "Select Health Conditions" : "\(selectedHealthConditions.count) conditions selected")
+                                .foregroundColor(selectedHealthConditions.isEmpty ? .secondary : .primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                    }
+                    
                     if let error = authModel.registrationError {
                         Text(error)
                             .foregroundColor(.red)
                             .font(.caption)
                             .padding(.top, -10)
                     }
-                    
-                    // Terms and conditions
-                    // HStack {
-                    //     Text("By registering, you agree to our ")
-                    //         .font(.caption)
-                    //         .foregroundColor(.secondary)
-                        
-                    //     Button("Terms & Conditions") {
-                    //         // Show terms and conditions
-                    //     }
-                    //     .font(.caption)
-                    //     .foregroundColor(.blue)
-                    // }
-                    // .padding(.top, 8)
                     
                     // Register button
                     Button(action: performRegistration) {
@@ -119,10 +136,22 @@ struct RegisterView: View {
             .padding()
         }
         .navigationBarBackButtonHidden(true)
+        .sheet(isPresented: $showHealthConditionsSheet) {
+            HealthConditionsSelectionView(
+                healthConditions: healthConditions,
+                selectedConditions: $selectedHealthConditions
+            )
+        }
     }
     
     private func performRegistration() {
-        authModel.register(username: username, email: email, password: password, confirmPassword: confirmPassword)
+        authModel.register(
+            username: username,
+            email: email,
+            password: password,
+            confirmPassword: confirmPassword,
+            healthConditions: selectedHealthConditions.isEmpty ? nil : selectedHealthConditions
+        )
         
         // Delay the notification to ensure authentication completes
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {

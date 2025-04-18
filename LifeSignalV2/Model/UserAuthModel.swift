@@ -35,6 +35,7 @@ class UserAuthModel: ObservableObject {
         var id: String
         var username: String
         var email: String
+        var healthConditions: [String]?
     }
     
     func login(email: String, password: String) {
@@ -69,7 +70,8 @@ class UserAuthModel: ObservableObject {
                         self?.currentUser = User(
                             id: userData.id,
                             username: userData.username,
-                            email: userData.email
+                            email: userData.email,
+                            healthConditions: userData.healthConditions
                         )
                         
                         // Set authenticated state
@@ -87,7 +89,7 @@ class UserAuthModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func register(username: String, email: String, password: String, confirmPassword: String) {
+    func register(username: String, email: String, password: String, confirmPassword: String, healthConditions: [String]? = nil) {
         registrationError = nil
         isLoading = true
         
@@ -117,7 +119,7 @@ class UserAuthModel: ObservableObject {
         }
         
         // Call API service
-        APIService.register(username: username, email: email, password: password)
+        APIService.register(username: username, email: email, password: password, healthConditions: healthConditions)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
@@ -136,7 +138,8 @@ class UserAuthModel: ObservableObject {
                         self?.currentUser = User(
                             id: userData.id,
                             username: userData.username,
-                            email: userData.email
+                            email: userData.email,
+                            healthConditions: userData.healthConditions
                         )
                         
                         // Set authenticated state
@@ -190,7 +193,12 @@ class UserAuthModel: ObservableObject {
         do {
             let user = try JSONDecoder().decode(AuthResponse.User.self, from: userData)
             
-            currentUser = User(id: user.id, username: user.username, email: user.email)
+            currentUser = User(
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                healthConditions: user.healthConditions
+            )
             isAuthenticated = true
         } catch {
             print("Error decoding user data: \(error.localizedDescription)")
@@ -201,5 +209,29 @@ class UserAuthModel: ObservableObject {
     private func removeFromKeychain() {
         UserDefaults.standard.removeObject(forKey: tokenKey)
         UserDefaults.standard.removeObject(forKey: userKey)
+    }
+    
+    // Update user health conditions
+    func updateHealthConditions(healthConditions: [String]) {
+        guard let token = self.token else {
+            return
+        }
+        
+        isLoading = true
+        
+        APIService.updateHealthConditions(healthConditions: healthConditions, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
+                },
+                receiveValue: { [weak self] response in
+                    if response.success, let userData = response.user {
+                        // Update current user's health conditions
+                        self?.currentUser?.healthConditions = userData.healthConditions
+                    }
+                }
+            )
+            .store(in: &cancellables)
     }
 } 

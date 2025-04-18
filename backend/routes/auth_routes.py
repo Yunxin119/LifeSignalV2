@@ -22,7 +22,7 @@ def register():
     
     # Extract optional fields
     kwargs = {}
-    optional_fields = ['full_name', 'age', 'medical_history']
+    optional_fields = ['full_name', 'age', 'medical_history', 'health_conditions']
     for field in optional_fields:
         if field in data:
             kwargs[field] = data.get(field)
@@ -64,6 +64,40 @@ def logout():
     token = data.get('token')
     AuthService.logout(token)
     return jsonify({'success': True}), 200
+
+@auth_bp.route('/update-health', methods=['POST'])
+def update_health_conditions():
+    """Update user health conditions"""
+    # Get token from Authorization header
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Authentication token is missing'}), 401
+    
+    token = auth_header.split(' ')[1]
+    
+    # Validate token
+    payload = AuthService.validate_token(token)
+    if not payload:
+        return jsonify({'error': 'Invalid or expired token'}), 401
+    
+    # Get user ID from token
+    user_id = payload.get('user_id')
+    
+    # Get health conditions from request
+    data = request.get_json()
+    health_conditions = data.get('health_conditions')
+    
+    if not health_conditions or not isinstance(health_conditions, list):
+        return jsonify({'error': 'Health conditions must be a list'}), 400
+    
+    # Update health conditions
+    result = AuthService.update_health_conditions(user_id, health_conditions)
+    
+    if result.get('success'):
+        return jsonify(result), 200
+    else:
+        return jsonify({'error': result.get('message', 'Failed to update health conditions')}), 400
+
 # Middleware function to verify JWT token
 def token_required(f):
     """Decorator for routes that require authentication"""

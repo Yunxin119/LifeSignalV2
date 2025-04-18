@@ -87,17 +87,21 @@ class AuthService:
                     'message': 'Invalid credentials'
                 }
             
-            # Generate token
             token = AuthService.generate_token(user)
+            
+            user_info = {
+                'id': str(user['_id']),
+                'username': user['username'],
+                'email': user['email']
+            }
+            
+            if 'health_conditions' in user:
+                user_info['health_conditions'] = user['health_conditions']
             
             return {
                 'success': True,
                 'token': token,
-                'user': {
-                    'id': str(user['_id']),
-                    'username': user['username'],
-                    'email': user['email']
-                }
+                'user': user_info
             }
         except Exception as e:
             logger.error(f"Error in authentication: {e}")
@@ -136,14 +140,21 @@ class AuthService:
             # Generate token
             token = AuthService.generate_token(user)
             
+            # Prepare user info
+            user_info = {
+                'id': str(user['_id']),
+                'username': user['username'],
+                'email': user['email']
+            }
+            
+            # Add health conditions if present
+            if 'health_conditions' in user:
+                user_info['health_conditions'] = user['health_conditions']
+            
             return {
                 'success': True,
                 'token': token,
-                'user': {
-                    'id': str(user['_id']),
-                    'username': user['username'],
-                    'email': user['email']
-                }
+                'user': user_info
             }
         except ValueError as e:
             logger.warning(f"Validation error in registration: {e}")
@@ -153,6 +164,47 @@ class AuthService:
             }
         except Exception as e:
             logger.error(f"Error in registration: {e}")
+            return {
+                'success': False,
+                'message': str(e)
+            }
+    
+    @staticmethod
+    def update_health_conditions(user_id, health_conditions):
+        """
+        Update health conditions for a user
+        
+        Args:
+            user_id (str): User ID
+            health_conditions (list): List of health conditions
+            
+        Returns:
+            dict: Update result
+        """
+        try:
+            # Update health conditions
+            success = User.update_health_conditions(user_id, health_conditions)
+            
+            if not success:
+                return {
+                    'success': False,
+                    'message': 'Failed to update health conditions'
+                }
+            
+            # Get updated user
+            user = User.get_by_id(user_id)
+            
+            return {
+                'success': True,
+                'user': {
+                    'id': str(user['_id']),
+                    'username': user['username'],
+                    'email': user['email'],
+                    'health_conditions': user['health_conditions']
+                }
+            }
+        except Exception as e:
+            logger.error(f"Error updating health conditions: {e}")
             return {
                 'success': False,
                 'message': str(e)
