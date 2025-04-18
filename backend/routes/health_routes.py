@@ -1,8 +1,13 @@
 from flask import Blueprint, request, jsonify
 from services.health_service import HealthService
 from routes.auth_routes import token_required
+import logging
 
-# Create health blueprint
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+# Create a health blueprint
 health_bp = Blueprint('health', __name__, url_prefix='/api/health')
 
 @health_bp.route('/analyze', methods=['POST'])
@@ -139,3 +144,90 @@ def analyze_trends_with_ai():
     }
     
     return jsonify(response), 200 
+
+@health_bp.route('/evaluate-model', methods=['GET'])
+@token_required
+def evaluate_user_model():
+    """Evaluate user's health prediction model with simulated test data"""
+    user_id = request.user_id
+    
+    try:
+        # Get user information
+        from models.user import User
+        user = User.get_by_id(user_id)
+        user_context = {}
+        if user:
+            if 'age' in user:
+                user_context['age'] = user['age']
+            if 'health_conditions' in user:
+                user_context['health_conditions'] = user['health_conditions']
+        
+        # Generate test data
+        from train.data_simulator import HealthDataSimulator
+        test_data = HealthDataSimulator.generate_health_timeline(
+            user_context if user else HealthDataSimulator.generate_user_profile(),
+            days=10,
+            abnormal_prob=0.3  # Increase abnormal ratio for better testing
+        )
+        
+        # Calculate true risk scores
+        from services.health_service import HealthService
+        for record in test_data:
+            heart_rate = record['heart_rate']
+            blood_oxygen = record['blood_oxygen']
+            record['true_risk'] = HealthService.calculate_risk_score(
+                heart_rate, blood_oxygen, user_context
+            )
+        
+        # Get ML predictions
+        from services.health_ml_service import HealthMLService
+        from services.feature_engineering import FeatureEngineering
+        
+        for record in test_data:
+            features = FeatureEngineering.extract_features(
+                record['heart_rate'],
+                record['blood_oxygen'],
+                None,
+                user_context
+            )
+            
+            record['ml_risk'] = HealthMLService.predict_risk(
+                user_id, features[:2], user_context
+            )
+            
+            # Calculate hybrid risk score
+            record['hybrid_risk'] = (record['ml_risk'] * 0.7) + (record['true_risk'] * 0.3)
+        
+        # Calculate evaluation metrics
+        import numpy as np
+        true_risks = np.array([r['true_risk'] for r in test_data])
+        ml_risks = np.array([r['ml_risk'] for r in test_data])
+        hybrid_risks = np.array([r['hybrid_risk'] for r in test_data])
+        
+        # Calculate mean absolute error
+        ml_mae = np.mean(np.abs(ml_risks - true_risks))
+        hybrid_mae = np.mean(np.abs(hybrid_risks - true_risks))
+        
+        # Prepare result
+        evaluation = {
+            'test_points': len(test_data),
+            'ml_model_error': float(ml_mae),
+            'hybrid_model_error': float(hybrid_mae),
+            'improvement': float((1 - (hybrid_mae / ml_mae)) * 100) if ml_mae > 0 else 0,
+            'sample_data': [{
+                'heart_rate': r['heart_rate'],
+                'blood_oxygen': r['blood_oxygen'],
+                'true_risk': r['true_risk'],
+                'ml_risk': r['ml_risk'],
+                'hybrid_risk': r['hybrid_risk']
+            } for r in test_data[:5]]  # Only show first 5 samples
+        }
+        
+        return jsonify(evaluation), 200
+        
+    except Exception as e:
+        logger.error(f"Error evaluating model: {e}")
+        return jsonify({
+            'error': str(e),
+            'message': 'Failed to evaluate health risk model'
+        }), 500

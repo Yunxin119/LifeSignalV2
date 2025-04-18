@@ -87,17 +87,14 @@ class AuthService:
                     'message': 'Invalid credentials'
                 }
             
-            # Generate token
             token = AuthService.generate_token(user)
             
-            # Prepare user info
             user_info = {
                 'id': str(user['_id']),
                 'username': user['username'],
                 'email': user['email']
             }
             
-            # Add health conditions if present
             if 'health_conditions' in user:
                 user_info['health_conditions'] = user['health_conditions']
             

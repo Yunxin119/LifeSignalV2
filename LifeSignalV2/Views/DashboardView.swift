@@ -64,9 +64,9 @@ struct DashboardView: View {
                         noDataView()
                     }
                     
-                    // Risk Assessment Card (if anomaly detected)
-                    if let healthData = healthService.latestHealthData, healthData.isAnomaly {
-                        riskAssessmentView(for: healthData)
+                    // Recommendations Card - Always displayed
+                    if let healthData = healthService.latestHealthData, !healthData.recommendations.isEmpty {
+                        recommendationsView(for: healthData)
                     }
                     
                     // Quick Actions
@@ -88,11 +88,14 @@ struct DashboardView: View {
             .navigationTitle("Health Dashboard")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showingEmergencySheet = true
-                    }) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.red)
+                    // Only show emergency icon for critical risk scores
+                    if let healthData = healthService.latestHealthData, healthData.riskScore >= 70 {
+                        Button(action: {
+                            showingEmergencySheet = true
+                        }) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.red)
+                        }
                     }
                 }
             }
@@ -128,45 +131,11 @@ struct DashboardView: View {
                     Text(errorMessage)
                 }
             }
-//            .overlay(
-//                Group {
-//                    #if DEBUG
-//                    if let rawResponse = healthService.rawResponseData {
-//                        VStack {
-//                            Spacer()
-//                            Button("Show Raw Response") {
-//                                showRawResponseDebug()
-//                            }
-//                            .padding()
-//                            .background(Color.gray.opacity(0.8))
-//                            .foregroundColor(.white)
-//                            .cornerRadius(8)
-//                        }
-//                        .padding()
-//                    }
-//                    #endif
-//                }
-//            )
         }
     }
     
-//    private func showRawResponseDebug() {
-//        if let rawResponse = healthService.rawResponseData,
-//           let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-//            let fileURL = documentsDirectory.appendingPathComponent("response_debug.json")
-//            do {
-//                // Convert Data to String first, then write the string to file
-//                if let jsonString = String(data: rawResponse, encoding: .utf8) {
-//                    try jsonString.write(to: fileURL, atomically: true, encoding: .utf8)
-//                    print("Debug response saved to: \(fileURL.path)")
-//                }
-//            } catch {
-//                print("Failed to save debug file: \(error)")
-//            }
-//        }
-//    }
-    
     private func createTestHealthData() {
+        // Unchanged test data creation code
         if let token = authModel.token {
             let submissionService = HealthDataSubmissionService()
             
@@ -241,7 +210,8 @@ struct DashboardView: View {
     // Check for anomalies and send notifications if needed
     private func checkForAnomalies() {
         if healthService.anomalyDetected && !hasShownAnomalyNotification,
-           let healthData = healthService.latestHealthData {
+           let healthData = healthService.latestHealthData,
+           healthData.riskScore >= 40 { // Only notify for moderate or higher risk
             // Send a notification for the anomaly
             notificationService.sendHealthAnomalyNotification(
                 heartRate: healthData.heartRate,
@@ -251,7 +221,7 @@ struct DashboardView: View {
             hasShownAnomalyNotification = true
             
             // Debug info
-            print("🔔 Sending anomaly notification for: Heart Rate \(Int(healthData.heartRate)) BPM, Blood Oxygen \(Int(healthData.bloodOxygen))%")
+            print("🔔 Sending anomaly notification for: Heart Rate \(Int(healthData.heartRate)) BPM, Blood Oxygen \(Int(healthData.bloodOxygen))%, Risk: \(healthData.riskScore)")
         }
     }
     
@@ -267,24 +237,30 @@ struct DashboardView: View {
     private func healthMetricsView(for healthData: HealthData) -> some View {
         VStack(spacing: 16) {
             HStack(spacing: 16) {
-                // Heart Rate Card
+                // Heart Rate Card - Only highlight as anomalous for moderate+ risk
+                let isHighRiskHR = healthData.isAnomaly && healthData.riskScore >= 40 &&
+                                 (healthData.heartRate > 100 || healthData.heartRate < 60)
+                
                 MetricCard(
                     title: "Heart Rate",
                     value: "\(Int(healthData.heartRate))",
                     unit: "BPM",
                     icon: "heart.fill",
-                    color: healthData.isAnomaly && healthData.heartRate > 100 ? .red : .pink,
-                    isAnomalous: healthData.isAnomaly && (healthData.heartRate > 100 || healthData.heartRate < 60)
+                    color: isHighRiskHR ? .red : .pink,
+                    isAnomalous: isHighRiskHR
                 )
                 
-                // Blood Oxygen Card
+                // Blood Oxygen Card - Only highlight as anomalous for moderate+ risk
+                let isHighRiskBO = healthData.isAnomaly && healthData.riskScore >= 40 &&
+                                 healthData.bloodOxygen < 95
+                
                 MetricCard(
                     title: "Blood Oxygen",
                     value: String(format: "%.1f", healthData.bloodOxygen),
                     unit: "%",
                     icon: "lungs.fill",
-                    color: healthData.isAnomaly && healthData.bloodOxygen < 95 ? .red : .blue,
-                    isAnomalous: healthData.isAnomaly && healthData.bloodOxygen < 95
+                    color: isHighRiskBO ? .red : .blue,
+                    isAnomalous: isHighRiskBO
                 )
             }
             
@@ -310,48 +286,80 @@ struct DashboardView: View {
         .cornerRadius(12)
     }
     
-    private func riskAssessmentView(for healthData: HealthData) -> some View {
+    // New recommendation view that's always displayed regardless of risk level
+    private func recommendationsView(for healthData: HealthData) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundColor(.yellow)
-                Text("Health Alert")
-                    .font(.headline)
+                // Icon and title changes based on risk level
+                if healthData.riskScore >= 70 {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.red)
+                    Text("Critical Health Alert")
+                        .font(.headline)
+                        .foregroundColor(.red)
+                } else if healthData.riskScore >= 40 {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.yellow)
+                    Text("Health Alert")
+                        .font(.headline)
+                } else {
+                    Image(systemName: "list.bullet.clipboard")
+                        .foregroundColor(.blue)
+                    Text("Recommendations")
+                        .font(.headline)
+                }
                 Spacer()
             }
             
             Divider()
             
-            if !healthData.recommendations.isEmpty {
-                ForEach(healthData.recommendations, id: \.self) { recommendation in
-                    HStack(alignment: .top) {
-                        Image(systemName: "circle.fill")
-                            .font(.system(size: 6))
-                            .padding(.top, 6)
-                        Text(recommendation)
-                    }
+            ForEach(healthData.recommendations, id: \.self) { recommendation in
+                HStack(alignment: .top) {
+                    Image(systemName: "circle.fill")
+                        .font(.system(size: 6))
+                        .padding(.top, 6)
+                    Text(recommendation)
                 }
             }
             
-            Spacer(minLength: 10)
-            
-            Button(action: {
-                showingEmergencySheet = true
-            }) {
-                HStack {
-                    Image(systemName: "phone.fill")
-                    Text("Contact Emergency Services")
+            // Only show emergency button for high risk (60+)
+            if healthData.riskScore >= 60 {
+                Spacer(minLength: 10)
+                
+                Button(action: {
+                    showingEmergencySheet = true
+                }) {
+                    HStack {
+                        Image(systemName: "phone.fill")
+                        Text("Contact Emergency Services")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.red)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.red)
-                .foregroundColor(.white)
-                .cornerRadius(10)
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(backgroundColor(for: healthData.riskScore))
         .cornerRadius(12)
+        // Only add red border for higher risk
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(healthData.riskScore >= 60 ? Color.red : Color.clear, lineWidth: healthData.riskScore >= 60 ? 2 : 0)
+        )
+    }
+    
+    // Helper function to determine background color based on risk
+    private func backgroundColor(for riskScore: Double) -> Color {
+        if riskScore >= 70 {
+            return Color(.systemRed).opacity(0.1)
+        } else if riskScore >= 40 {
+            return Color(.systemYellow).opacity(0.1)
+        } else {
+            return Color(.systemGray6)
+        }
     }
     
     private func quickActionsView() -> some View {
@@ -453,128 +461,8 @@ struct DashboardView: View {
     }
 }
 
-// Helper Views
-struct MetricCard: View {
-    let title: String
-    let value: String
-    let unit: String
-    let icon: String
-    let color: Color
-    var isAnomalous: Bool = false
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundColor(color)
-                
-                Text(title)
-                    .font(.headline)
-                
-                Spacer()
-                
-                if isAnomalous {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(.yellow)
-                }
-            }
-            
-            HStack(alignment: .firstTextBaseline) {
-                Text(value)
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundColor(isAnomalous ? .red : .primary)
-                
-                Text(unit)
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: isAnomalous ? color.opacity(0.3) : Color.black.opacity(0.05), 
-                radius: isAnomalous ? 10 : 5, 
-                x: 0, 
-                y: 2)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(isAnomalous ? color : Color.clear, lineWidth: isAnomalous ? 2 : 0)
-        )
-    }
-}
 
-struct RiskScoreView: View {
-    let score: Double
-    
-    private var riskLevel: String {
-        switch score {
-        case 0..<20: return "Low"
-        case 20..<40: return "Moderate"
-        case 40..<60: return "Elevated"
-        case 60..<80: return "High"
-        default: return "Critical"
-        }
-    }
-    
-    private var riskColor: Color {
-        switch score {
-        case 0..<20: return .green
-        case 20..<40: return .yellow
-        case 40..<60: return .orange
-        case 60..<80: return .red
-        default: return .purple
-        }
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Risk Assessment")
-                    .font(.headline)
-                
-                Spacer()
-                
-                Text(riskLevel)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(riskColor)
-            }
-            
-            // Risk gauge
-            ZStack(alignment: .leading) {
-                // Background track
-                Rectangle()
-                    .frame(height: 8)
-                    .cornerRadius(4)
-                    .foregroundColor(Color(.systemGray5))
-                
-                // Indicator
-                Rectangle()
-                    .frame(width: CGFloat(score) / 100 * UIScreen.main.bounds.width * 0.8, height: 8)
-                    .cornerRadius(4)
-                    .foregroundColor(riskColor)
-            }
-            
-            HStack {
-                Text("0%")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-                
-                Text("100%")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-    }
-}
-
+// MARK: Helper Views
 struct QuickActionButton: View {
     let title: String
     let icon: String
