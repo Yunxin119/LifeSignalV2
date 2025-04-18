@@ -136,76 +136,152 @@ class HealthDataSimulator:
         }
     
     @staticmethod
-    def generate_health_timeline(user_profile, days=30, abnormal_prob=0.15):
-        """Generate a timeline of health data for a user"""
+    def generate_health_timeline(user_profile, days=30, abnormal_prob=0.15, simulation_params=None):
+        """Generate a timeline of health data for a user with condition-specific patterns"""
         timeline = []
         
         # Start date
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days)
         
+        # Default simulation parameters
+        hr_variability_factor = 1.0
+        hr_baseline_shift = 0
+        bo_variability_factor = 1.0
+        bo_baseline_shift = 0
+        
+        # Special episode patterns
+        anxiety_episodes = False
+        arrhythmia_episodes = False
+        altitude_sensitive = False
+        glucose_related_fluctuations = False
+        
+        # Apply simulation parameters if provided
+        if simulation_params:
+            hr_variability_factor = simulation_params.get('hr_variability_factor', 1.0)
+            hr_baseline_shift = simulation_params.get('hr_baseline_shift', 0)
+            bo_variability_factor = simulation_params.get('bo_variability_factor', 1.0)
+            bo_baseline_shift = simulation_params.get('bo_baseline_shift', 0)
+            
+            anxiety_episodes = simulation_params.get('anxiety_episodes', False)
+            arrhythmia_episodes = simulation_params.get('arrhythmia_episodes', False)
+            altitude_sensitive = simulation_params.get('altitude_sensitive', False)
+            glucose_related_fluctuations = simulation_params.get('glucose_related_fluctuations', False)
+        
+        # Extract user context information
+        age = user_profile.get('age', 40)
+        conditions = user_profile.get('health_conditions', [])
+        conditions_text = " ".join([c.lower() for c in conditions])
+        
         # Generate daily records
         current_date = start_date
+        day_counter = 0
+        
         while current_date <= end_date:
-            # Determine if this reading is abnormal
-            is_abnormal = random.random() < abnormal_prob
+            day_counter += 1
+            # Number of readings for this day (random)
+            num_readings = random.randint(1, 3)
             
-            # Choose severity if abnormal
-            if is_abnormal:
-                severity = random.choices(
-                    ['mild', 'moderate', 'severe'], 
-                    weights=[0.6, 0.3, 0.1]
-                )[0]
-                vitals = HealthDataSimulator.generate_abnormal_vitals(user_profile, severity)
-            else:
-                vitals = HealthDataSimulator.generate_normal_vitals(user_profile)
+            # Special episode probability increases for certain conditions
+            episode_probability = 0.05  # Base probability
+            if anxiety_episodes and 'anxiety' in conditions_text:
+                episode_probability = 0.2  # Higher chance of anxiety episode
             
-            # Add timestamp
-            timestamp = current_date + timedelta(
-                hours=random.randint(8, 22),
-                minutes=random.randint(0, 59)
-            )
+            # Determine if this is a special episode day
+            is_special_episode = random.random() < episode_probability
             
-            # Create record
-            record = {
-                '_id': ObjectId(),
-                'user_id': 'simulated',
-                'heart_rate': vitals['heart_rate'],
-                'blood_oxygen': vitals['blood_oxygen'],
-                'created_at': timestamp,
-                'updated_at': timestamp,
-                'is_simulated': True
-            }
-            
-            # Add to timeline
-            timeline.append(record)
-            
-            # Move to next date (possibly multiple readings per day)
-            if random.random() < 0.3:  # 30% chance of multiple readings per day
-                # Add another reading a few hours later
-                timestamp = timestamp + timedelta(hours=random.randint(2, 8))
+            for reading in range(num_readings):
+                # Determine if this reading is abnormal (standard threshold)
+                is_standard_abnormal = random.random() < abnormal_prob
                 
-                # Second reading has higher chance of being abnormal if first was abnormal
-                second_abnormal_prob = 0.6 if is_abnormal else 0.1
-                
-                if random.random() < second_abnormal_prob:
+                # Base vitals generation
+                if is_standard_abnormal:
                     severity = random.choices(
                         ['mild', 'moderate', 'severe'], 
-                        weights=[0.5, 0.3, 0.2]
+                        weights=[0.6, 0.3, 0.1]
                     )[0]
                     vitals = HealthDataSimulator.generate_abnormal_vitals(user_profile, severity)
                 else:
                     vitals = HealthDataSimulator.generate_normal_vitals(user_profile)
                 
-                # Create second record
+                # Apply condition-specific adjustments
+                heart_rate = vitals['heart_rate']
+                blood_oxygen = vitals['blood_oxygen']
+                
+                # Apply baseline shifts
+                heart_rate += hr_baseline_shift
+                blood_oxygen += bo_baseline_shift
+                
+                # Apply variability factors
+                if hr_variability_factor != 1.0:
+                    # Apply increased variability around the mean
+                    hr_deviation = heart_rate - (70 + hr_baseline_shift)  # Deviation from adjusted baseline
+                    heart_rate = (70 + hr_baseline_shift) + (hr_deviation * hr_variability_factor)
+                
+                if bo_variability_factor != 1.0:
+                    # Apply increased variability around the mean
+                    bo_deviation = blood_oxygen - (97 + bo_baseline_shift)  # Deviation from adjusted baseline
+                    blood_oxygen = (97 + bo_baseline_shift) + (bo_deviation * bo_variability_factor)
+                
+                # Special episode patterns
+                if is_special_episode:
+                    if anxiety_episodes and 'anxiety' in conditions_text:
+                        # Anxiety episode - temporary elevated heart rate
+                        heart_rate += random.uniform(15, 30)
+                        # Slightly lower oxygen due to faster breathing
+                        blood_oxygen -= random.uniform(0, 2)
+                    
+                    if arrhythmia_episodes and any(c in conditions_text for c in ['heart', 'arrhythmia']):
+                        # Arrhythmia episode - irregular heart rate (high or low)
+                        if random.random() < 0.5:
+                            heart_rate += random.uniform(20, 40)  # Tachycardia
+                        else:
+                            heart_rate -= random.uniform(15, 25)  # Bradycardia
+                    
+                    if altitude_sensitive and 'copd' in conditions_text:
+                        # COPD patients more affected by environmental factors
+                        blood_oxygen -= random.uniform(3, 7)
+                    
+                    if glucose_related_fluctuations and 'diabetes' in conditions_text:
+                        # Blood sugar affecting heart rate
+                        if random.random() < 0.5:  # High sugar
+                            heart_rate += random.uniform(5, 15)
+                        else:  # Low sugar
+                            heart_rate -= random.uniform(5, 10)
+                
+                # Daily patterns (time of day effects)
+                hour = random.randint(6, 23)  # Time between 6am and 11pm
+                
+                if 6 <= hour <= 9:  # Morning
+                    heart_rate += random.uniform(0, 5)  # Slightly higher in morning
+                elif 22 <= hour <= 23:  # Night
+                    heart_rate -= random.uniform(0, 8)  # Lower at night
+                    
+                # Weekly patterns (more stress on weekdays)
+                weekday = (current_date.weekday() < 5)  # Monday-Friday
+                if weekday and 'stress' in conditions_text:
+                    heart_rate += random.uniform(0, 5)  # Stress effect
+                
+                # Ensure values are within realistic ranges
+                heart_rate = max(40, min(180, heart_rate))
+                blood_oxygen = max(75, min(100, blood_oxygen))
+                
+                # Add timestamp
+                timestamp = current_date + timedelta(
+                    hours=hour,
+                    minutes=random.randint(0, 59)
+                )
+                
+                # Create record
                 record = {
                     '_id': ObjectId(),
                     'user_id': 'simulated',
-                    'heart_rate': vitals['heart_rate'],
-                    'blood_oxygen': vitals['blood_oxygen'],
+                    'heart_rate': round(heart_rate, 1),
+                    'blood_oxygen': round(blood_oxygen, 1),
                     'created_at': timestamp,
                     'updated_at': timestamp,
-                    'is_simulated': True
+                    'is_simulated': True,
+                    'simulation_note': 'Enhanced simulation' + (' with special episode' if is_special_episode else '')
                 }
                 
                 # Add to timeline
@@ -213,6 +289,9 @@ class HealthDataSimulator:
             
             # Move to next day
             current_date += timedelta(days=1)
+        
+        # Sort timeline by timestamp
+        timeline.sort(key=lambda x: x['created_at'])
         
         return timeline
     

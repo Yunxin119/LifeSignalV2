@@ -34,6 +34,20 @@ struct SettingsView: View {
                     }
                 }
                 
+                Section(header: Text("AI Model")) {
+                    NavigationLink(destination: SimulateDataView()) {
+                        HStack {
+                            Image(systemName: "brain.head.profile")
+                                .foregroundColor(.purple)
+                            Text("Simulate Data for Better Scope")
+                        }
+                    }
+                    
+                    Text("Test how well your personalized health model predicts risk scores")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
                 Section(header: Text("Demo Features")) {
                     Toggle("Show Demo Options", isOn: $showingDemoOptions)
                     
