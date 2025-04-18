@@ -12,8 +12,16 @@ struct ProfileView: View {
     @EnvironmentObject var authModel: UserAuthModel
     @State private var showingWatchPairing = false
     @State private var showingLogoutConfirmation = false
+    @State private var showingHealthConditionsEditor = false
     // TODO: IMPLEMENT API FOR PAIRING HERE
     @State private var isWatchConnected = false
+    
+    // Common health conditions for editing
+    private let healthConditions = [
+        "Anxiety", "Depression", "Asthma", "COPD", 
+        "Heart Disease", "Hypertension", "Diabetes", 
+        "Arthritis", "Cancer", "None"
+    ]
     
     var body: some View {
         NavigationStack {
@@ -46,6 +54,30 @@ struct ProfileView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 20)
+                    }
+                }
+                
+                // Health Conditions
+                Section(header: Text("HEALTH CONDITIONS")) {
+                    if let user = authModel.currentUser {
+                        if let conditions = user.healthConditions, !conditions.isEmpty {
+                            ForEach(conditions, id: \.self) { condition in
+                                Text(condition)
+                            }
+                        } else {
+                            Text("No health conditions specified")
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Button(action: {
+                            showingHealthConditionsEditor = true
+                        }) {
+                            HStack {
+                                Image(systemName: "pencil")
+                                Text("Edit Health Conditions")
+                            }
+                            .foregroundColor(.blue)
+                        }
                     }
                 }
                 
@@ -131,6 +163,18 @@ struct ProfileView: View {
             .sheet(isPresented: $showingWatchPairing) {
                 WatchPairingView()
                     .environmentObject(authModel)
+            }
+            .sheet(isPresented: $showingHealthConditionsEditor) {
+                HealthConditionsSelectionView(
+                    healthConditions: healthConditions,
+                    selectedConditions: Binding(
+                        get: { authModel.currentUser?.healthConditions ?? [] },
+                        set: { newValue in
+                            // Save health conditions when done
+                            authModel.updateHealthConditions(healthConditions: newValue)
+                        }
+                    )
+                )
             }
             .alert(isPresented: $showingLogoutConfirmation) {
                 Alert(

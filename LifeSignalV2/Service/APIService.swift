@@ -50,13 +50,17 @@ struct APIService {
         return makeRequest(endpoint: endpoint, method: "POST", body: body)
     }
     
-    static func register(username: String, email: String, password: String) -> AnyPublisher<AuthResponse, APIError> {
+    static func register(username: String, email: String, password: String, healthConditions: [String]? = nil) -> AnyPublisher<AuthResponse, APIError> {
         let endpoint = "/api/auth/register"
-        let body: [String: Any] = [
+        var body: [String: Any] = [
             "username": username,
             "email": email,
             "password": password
         ]
+        
+        if let healthConditions = healthConditions, !healthConditions.isEmpty {
+            body["health_conditions"] = healthConditions
+        }
         
         return makeRequest(endpoint: endpoint, method: "POST", body: body)
     }
@@ -129,5 +133,18 @@ struct AuthResponse: Decodable {
         let id: String
         let username: String
         let email: String
+        let healthConditions: [String]?
+    }
+}
+
+// MARK: - Health Conditions
+extension APIService {
+    static func updateHealthConditions(healthConditions: [String], token: String) -> AnyPublisher<AuthResponse, APIError> {
+        let endpoint = "/api/auth/update-health"
+        let body: [String: Any] = [
+            "health_conditions": healthConditions
+        ]
+        
+        return makeRequest(endpoint: endpoint, method: "POST", body: body, token: token)
     }
 } 
