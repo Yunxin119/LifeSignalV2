@@ -41,6 +41,9 @@ class HealthService:
     def analyze_health_data(cls, user_id, heart_rate, blood_oxygen, additional_metrics=None):
         """Analyze health data using machine learning and rules"""
         try:
+            logger.info(f"[ANALYSIS_START] User: {user_id}, HR: {heart_rate}, SpO2: {blood_oxygen}")
+            start_time = datetime.now()
+            
             # Get user context
             user = User.get_by_id(user_id)
             user_context = {}
@@ -54,43 +57,57 @@ class HealthService:
             
             # Log health conditions for personalized analysis
             if 'health_conditions' in user_context and user_context['health_conditions']:
-                logger.info(f"Analyzing health data with conditions: {user_context['health_conditions']}")
+                logger.info(f"[USER_CONTEXT] Analyzing health data with conditions: {user_context['health_conditions']}")
+            if 'age' in user_context:
+                logger.info(f"[USER_CONTEXT] User age: {user_context['age']}")
                     
             # Extract features
             from services.feature_engineering import FeatureEngineering
             features = FeatureEngineering.extract_features(
                 heart_rate, blood_oxygen, additional_metrics, user_context
             )
+            logger.info(f"[FEATURES] Extracted {len(features)} features")
             
             # Get historical features if available
             historical_features = FeatureEngineering.get_historical_features(user_id)
+            history_count = len(historical_features)
+            logger.info(f"[HISTORY] Found {history_count} historical data points for user {user_id}")
             
             # Legacy anomaly detection
             anomaly_detector = cls.get_anomaly_detector()
             legacy_features = np.array([[heart_rate, blood_oxygen]])
             prediction = anomaly_detector.predict(legacy_features)
             is_anomaly = prediction[0] == -1
+            logger.info(f"[ANOMALY_DETECTION] Result: {'Anomaly detected' if is_anomaly else 'Normal'}")
             
             # Calculate rule-based risk
+            rule_start_time = datetime.now()
             rule_risk_score = cls.calculate_risk_score(heart_rate, blood_oxygen, user_context)
+            rule_duration = (datetime.now() - rule_start_time).total_seconds() * 1000
+            logger.info(f"[RULE_RISK] Score: {rule_risk_score:.2f} (calculated in {rule_duration:.2f}ms)")
             
             # Get ML risk prediction
+            ml_start_time = datetime.now()
             from services.health_ml_service import HealthMLService
             ml_risk_score = HealthMLService.predict_risk(user_id, features[:2], user_context)
+            ml_duration = (datetime.now() - ml_start_time).total_seconds() * 1000
+            logger.info(f"[ML_RISK] Score: {ml_risk_score:.2f} (calculated in {ml_duration:.2f}ms)")
             
             # Blend predictions with more weight to ML as we collect more data
+            blend_start_time = datetime.now()
             if len(historical_features) > 0:
                 # More data = more trust in ML model
                 ml_weight = min(0.7, 0.3 + (len(historical_features) / 100))
                 rule_weight = 1.0 - ml_weight
+                logger.info(f"[RISK_BLEND] Using ML weight: {ml_weight:.2f}, Rule weight: {rule_weight:.2f} based on {len(historical_features)} historical points")
                 risk_score = (ml_risk_score * ml_weight) + (rule_risk_score * rule_weight)
             else:
                 # Not enough historical data, rely more on rules
+                logger.info(f"[RISK_BLEND] Limited history: Using ML weight: 0.3, Rule weight: 0.7")
                 risk_score = (ml_risk_score * 0.3) + (rule_risk_score * 0.7)
-                    
-            # Ensure minimum risk if anomaly detected
-            if is_anomaly and risk_score < 40:
-                risk_score = max(risk_score, 40)
+            
+            blend_duration = (datetime.now() - blend_start_time).total_seconds() * 1000    
+            logger.info(f"[RISK_BLEND] Final blended risk score: {risk_score:.2f} (blended in {blend_duration:.2f}ms)")
                     
             # Prepare data for analysis
             health_data = {
@@ -106,19 +123,23 @@ class HealthService:
                 health_conditions_text = " ".join(health_conditions)
                 
                 if any(term in health_conditions_text for term in ['anxiety', 'panic disorder', 'stress disorder']):
-                    logger.info(f"Applying anxiety-adjusted heart rate thresholds for user {user_id}")
+                    logger.info(f"[CONDITION_ADJUST] Applying anxiety-adjusted heart rate thresholds for user {user_id}")
                     health_data['condition_note'] = "Anxiety may cause elevated heart rate readings"
                 
                 if any(term in health_conditions_text for term in ['copd', 'emphysema', 'chronic bronchitis']):
-                    logger.info(f"Applying COPD-adjusted blood oxygen thresholds for user {user_id}")
+                    logger.info(f"[CONDITION_ADJUST] Applying COPD-adjusted blood oxygen thresholds for user {user_id}")
                     health_data['condition_note'] = "COPD may cause lower baseline blood oxygen levels"
                 
                 if any(term in health_conditions_text for term in ['heart disease', 'hypertension', 'cardiovascular']):
-                    logger.info(f"Adding heart condition context for user {user_id}")
+                    logger.info(f"[CONDITION_ADJUST] Adding heart condition context for user {user_id}")
                     health_data['condition_note'] = "Heart condition requires careful monitoring of vital signs"
             
             # Get AI recommendations
+            ai_start_time = datetime.now()
             ai_analysis = gemini.generate_health_advice(health_data, user_context)
+            ai_duration = (datetime.now() - ai_start_time).total_seconds() * 1000
+            logger.info(f"[AI_ANALYSIS] Generated AI recommendations in {ai_duration:.2f}ms")
+            
             recommendations = cls.generate_recommendations(risk_score, heart_rate, blood_oxygen, user_context)
             
             # Prepare result
@@ -165,15 +186,20 @@ class HealthService:
             # Update ML model with new data (immediate training)
             try:
                 HealthMLService.update_user_model(user_id, features[:2], risk_score, user_context)
-                logger.info(f"Model updated for user {user_id} with new health data")
+                logger.info(f"[MODEL_UPDATE] Model updated for user {user_id} with new health data")
             except Exception as e:
-                logger.warning(f"Failed to update user model: {e}")
+                logger.warning(f"[MODEL_UPDATE] Failed to update user model: {e}")
 
             result['health_data_id'] = health_data_id
+            
+            # Log overall timing
+            total_duration = (datetime.now() - start_time).total_seconds() * 1000
+            logger.info(f"[ANALYSIS_COMPLETE] Total analysis time: {total_duration:.2f}ms for user {user_id}")
+            
             return result
             
         except Exception as e:
-            logger.error(f"Error analyzing health data: {e}")
+            logger.error(f"[ANALYSIS_ERROR] Error analyzing health data: {e}", exc_info=True)
             return {
                 'error': str(e),
                 'recommendations': ["Unable to analyze health data. Please try again later."]
@@ -189,6 +215,9 @@ class HealthService:
         condition_specific_adjustments = False
         condition_notes = []
 
+        # Log starting parameters
+        logging.debug(f"[RULE_RISK_START] HR: {heart_rate}, SpO2: {blood_oxygen}, Initial ranges: HR({hr_normal_low}-{hr_normal_high}), SpO2(≥{bo_normal_low})")
+
         if user_context and 'health_conditions' in user_context and user_context['health_conditions']:
             health_conditions = [c.lower() for c in user_context['health_conditions']]
             health_conditions_text = " ".join(health_conditions)
@@ -198,97 +227,74 @@ class HealthService:
                 hr_normal_high += 15  # Allow higher heart rate for anxiety patients
                 condition_specific_adjustments = True
                 condition_notes.append("Adjusted heart rate threshold for anxiety")
+                logging.debug(f"[RULE_ADJUST] Anxiety detected, increased HR upper threshold to {hr_normal_high}")
             
             # Adjust blood oxygen threshold for COPD
             if any(term in health_conditions_text for term in ['copd', 'emphysema', 'chronic bronchitis']):
                 bo_normal_low = 92  # Lower threshold for COPD patients
                 condition_specific_adjustments = True
                 condition_notes.append("Adjusted blood oxygen threshold for COPD")
+                logging.debug(f"[RULE_ADJUST] COPD detected, lowered SpO2 threshold to {bo_normal_low}")
                 
             # Athletes might have lower resting heart rates
             if 'athlete' in health_conditions_text:
                 hr_normal_low = 50  # Lower threshold for athletes
                 condition_specific_adjustments = True
                 condition_notes.append("Adjusted heart rate threshold for athletic condition")
+                logging.debug(f"[RULE_ADJUST] Athletic condition detected, lowered HR lower threshold to {hr_normal_low}")
             
             # Diabetic patients may need different metrics
             if any(term in health_conditions_text for term in ['diabetes', 'diabetic']):
                 condition_specific_adjustments = True
                 condition_notes.append("Considering diabetic condition in assessment")
+                logging.debug(f"[RULE_ADJUST] Diabetes condition noted in assessment")
             
             # Heart conditions need more careful monitoring
             if any(term in health_conditions_text for term in ['heart disease', 'hypertension', 'arrhythmia', 'cardiovascular']):
                 condition_specific_adjustments = True
                 condition_notes.append("Heart condition requires more careful monitoring")
+                logging.debug(f"[RULE_ADJUST] Heart condition noted, applying more careful monitoring")
         
         # Heart rate risk calculation
         if hr_normal_low <= heart_rate <= hr_normal_high:
             hr_risk = 0
+            logging.debug(f"[RULE_HR] Heart rate {heart_rate} is within normal range ({hr_normal_low}-{hr_normal_high}), risk = 0")
         else:
             if heart_rate > hr_normal_high:
                 hr_deviation = heart_rate - hr_normal_high
                 # More balanced scaling for elevated heart rate
                 hr_risk = min(100, (hr_deviation / 20) * 100)
+                logging.debug(f"[RULE_HR] Heart rate {heart_rate} exceeds normal range by {hr_deviation}, risk = {hr_risk:.2f}")
             else:
                 hr_deviation = hr_normal_low - heart_rate
                 hr_risk = min(100, (hr_deviation / 20) * 100)
+                logging.debug(f"[RULE_HR] Heart rate {heart_rate} below normal range by {hr_deviation}, risk = {hr_risk:.2f}")
         
         # Blood oxygen risk calculation
         if blood_oxygen >= bo_normal_low:
             bo_risk = 0
+            logging.debug(f"[RULE_SPO2] Blood oxygen {blood_oxygen}% is within normal range (≥{bo_normal_low}%), risk = 0")
         else:
             bo_deviation = bo_normal_low - blood_oxygen
             bo_risk = min(100, (bo_deviation / 5) * 100)
+            logging.debug(f"[RULE_SPO2] Blood oxygen {blood_oxygen}% below normal by {bo_deviation}%, risk = {bo_risk:.2f}")
         
         # Base risk - equal weighting
         base_risk = (hr_risk * 0.5 + bo_risk * 0.5)
+        logging.debug(f"[RULE_BASE] Base risk (50% HR, 50% SpO2): {base_risk:.2f}")
         
         # Combined risk factor when both metrics are abnormal OR there are specific conditions
         if condition_specific_adjustments and hr_risk > 0 and bo_risk > 0:
+            prev_risk = base_risk
             base_risk = min(100, base_risk * 1.15)  # Increased multiplier from 1.1 to 1.15
-            logger.info(f"Applied condition-specific risk adjustment: {', '.join(condition_notes)}")
+            logging.info(f"[RULE_ADJUST] Applied condition-specific risk adjustment: {', '.join(condition_notes)}")
+            logging.debug(f"[RULE_ADJUST] Risk increased from {prev_risk:.2f} to {base_risk:.2f} due to condition adjustments")
         elif hr_risk > 0 and bo_risk > 0:
-            base_risk = min(100, base_risk * 1.2) 
+            prev_risk = base_risk
+            base_risk = min(100, base_risk * 1.1)
+            logging.debug(f"[RULE_ADJUST] Risk increased from {prev_risk:.2f} to {base_risk:.2f} due to multiple abnormal vitals")
         
-        # Apply user context factors
-        if user_context:
-            # Age factor
-            age_factor = 1.0
-            if 'age' in user_context:
-                age = user_context['age']
-                if isinstance(age, str) and age.isdigit():
-                    age = int(age)
-                if isinstance(age, int):
-                    if age > 65:
-                        age_factor = 1.2 + min(0.3, (age - 65) * 0.01)
-                    elif age < 18:
-                        age_factor = 1.1
-            
-            # Health conditions factor
-            condition_factor = 1.0
-            if 'health_conditions' in user_context and user_context['health_conditions']:
-                high_risk_conditions = ['heart disease', 'coronary', 'hypertension', 'arrhythmia', 
-                                   'diabetes']
-                expected_impact_conditions = ['anxiety', 'copd', 'asthma', 'sleep apnea']
-
-                health_conditions = [c.lower() for c in user_context['health_conditions']]
-                
-                high_risk_count = sum(1 for c in health_conditions 
-                                if any(hr in c for hr in high_risk_conditions))
-                                
-                expected_impact_count = sum(1 for c in health_conditions 
-                                        if any(ei in c for ei in expected_impact_conditions))
-                                        
-                other_count = len(health_conditions) - high_risk_count - expected_impact_count
-                
-                condition_factor += (high_risk_count * 0.15) + (expected_impact_count * 0.07) + (other_count * 0.05)
-                logger.info(f"Condition factor: {condition_factor} (High risk: {high_risk_count}, Expected impact: {expected_impact_count}, Other: {other_count})")
-
-            # Apply adjustment factors
-            adjusted_risk = min(100, base_risk * age_factor * condition_factor)
-            logger.info(f"Risk calculation: Base risk {base_risk:.2f} * Age factor {age_factor:.2f} * Condition factor {condition_factor:.2f} = {adjusted_risk:.2f}")
-            return adjusted_risk
-            
+        logging.info(f"[RULE_FINAL] Final rule-based risk score: {base_risk:.2f}")
         return base_risk
 
     @staticmethod

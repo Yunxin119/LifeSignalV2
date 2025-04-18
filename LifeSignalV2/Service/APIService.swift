@@ -147,4 +147,102 @@ extension APIService {
         
         return makeRequest(endpoint: endpoint, method: "POST", body: body, token: token)
     }
+}
+
+// MARK: - Model Evaluation
+extension APIService {
+    static func evaluateUserModel(token: String) -> AnyPublisher<ModelEvaluationResponse, APIError> {
+        let endpoint = "/api/health/evaluate-model"
+        return makeRequest(endpoint: endpoint, method: "GET", token: token)
+    }
+    
+    static func simulateHealthData(token: String, days: Int, abnormalProb: Double, readingsPerDay: Int) -> AnyPublisher<SimulationResponse, APIError> {
+        let endpoint = "/api/health/simulate"
+        let body: [String: Any] = [
+            "days": days,
+            "abnormal_prob": abnormalProb,
+            "readings_per_day": readingsPerDay
+        ]
+        
+        return makeRequest(endpoint: endpoint, method: "POST", body: body, token: token)
+    }
+}
+
+// MARK: - Additional Response Models
+struct ModelEvaluationResponse: Decodable {
+    let testPoints: Int
+    let mlModelError: Double
+    let hybridModelError: Double
+    let improvement: Double
+    let sampleData: [SampleDataPoint]
+    
+    enum CodingKeys: String, CodingKey {
+        case testPoints = "test_points"
+        case mlModelError = "ml_model_error"
+        case hybridModelError = "hybrid_model_error"
+        case improvement
+        case sampleData = "sample_data"
+    }
+    
+    struct SampleDataPoint: Decodable {
+        let heartRate: Double
+        let bloodOxygen: Double
+        let trueRisk: Double
+        let mlRisk: Double
+        let hybridRisk: Double
+        
+        enum CodingKeys: String, CodingKey {
+            case heartRate = "heart_rate"
+            case bloodOxygen = "blood_oxygen"
+            case trueRisk = "true_risk"
+            case mlRisk = "ml_risk"
+            case hybridRisk = "hybrid_risk"
+        }
+    }
+}
+
+struct SimulationResponse: Decodable {
+    let message: String
+    let recordsCreated: Int
+    let samples: [HealthSample]
+    let modelEvaluation: ModelEvaluation
+    
+    enum CodingKeys: String, CodingKey {
+        case message
+        case recordsCreated = "records_created"
+        case samples
+        case modelEvaluation = "model_evaluation"
+    }
+    
+    struct HealthSample: Decodable {
+        let id: String
+        let heartRate: Double
+        let bloodOxygen: Double
+        let riskScore: Double
+        let isAnomaly: Bool
+        let timestamp: String
+        
+        enum CodingKeys: String, CodingKey {
+            case id
+            case heartRate = "heart_rate"
+            case bloodOxygen = "blood_oxygen"
+            case riskScore = "risk_score"
+            case isAnomaly = "is_anomaly"
+            case timestamp
+        }
+    }
+    
+    struct ModelEvaluation: Decodable {
+        let mlModelError: Double?
+        let hybridModelError: Double?
+        let improvement: Double?
+        let error: String?
+        
+        enum CodingKeys: String, CodingKey {
+            case mlModelError = "ml_model_error"
+            case hybridModelError = "hybrid_model_error"
+            case improvement
+            case error
+        }
+    }
 } 
