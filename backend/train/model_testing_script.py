@@ -1,8 +1,10 @@
 """
-Health ML Model Testing and Visualization Tool
+Condition-Aware Health ML Model Testing Script
 
-This script tests the health risk prediction model across different conditions
-and visualizes its performance compared to the rule-based approach.
+This standalone script tests the improved condition-aware ML model by:
+1. Creating a condition-aware model
+2. Testing it with various health conditions
+3. Generating visualizations to show model performance
 """
 
 import os
@@ -11,565 +13,653 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_absolute_error
+from sklearn.ensemble import GradientBoostingRegressor
 import joblib
-from datetime import datetime, timedelta
-import json
-
-# Add parent directory to path to import project modules
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-# Import required project modules
-from services.health_service import HealthService
-from services.health_ml_service import HealthMLService
-from services.feature_engineering import FeatureEngineering
-from train.data_simulator import HealthDataSimulator
-
-# Set up logging
+from datetime import datetime
+import shutil
 import logging
+
+# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-class ModelTester:
-    def __init__(self, output_dir="model_test_results"):
-        """Initialize the model tester with an output directory for results"""
+# Output directories
+MODEL_DIR = "improved_models"
+TEST_RESULTS_DIR = "model_test_results"
+
+class HealthModelTester:
+    """Tests condition-aware health risk prediction models"""
+    
+    def __init__(self, output_dir=TEST_RESULTS_DIR):
+        """Initialize the model tester"""
         self.output_dir = output_dir
         os.makedirs(output_dir, exist_ok=True)
         self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        # Data storage
-        self.test_results = {}
+        # Create model directory
+        os.makedirs(MODEL_DIR, exist_ok=True)
+        
+        # Store test results
         self.condition_results = {}
         
-    def test_model_across_conditions(self, conditions_to_test, samples_per_condition=100):
-        """Test model performance across different health conditions"""
-        logger.info(f"Testing model across {len(conditions_to_test)} different health conditions")
+        # Store models
+        self.rule_based_model = None
+        self.hybrid_model = None
+        self.pure_ml_model = None
+    
+    def calculate_rule_based_risk(self, heart_rate, blood_oxygen, user_context=None):
+        """Calculate rule-based risk score using similar logic as HealthService"""
+        # Normal ranges
+        hr_normal_low, hr_normal_high = 60, 100
+        bo_normal_low = 95
+        
+        # Apply condition-specific adjustments
+        if user_context and 'health_conditions' in user_context and user_context['health_conditions']:
+            health_conditions = [c.lower() for c in user_context['health_conditions']]
+            health_conditions_text = " ".join(health_conditions)
+            
+            # Adjust heart rate range for anxiety
+            if any(term in health_conditions_text for term in ['anxiety', 'panic', 'stress']):
+                hr_normal_high += 15  # Allow higher heart rate for anxiety patients
+            
+            # Adjust blood oxygen threshold for COPD
+            if any(term in health_conditions_text for term in ['copd', 'emphysema', 'chronic bronchitis']):
+                bo_normal_low = 92  # Lower threshold for COPD patients
+                
+            # Athletes might have lower resting heart rates
+            if 'athlete' in health_conditions_text:
+                hr_normal_low = 50  # Lower threshold for athletes
+        
+        # Calculate heart rate risk
+        if heart_rate < hr_normal_low:
+            # Low heart rate risk
+            hr_risk = 40 + (hr_normal_low - heart_rate) * 3
+        elif heart_rate > hr_normal_high:
+            # High heart rate risk
+            hr_risk = 40 + (heart_rate - hr_normal_high) * 1.5
+        else:
+            # Normal heart rate
+            hr_risk = 20 + abs(heart_rate - 75) * 0.4  # Slight risk away from ideal
+        
+        # Calculate blood oxygen risk
+        if blood_oxygen < bo_normal_low:
+            # Low blood oxygen risk
+            bo_risk = 50 + (bo_normal_low - blood_oxygen) * 10
+        else:
+            # Normal blood oxygen
+            bo_risk = max(0, 20 - (blood_oxygen - bo_normal_low) * 2)
+        
+        # Combine risks (blood oxygen issues are more serious)
+        combined_risk = (hr_risk * 0.4) + (bo_risk * 0.6)
+        
+        # Cap at 100
+        return min(100, combined_risk)
+    
+    def create_condition_aware_model(self, health_conditions=None):
+        """Create condition-aware ML model that incorporates health conditions as features"""
+        logger.info(f"Creating condition-aware model for conditions: {health_conditions or 'None'}")
+        
+        # Create base model
+        model = GradientBoostingRegressor(
+            n_estimators=100,
+            learning_rate=0.1,
+            max_depth=3,
+            random_state=42
+        )
+        
+        # Generate training data with condition-specific examples
+        X_train, y_train = self._generate_training_data(health_conditions or [])
+        
+        # Train the model
+        model.fit(X_train, y_train)
+        
+        logger.info(f"Model trained with {len(X_train)} samples")
+        
+        # Save model
+        model_path = os.path.join(MODEL_DIR, f"condition_aware_model_{self.timestamp}.pkl")
+        joblib.dump(model, model_path)
+        logger.info(f"Model saved to {model_path}")
+        
+        self.hybrid_model = model
+        return model
+    
+    def _generate_training_data(self, health_conditions):
+        """Generate synthetic training data with condition-specific adjustments"""
+        # Combine all conditions into a single string for easier checking
+        conditions_text = " ".join(health_conditions).lower()
+        
+        # Generate base samples across the range of heart rates and blood oxygen
+        X_samples = []
+        y_samples = []
+        
+        # Generate samples across normal ranges
+        for hr in range(40, 180, 5):  # Heart rate from 40 to 180
+            for bo in range(80, 101):  # Blood oxygen from 80 to 100
+                # Create feature vector
+                features = [hr, bo]
+                
+                # Add condition markers as features
+                has_copd = 1.0 if any(c in conditions_text for c in ['copd', 'emphysema', 'chronic bronchitis']) else 0.0
+                has_anxiety = 1.0 if any(c in conditions_text for c in ['anxiety', 'panic', 'stress']) else 0.0
+                has_heart_issue = 1.0 if any(c in conditions_text for c in ['heart', 'cardiac', 'arrhythmia']) else 0.0
+                is_athlete = 1.0 if 'athlete' in conditions_text else 0.0
+                
+                # Complete feature vector with condition indicators
+                features.extend([has_copd, has_anxiety, has_heart_issue, is_athlete])
+                
+                X_samples.append(features)
+                
+                # Create user context for rule-based calculation
+                user_context = {'health_conditions': health_conditions} if health_conditions else None
+                
+                # Get rule-based risk score
+                risk_score = self.calculate_rule_based_risk(hr, bo, user_context)
+                y_samples.append(risk_score)
+        
+        # Add extra condition-specific samples to better learn special cases
+        if health_conditions:
+            # COPD-specific samples: need more examples with lowered blood oxygen
+            if any(c in conditions_text for c in ['copd', 'emphysema', 'chronic bronchitis']):
+                for _ in range(200):
+                    hr = np.random.uniform(60, 100)
+                    bo = np.random.uniform(88, 94)  # COPD patients have lower baseline
+                    
+                    features = [hr, bo, 1.0, 0.0, 0.0, 0.0]  # COPD=1, others=0
+                    
+                    X_samples.append(features)
+                    y_samples.append(self.calculate_rule_based_risk(hr, bo, {'health_conditions': health_conditions}))
+            
+            # Anxiety-specific samples: need more examples with elevated heart rate
+            if any(c in conditions_text for c in ['anxiety', 'panic', 'stress']):
+                for _ in range(200):
+                    hr = np.random.uniform(70, 115)  # Higher baseline heart rate
+                    bo = np.random.uniform(95, 100)
+                    
+                    features = [hr, bo, 0.0, 1.0, 0.0, 0.0]  # Anxiety=1, others=0
+                    
+                    X_samples.append(features)
+                    y_samples.append(self.calculate_rule_based_risk(hr, bo, {'health_conditions': health_conditions}))
+            
+            # Heart condition samples
+            if any(c in conditions_text for c in ['heart', 'cardiac', 'arrhythmia']):
+                for _ in range(200):
+                    # Higher risk for unusual heart rates
+                    hr = np.random.choice([
+                        np.random.uniform(40, 55),   # Low heart rate
+                        np.random.uniform(100, 130)  # High heart rate
+                    ])
+                    bo = np.random.uniform(93, 100)
+                    
+                    features = [hr, bo, 0.0, 0.0, 1.0, 0.0]  # Heart issue=1, others=0
+                    
+                    X_samples.append(features)
+                    y_samples.append(self.calculate_rule_based_risk(hr, bo, {'health_conditions': health_conditions}))
+            
+            # Athlete samples: lower resting heart rate
+            if any(c in conditions_text for c in ['athlete']):
+                for _ in range(200):
+                    hr = np.random.uniform(40, 70)  # Athletes often have lower heart rates
+                    bo = np.random.uniform(95, 100)
+                    
+                    features = [hr, bo, 0.0, 0.0, 0.0, 1.0]  # Athlete=1, others=0
+                    
+                    X_samples.append(features)
+                    y_samples.append(self.calculate_rule_based_risk(hr, bo, {'health_conditions': health_conditions}))
+        
+        return np.array(X_samples), np.array(y_samples)
+    
+    def predict_with_model(self, model, heart_rate, blood_oxygen, health_conditions=None):
+        """Make prediction using condition-aware model"""
+        # Process health conditions for expanded features
+        has_copd = 0.0
+        has_anxiety = 0.0
+        has_heart_issue = 0.0
+        is_athlete = 0.0
+        
+        if health_conditions:
+            conditions_text = " ".join([c.lower() for c in health_conditions])
+            
+            # Set condition indicators
+            has_copd = 1.0 if any(c in conditions_text for c in ['copd', 'emphysema', 'chronic bronchitis']) else 0.0
+            has_anxiety = 1.0 if any(c in conditions_text for c in ['anxiety', 'panic', 'stress']) else 0.0
+            has_heart_issue = 1.0 if any(c in conditions_text for c in ['heart', 'cardiac', 'arrhythmia']) else 0.0
+            is_athlete = 1.0 if 'athlete' in conditions_text else 0.0
+        
+        # Prepare expanded features
+        features = [heart_rate, blood_oxygen, has_copd, has_anxiety, has_heart_issue, is_athlete]
+        X = np.array([features])
+        
+        # Make prediction
+        prediction = model.predict(X)[0]
+        return float(prediction)
+    
+    def create_pure_ml_model(self):
+        """Create a pure ML model without condition awareness"""
+        logger.info("Creating pure ML model with no condition awareness")
+        
+        # Create base model
+        model = GradientBoostingRegressor(
+            n_estimators=100,
+            learning_rate=0.1,
+            max_depth=3,
+            random_state=42
+        )
+        
+        # Generate training data without condition awareness
+        X_train, y_train = self._generate_pure_ml_training_data()
+        
+        # Train the model
+        model.fit(X_train, y_train)
+        
+        logger.info(f"Pure ML model trained with {len(X_train)} samples")
+        
+        # Save model
+        model_path = os.path.join(MODEL_DIR, f"pure_ml_model_{self.timestamp}.pkl")
+        joblib.dump(model, model_path)
+        logger.info(f"Pure ML model saved to {model_path}")
+        
+        self.pure_ml_model = model
+        return model
+    
+    def _generate_pure_ml_training_data(self):
+        """Generate synthetic training data for pure ML model (no condition awareness)"""
+        X_samples = []
+        y_samples = []
+        
+        # Generate samples across normal ranges
+        for hr in range(40, 180, 5):  # Heart rate from 40 to 180
+            for bo in range(80, 101):  # Blood oxygen from 80 to 100
+                # Create feature vector (only vital signs, no condition features)
+                features = [hr, bo]
+                X_samples.append(features)
+                
+                # Get risk score (without any condition awareness)
+                risk_score = self.calculate_rule_based_risk(hr, bo)
+                y_samples.append(risk_score)
+                
+                # Add some noise to make the model learn patterns
+                if np.random.random() < 0.3:  # 30% of samples have noise
+                    noise = np.random.normal(0, 5)  # mean 0, std 5
+                    noisy_risk = max(0, min(100, risk_score + noise))
+                    X_samples.append(features)
+                    y_samples.append(noisy_risk)
+        
+        return np.array(X_samples), np.array(y_samples)
+    
+    def predict_with_pure_ml_model(self, model, heart_rate, blood_oxygen):
+        """Make prediction using pure ML model"""
+        # Prepare features (only vital signs)
+        features = [heart_rate, blood_oxygen]
+        X = np.array([features])
+        
+        # Make prediction
+        prediction = model.predict(X)[0]
+        return float(prediction)
+    
+    def test_all_models_across_conditions(self, conditions_to_test):
+        """Test all models (rule-based, hybrid, pure ML) across different health conditions"""
+        logger.info(f"Testing all models across {len(conditions_to_test)} different conditions")
+        
+        # Ensure we have all three models
+        if not self.hybrid_model:
+            self.hybrid_model = self.create_condition_aware_model()
+            
+        if not self.pure_ml_model:
+            self.pure_ml_model = self.create_pure_ml_model()
         
         all_results = []
         
         for condition in conditions_to_test:
             logger.info(f"Testing condition: {condition}")
             
-            # Create user profile with this condition
-            user_profile = {
-                'age': 50,  # Default age
-                'health_conditions': [condition]
-            }
-            
             # Generate test data for this condition
-            test_data = self._generate_condition_specific_data(user_profile, 
-                                                              samples=samples_per_condition,
-                                                              abnormal_prob=0.3)
+            test_data = self._generate_test_data_for_condition(condition)
             
-            # Test model on this data
-            results = self._evaluate_model_on_data(test_data, user_profile)
+            # Test models on this data
+            results = []
+            
+            for hr, bo in test_data:
+                # Calculate rule-based risk score
+                user_context = {'health_conditions': [condition]} if condition != "None" else None
+                rule_risk = self.calculate_rule_based_risk(hr, bo, user_context)
+                
+                # Get hybrid model prediction (condition-aware)
+                if condition == "None":
+                    hybrid_risk = self.predict_with_model(self.hybrid_model, hr, bo)
+                else:
+                    hybrid_risk = self.predict_with_model(self.hybrid_model, hr, bo, [condition])
+                
+                # Get pure ML model prediction (not condition-aware)
+                pure_ml_risk = self.predict_with_pure_ml_model(self.pure_ml_model, hr, bo)
+            
+            # Store results
+                results.append({
+                    'condition': condition,
+                    'heart_rate': hr,
+                    'blood_oxygen': bo,
+                    'rule_risk': rule_risk,
+                'hybrid_risk': hybrid_risk,
+                    'pure_ml_risk': pure_ml_risk,
+                    'hybrid_diff': hybrid_risk - rule_risk,
+                    'pure_ml_diff': pure_ml_risk - rule_risk
+                })
+            
+            # Calculate metrics for both models
+            df = pd.DataFrame(results)
+            hybrid_mae = mean_absolute_error(df['rule_risk'], df['hybrid_risk'])
+            pure_ml_mae = mean_absolute_error(df['rule_risk'], df['pure_ml_risk'])
             
             # Store results for this condition
-            self.condition_results[condition] = results
+            self.condition_results[condition] = {
+                'detailed_results': results,
+                'metrics': {
+                    'hybrid_mae': hybrid_mae,
+                    'pure_ml_mae': pure_ml_mae,
+                    'samples': len(results),
+                    'avg_rule_risk': df['rule_risk'].mean(),
+                    'avg_hybrid_risk': df['hybrid_risk'].mean(),
+                    'avg_pure_ml_risk': df['pure_ml_risk'].mean(),
+                    'avg_hybrid_diff': df['hybrid_diff'].mean(),
+                    'avg_pure_ml_diff': df['pure_ml_diff'].mean(),
+                    'max_hybrid_diff': abs(df['hybrid_diff']).max(),
+                    'max_pure_ml_diff': abs(df['pure_ml_diff']).max()
+                }
+            }
             
-            # Add condition identifier to each result
-            for record in results['detailed_results']:
-                record['condition'] = condition
-                all_results.append(record)
+            all_results.extend(results)
         
-        # Convert all detailed results to DataFrame for easier analysis
+        # Convert all results to DataFrame
         self.results_df = pd.DataFrame(all_results)
         
         # Save combined results
-        self.results_df.to_csv(f"{self.output_dir}/all_conditions_{self.timestamp}.csv", index=False)
+        self.results_df.to_csv(f"{self.output_dir}/all_models_comparison_{self.timestamp}.csv", index=False)
         
         return self.condition_results
     
-    def test_model_across_age_groups(self, age_groups=[(18, 30), (31, 50), (51, 70), (71, 90)]):
-        """Test model performance across different age groups"""
-        logger.info(f"Testing model across {len(age_groups)} different age groups")
+    def _generate_test_data_for_condition(self, condition, samples=100):
+        """Generate test data specific to a health condition"""
+        test_points = []
         
-        age_results = {}
-        all_results = []
-        
-        for age_min, age_max in age_groups:
-            age_group = f"{age_min}-{age_max}"
-            logger.info(f"Testing age group: {age_group}")
+        if condition.lower() == "copd" or condition.lower() == "emphysema":
+            # For COPD, include more data points with lower blood oxygen
+            for _ in range(samples // 2):
+                hr = np.random.uniform(60, 100)
+                bo = np.random.uniform(88, 94)  # Lower blood oxygen range
+                test_points.append((hr, bo))
             
-            # Create user profiles with different ages in this range
-            results_for_group = []
-            
-            for _ in range(5):  # Test 5 different users in each age group
-                age = np.random.randint(age_min, age_max+1)
-                user_profile = {
-                    'age': age,
-                    'health_conditions': []  # No conditions to isolate age effect
-                }
+            for _ in range(samples // 2):
+                hr = np.random.uniform(50, 120)
+                bo = np.random.uniform(85, 100)
+                test_points.append((hr, bo))
                 
-                # Generate test data for this age
-                test_data = self._generate_condition_specific_data(user_profile, 
-                                                                samples=40,  # 40 samples per user
-                                                                abnormal_prob=0.3)
+        elif condition.lower() == "anxiety":
+            # For anxiety, include more data points with higher heart rates
+            for _ in range(samples // 2):
+                hr = np.random.uniform(80, 120)  # Higher heart rate range
+                bo = np.random.uniform(95, 100)
+                test_points.append((hr, bo))
+            
+            for _ in range(samples // 2):
+                hr = np.random.uniform(60, 140)
+                bo = np.random.uniform(90, 100)
+                test_points.append((hr, bo))
                 
-                # Test model on this data
-                results = self._evaluate_model_on_data(test_data, user_profile)
-                results_for_group.extend(results['detailed_results'])
-            
-            # Add age group identifier
-            for record in results_for_group:
-                record['age_group'] = age_group
-                all_results.append(record)
+        elif "heart" in condition.lower():
+            # For heart conditions, include more variety in heart rates
+            for _ in range(samples // 3):
+                hr = np.random.uniform(40, 60)  # Low heart rate
+                bo = np.random.uniform(93, 100)
+                test_points.append((hr, bo))
                 
-            # Calculate aggregated metrics for this age group
-            df = pd.DataFrame(results_for_group)
-            age_results[age_group] = {
-                'rule_ml_mae': mean_absolute_error(df['true_risk'], df['ml_risk']),
-                'samples': len(df),
-                'avg_true_risk': df['true_risk'].mean(),
-                'avg_ml_risk': df['ml_risk'].mean()
-            }
-        
-        # Save combined results
-        age_df = pd.DataFrame(all_results)
-        age_df.to_csv(f"{self.output_dir}/age_groups_{self.timestamp}.csv", index=False)
-        
-        return age_results
-    
-    def test_decision_boundaries(self, range_pairs=(
-            {'hr': (40, 180), 'bo': (85, 100)},  # Full range
-            {'hr': (85, 105), 'bo': (90, 98)}     # Normal-ish range
-        )):
-        """Test how model performs around decision boundaries"""
-        logger.info("Testing model performance around decision boundaries")
-        
-        boundary_results = {}
-        
-        for i, ranges in enumerate(range_pairs):
-            hr_range = ranges['hr']
-            bo_range = ranges['bo']
-            
-            range_name = f"range_{i+1}_hr{hr_range[0]}-{hr_range[1]}_bo{bo_range[0]}-{bo_range[1]}"
-            logger.info(f"Testing {range_name}")
-            
-            # Generate grid of test points
-            hr_points = np.linspace(hr_range[0], hr_range[1], 20)
-            bo_points = np.linspace(bo_range[0], bo_range[1], 20)
-            
-            grid_results = []
-            
-            # Define user profiles to test
-            profiles = [
-                {'age': 40, 'health_conditions': []},
-                {'age': 70, 'health_conditions': []},
-                {'age': 50, 'health_conditions': ['Anxiety']},
-                {'age': 50, 'health_conditions': ['COPD']},
-            ]
-            
-            for profile in profiles:
-                profile_str = f"age{profile['age']}_conditions{'_'.join(profile['health_conditions']) if profile['health_conditions'] else 'none'}"
-                logger.info(f"  Testing profile: {profile_str}")
+            for _ in range(samples // 3):
+                hr = np.random.uniform(100, 130)  # High heart rate
+                bo = np.random.uniform(93, 100)
+                test_points.append((hr, bo))
                 
-                for hr in hr_points:
-                    for bo in bo_points:
-                        # Calculate rule-based risk
-                        rule_risk = HealthService.calculate_risk_score(hr, bo, profile)
-                        
-                        # Calculate ML-based risk
-                        features = FeatureEngineering.extract_features(hr, bo, None, profile)
-                        ml_risk = self._predict_with_default_model(features[:2], profile)
-                        
-                        grid_results.append({
-                            'heart_rate': hr,
-                            'blood_oxygen': bo,
-                            'true_risk': rule_risk,
-                            'ml_risk': ml_risk,
-                            'difference': ml_risk - rule_risk,
-                            'profile': profile_str
-                        })
-            
-            # Convert to DataFrame
-            grid_df = pd.DataFrame(grid_results)
-            
-            # Save results
-            grid_df.to_csv(f"{self.output_dir}/boundary_{range_name}_{self.timestamp}.csv", index=False)
-            
-            # Store in results
-            boundary_results[range_name] = grid_df
-        
-        return boundary_results
-    
-    def _generate_condition_specific_data(self, user_profile, samples=100, abnormal_prob=0.3):
-        """Generate condition-specific test data"""
-        # Calculate days needed based on samples and avg readings per day
-        days_needed = max(10, samples // 3 + 1)  # Assume ~3 readings per day
-        
-        # Generate timeline with specific user profile
-        simulation_params = self._get_simulation_params_for_condition(user_profile)
-        
-        # Check if enhanced simulation is supported
-        if hasattr(HealthDataSimulator, 'generate_enhanced_health_timeline') and simulation_params:
-            timeline = HealthDataSimulator.generate_enhanced_health_timeline(
-                user_profile,
-                days=days_needed,
-                abnormal_prob=abnormal_prob,
-                simulation_params=simulation_params
-            )
-        else:
-            # Fallback to standard method
-            timeline = HealthDataSimulator.generate_health_timeline(
-                user_profile,
-                days=days_needed,
-                abnormal_prob=abnormal_prob
-            )
-        
-        # Ensure we have enough samples
-        if len(timeline) > samples:
-            # Randomly select the required number of samples
-            indices = np.random.choice(len(timeline), samples, replace=False)
-            timeline = [timeline[i] for i in indices]
-        
-        return timeline
-    
-    def _get_simulation_params_for_condition(self, user_profile):
-        """Get condition-specific simulation parameters"""
-        simulation_params = {}
-        
-        if 'health_conditions' not in user_profile or not user_profile['health_conditions']:
-            return simulation_params
-        
-        health_conditions = [c.lower() for c in user_profile['health_conditions']]
-        health_conditions_text = " ".join(health_conditions)
-        
-        # Anxiety adjustments
-        if any(term in health_conditions_text for term in ['anxiety', 'panic disorder', 'stress disorder']):
-            simulation_params['hr_variability_factor'] = 1.5  # More heart rate variability
-            simulation_params['hr_baseline_shift'] = 10  # Higher baseline heart rate
-            simulation_params['anxiety_episodes'] = True  # Generate occasional episodes of high HR
-        
-        # COPD adjustments
-        if any(term in health_conditions_text for term in ['copd', 'emphysema', 'chronic bronchitis']):
-            simulation_params['bo_variability_factor'] = 1.5  # More blood oxygen variability
-            simulation_params['bo_baseline_shift'] = -3  # Lower baseline blood oxygen
-            simulation_params['altitude_sensitive'] = True  # More affected by environmental factors
-            
-        # Athlete adjustments
-        if any(term in health_conditions_text for term in ['athlete', 'athletic']):
-            simulation_params['hr_baseline_shift'] = -10  # Lower resting heart rate
-            simulation_params['recovery_factor'] = 1.5  # Better recovery from exertion
-            
-        # Diabetes adjustments
-        if any(term in health_conditions_text for term in ['diabetes', 'diabetic']):
-            simulation_params['glucose_related_fluctuations'] = True  # Heart rate affected by glucose
-            simulation_params['hr_variability_factor'] = 1.3  # More heart rate variability
-            
-        # Heart condition adjustments
-        if any(term in health_conditions_text for term in ['heart disease', 'hypertension', 'arrhythmia']):
-            simulation_params['arrhythmia_episodes'] = True  # Occasional irregular patterns
-            simulation_params['stress_sensitivity'] = 1.5  # More sensitive to stress factors
-        
-        return simulation_params
-    
-    def _evaluate_model_on_data(self, test_data, user_profile):
-        """Evaluate model performance on test data"""
-        results = {
-            'detailed_results': [],
-            'metrics': {}
-        }
-        
-        true_risks = []
-        ml_risks = []
-        hybrid_risks = []
-        
-        for record in test_data:
-            heart_rate = record['heart_rate']
-            blood_oxygen = record['blood_oxygen']
-            
-            # Calculate rule-based risk score
-            true_risk = HealthService.calculate_risk_score(heart_rate, blood_oxygen, user_profile)
-            
-            # Extract features and get ML prediction
-            features = FeatureEngineering.extract_features(heart_rate, blood_oxygen, None, user_profile)
-            ml_risk = self._predict_with_default_model(features[:2], user_profile)
-            
-            # Calculate hybrid risk score
-            hybrid_risk = (ml_risk * 0.7) + (true_risk * 0.3)
-            
-            # Store results
-            result_record = {
-                'heart_rate': heart_rate,
-                'blood_oxygen': blood_oxygen,
-                'true_risk': true_risk,
-                'ml_risk': ml_risk,
-                'hybrid_risk': hybrid_risk,
-                'diff': ml_risk - true_risk
-            }
-            
-            results['detailed_results'].append(result_record)
-            true_risks.append(true_risk)
-            ml_risks.append(ml_risk)
-            hybrid_risks.append(hybrid_risk)
-        
-        # Calculate metrics
-        true_risks = np.array(true_risks)
-        ml_risks = np.array(ml_risks)
-        hybrid_risks = np.array(hybrid_risks)
-        
-        results['metrics'] = {
-            'samples': len(test_data),
-            'rule_ml_mae': mean_absolute_error(true_risks, ml_risks),
-            'rule_ml_mse': mean_squared_error(true_risks, ml_risks),
-            'rule_ml_rmse': np.sqrt(mean_squared_error(true_risks, ml_risks)),
-            'rule_hybrid_mae': mean_absolute_error(true_risks, hybrid_risks),
-            'avg_true_risk': np.mean(true_risks),
-            'avg_ml_risk': np.mean(ml_risks),
-            'avg_diff': np.mean(ml_risks - true_risks),
-            'max_diff': np.max(np.abs(ml_risks - true_risks))
-        }
-        
-        return results
-    
-    def _predict_with_default_model(self, features, user_profile=None):
-        """Make prediction using the default model"""
-        try:
-            # Try to use the default model from the ML service
-            model_path = os.path.join(HealthMLService.MODEL_DIR, "default_model.pkl")
-            
-            if os.path.exists(model_path):
-                model = joblib.load(model_path)
-                X = np.array([features])
-                prediction = model.predict(X)[0]
-                return float(prediction)
+            for _ in range(samples // 3):
+                hr = np.random.uniform(60, 100)
+                bo = np.random.uniform(90, 100)
+                test_points.append((hr, bo))
+                
+        elif "athlete" in condition.lower():
+            # For athletes, include more data with lower baseline heart rates
+            for _ in range(samples // 2):
+                hr = np.random.uniform(40, 70)  # Lower heart rate range
+                bo = np.random.uniform(95, 100)
+                test_points.append((hr, bo))
+                
+            for _ in range(samples // 2):
+                hr = np.random.uniform(60, 110)
+                bo = np.random.uniform(93, 100)
+                test_points.append((hr, bo))
+                
             else:
-                # If no model exists, create a temporary one
-                model = HealthMLService._create_base_model(user_profile)
-                X = np.array([features])
-                prediction = model.predict(X)[0]
-                return float(prediction)
-                
-        except Exception as e:
-            logger.error(f"Error making prediction: {e}")
-            # Fallback to rule-based approach
-            if len(features) >= 2:
-                heart_rate, blood_oxygen = features[:2]
-                return HealthService.calculate_risk_score(heart_rate, blood_oxygen, user_profile)
-            else:
-                return 50.0  # Default mid-range risk
+            # For other conditions or no condition, use a general distribution
+            for _ in range(samples):
+                hr = np.random.uniform(50, 120)
+                bo = np.random.uniform(88, 100)
+                test_points.append((hr, bo))
+        
+        return test_points
     
-    def visualize_condition_comparisons(self):
-        """Visualize performance comparison across different conditions"""
+    def visualize_condition_performance(self):
+        """Visualize model performance across different conditions"""
         if not self.condition_results:
-            logger.error("No condition results to visualize. Run test_model_across_conditions first.")
+            logger.error("No condition results to visualize. Run test_all_models_across_conditions first.")
             return
         
         # Extract metrics for visualization
         conditions = []
-        maes = []
-        avg_diffs = []
-        max_diffs = []
+        hybrid_maes = []
+        pure_ml_maes = []
+        hybrid_diffs = []
+        pure_ml_diffs = []
         
         for condition, results in self.condition_results.items():
             conditions.append(condition)
             metrics = results['metrics']
-            maes.append(metrics['rule_ml_mae'])
-            avg_diffs.append(metrics['avg_diff'])
-            max_diffs.append(metrics['max_diff'])
+            hybrid_maes.append(metrics['hybrid_mae'])
+            pure_ml_maes.append(metrics['pure_ml_mae'])
+            hybrid_diffs.append(metrics['avg_hybrid_diff'])
+            pure_ml_diffs.append(metrics['avg_pure_ml_diff'])
         
         # Create figure
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8))
+        plt.figure(figsize=(12, 6))
         
         # Plot MAE by condition
-        ax1.bar(conditions, maes, color='skyblue')
-        ax1.set_title('Mean Absolute Error by Condition')
-        ax1.set_xlabel('Condition')
-        ax1.set_ylabel('MAE')
-        ax1.set_ylim(bottom=0)
-        plt.setp(ax1.get_xticklabels(), rotation=45, ha='right')
+        plt.subplot(1, 2, 1)
+        bars = plt.bar(conditions, hybrid_maes, color='skyblue', label='Hybrid Model')
+        bars = plt.bar(conditions, pure_ml_maes, color='lightgreen', label='Pure ML Model', bottom=hybrid_maes)
+        plt.title('Mean Absolute Error by Condition')
+        plt.xlabel('Condition')
+        plt.ylabel('MAE')
+        plt.xticks(rotation=45, ha='right')
         
-        # Plot avg and max differences
-        x = np.arange(len(conditions))
-        width = 0.35
-        ax2.bar(x - width/2, avg_diffs, width, label='Avg Difference', color='lightgreen')
-        ax2.bar(x + width/2, max_diffs, width, label='Max Difference', color='salmon')
-        ax2.set_title('Risk Score Differences by Condition')
-        ax2.set_xlabel('Condition')
-        ax2.set_ylabel('Difference')
-        ax2.set_xticks(x)
-        ax2.set_xticklabels(conditions)
-        plt.setp(ax2.get_xticklabels(), rotation=45, ha='right')
-        ax2.legend()
+        # Add value labels
+        for bar in bars:
+            height = bar.get_height()
+            plt.text(bar.get_x() + bar.get_width()/2., height,
+                    f'{height:.2f}',
+                    ha='center', va='bottom')
+        
+        # Plot average differences
+        plt.subplot(1, 2, 2)
+        colors = ['red' if d < 0 else 'green' for d in hybrid_diffs]
+        bars = plt.bar(conditions, hybrid_diffs, color=colors, label='Hybrid Model')
+        colors = ['red' if d < 0 else 'green' for d in pure_ml_diffs]
+        bars = plt.bar(conditions, pure_ml_diffs, color=colors, label='Pure ML Model', bottom=hybrid_diffs)
+        plt.title('Average Difference (Hybrid - Rule)')
+        plt.xlabel('Condition')
+        plt.ylabel('Difference')
+        plt.xticks(rotation=45, ha='right')
+        plt.axhline(y=0, color='black', linestyle='-')
+        
+        # Add value labels
+        for bar in bars:
+            height = bar.get_height()
+            plt.text(bar.get_x() + bar.get_width()/2., 
+                    height if height >= 0 else height - 1,
+                    f'{height:.2f}',
+                    ha='center', va='bottom' if height >= 0 else 'top')
         
         plt.tight_layout()
-        plt.savefig(f"{self.output_dir}/condition_comparison_{self.timestamp}.png")
+        plt.savefig(f"{self.output_dir}/condition_performance_{self.timestamp}.png")
         plt.close()
+        
+        # Create additional visualizations
+        self._visualize_error_distribution()
+        self._visualize_decision_boundaries()
     
-    def visualize_decision_boundaries(self, boundary_data, profile_filter=None):
-        """Visualize decision boundaries between rule-based and ML approaches"""
-        if not boundary_data:
-            logger.error("No boundary data to visualize.")
+    def _visualize_error_distribution(self):
+        """Visualize distribution of errors"""
+        if not hasattr(self, 'results_df'):
+            logger.error("No results dataframe found. Run test_all_models_across_conditions first.")
             return
         
-        for range_name, data_df in boundary_data.items():
-            # Filter by profile if specified
-            if profile_filter:
-                filtered_df = data_df[data_df['profile'] == profile_filter]
-                if len(filtered_df) == 0:
-                    logger.warning(f"No data for profile {profile_filter} in range {range_name}")
-                    continue
-                suffix = f"_{profile_filter}"
-            else:
-                # Use first profile as default
-                profile = data_df['profile'].iloc[0]
-                filtered_df = data_df[data_df['profile'] == profile]
-                suffix = f"_{profile}"
-            
-            # Create figure with multiple plots
-            fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-            fig.suptitle(f"Decision Boundary Analysis - {range_name}{suffix}", fontsize=16)
-            
-            # Get unique heart rates and blood oxygen values
-            hr_values = sorted(filtered_df['heart_rate'].unique())
-            bo_values = sorted(filtered_df['blood_oxygen'].unique())
-            
-            # Reshape data for heatmaps
-            pivot_true = filtered_df.pivot_table(
-                values='true_risk', index='blood_oxygen', columns='heart_rate')
-            pivot_ml = filtered_df.pivot_table(
-                values='ml_risk', index='blood_oxygen', columns='heart_rate')
-            pivot_diff = filtered_df.pivot_table(
-                values='difference', index='blood_oxygen', columns='heart_rate')
-            
-            # Plot rule-based risk
-            sns.heatmap(pivot_true, ax=axes[0, 0], cmap='YlOrRd', vmin=0, vmax=100)
-            axes[0, 0].set_title('Rule-based Risk Score')
-            axes[0, 0].set_xlabel('Heart Rate')
-            axes[0, 0].set_ylabel('Blood Oxygen')
-            
-            # Plot ML-based risk
-            sns.heatmap(pivot_ml, ax=axes[0, 1], cmap='YlOrRd', vmin=0, vmax=100)
-            axes[0, 1].set_title('ML-based Risk Score')
-            axes[0, 1].set_xlabel('Heart Rate')
-            axes[0, 1].set_ylabel('Blood Oxygen')
-            
-            # Plot difference
-            diff_max = max(abs(pivot_diff.min().min()), abs(pivot_diff.max().max()))
-            sns.heatmap(pivot_diff, ax=axes[1, 0], cmap='coolwarm', vmin=-diff_max, vmax=diff_max)
-            axes[1, 0].set_title('Risk Score Difference (ML - Rule)')
-            axes[1, 0].set_xlabel('Heart Rate')
-            axes[1, 0].set_ylabel('Blood Oxygen')
-            
-            # Scatter plot of differences
-            scatter = axes[1, 1].scatter(
-                filtered_df['heart_rate'], 
-                filtered_df['blood_oxygen'],
-                c=filtered_df['difference'], 
-                cmap='coolwarm',
-                vmin=-diff_max, vmax=diff_max,
-                s=100, alpha=0.7
-            )
-            axes[1, 1].set_title('Risk Score Difference (Scatter)')
-            axes[1, 1].set_xlabel('Heart Rate')
-            axes[1, 1].set_ylabel('Blood Oxygen')
-            plt.colorbar(scatter, ax=axes[1, 1])
-            
-            plt.tight_layout()
-            plt.savefig(f"{self.output_dir}/boundary_{range_name}{suffix}_{self.timestamp}.png")
-            plt.close()
-    
-    def visualize_error_distribution(self):
-        """Visualize error distribution across all data"""
-        if hasattr(self, 'results_df'):
-            df = self.results_df
-        else:
-            logger.error("No results dataframe available. Run tests first.")
-            return
+        plt.figure(figsize=(10, 6))
         
-        # Create figure
-        fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-        fig.suptitle("Error Distribution Analysis", fontsize=16)
-        
-        # Plot error histogram
-        sns.histplot(df['diff'], bins=20, kde=True, ax=axes[0, 0])
-        axes[0, 0].set_title('Distribution of ML-Rule Differences')
-        axes[0, 0].set_xlabel('Difference')
-        axes[0, 0].set_ylabel('Count')
-        
-        # Plot error by heart rate
-        axes[0, 1].scatter(df['heart_rate'], df['diff'], alpha=0.5)
-        axes[0, 1].set_title('Error by Heart Rate')
-        axes[0, 1].set_xlabel('Heart Rate')
-        axes[0, 1].set_ylabel('ML-Rule Difference')
-        
-        # Plot error by blood oxygen
-        axes[1, 0].scatter(df['blood_oxygen'], df['diff'], alpha=0.5)
-        axes[1, 0].set_title('Error by Blood Oxygen')
-        axes[1, 0].set_xlabel('Blood Oxygen')
-        axes[1, 0].set_ylabel('ML-Rule Difference')
-        
-        # Box plot by condition
-        if 'condition' in df.columns:
-            sns.boxplot(x='condition', y='diff', data=df, ax=axes[1, 1])
-            axes[1, 1].set_title('Error Distribution by Condition')
-            axes[1, 1].set_xlabel('Condition')
-            axes[1, 1].set_ylabel('ML-Rule Difference')
-            plt.setp(axes[1, 1].get_xticklabels(), rotation=45, ha='right')
+        # Plot error histogram by condition
+        sns.histplot(data=self.results_df, x='hybrid_diff', hue='condition', bins=20, alpha=0.5, label='Hybrid Model')
+        sns.histplot(data=self.results_df, x='pure_ml_diff', hue='condition', bins=20, alpha=0.5, label='Pure ML Model')
+        plt.title('Distribution of Prediction Differences by Condition')
+        plt.xlabel('ML Risk - Rule Risk')
+        plt.axvline(x=0, color='black', linestyle='-')
         
         plt.tight_layout()
         plt.savefig(f"{self.output_dir}/error_distribution_{self.timestamp}.png")
         plt.close()
+    
+    def _visualize_decision_boundaries(self):
+        """Visualize decision boundaries for different conditions"""
+        conditions_to_visualize = ['COPD', 'Anxiety', 'Heart Disease', 'None']
+        
+        for condition in conditions_to_visualize:
+            if condition not in self.condition_results:
+                    continue
+                
+            # Generate grid data
+            hr_range = np.linspace(40, 140, 40)
+            bo_range = np.linspace(85, 100, 30)
+            
+            grid_data = []
+            
+            for hr in hr_range:
+                for bo in bo_range:
+                    # Calculate rule-based risk
+                    user_context = {'health_conditions': [condition]} if condition != "None" else None
+                    rule_risk = self.calculate_rule_based_risk(hr, bo, user_context)
+                    
+                    # Get hybrid model prediction
+                    hybrid_risk = self.predict_with_model(self.hybrid_model, hr, bo)
+                    
+                    # Get pure ML model prediction
+                    pure_ml_risk = self.predict_with_pure_ml_model(self.pure_ml_model, hr, bo)
+                    
+                    grid_data.append({
+                        'heart_rate': hr,
+                        'blood_oxygen': bo,
+                        'rule_risk': rule_risk,
+                        'hybrid_risk': hybrid_risk,
+                        'pure_ml_risk': pure_ml_risk,
+                        'hybrid_diff': hybrid_risk - rule_risk,
+                        'pure_ml_diff': pure_ml_risk - rule_risk
+                    })
+            
+            # Convert to DataFrame
+            grid_df = pd.DataFrame(grid_data)
+            
+            # Create visualizations
+            fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+            fig.suptitle(f'Decision Boundaries for {condition}', fontsize=16)
+            
+            # Rule-based risk
+            pivot_rule = grid_df.pivot_table(values='rule_risk', 
+                                         index='blood_oxygen', 
+                                         columns='heart_rate')
+            sns.heatmap(pivot_rule, ax=axes[0], cmap='YlOrRd', vmin=0, vmax=100)
+            axes[0].set_title(f'Rule-based Risk Score ({condition})')
+            axes[0].set_xlabel('Heart Rate')
+            axes[0].set_ylabel('Blood Oxygen')
+            
+            # Hybrid model
+            pivot_hybrid = grid_df.pivot_table(values='hybrid_risk', 
+                                       index='blood_oxygen', 
+                                       columns='heart_rate')
+            sns.heatmap(pivot_hybrid, ax=axes[1], cmap='YlOrRd', vmin=0, vmax=100)
+            axes[1].set_title(f'Hybrid Model Risk Score ({condition})')
+            axes[1].set_xlabel('Heart Rate')
+            axes[1].set_ylabel('Blood Oxygen')
+            
+            # Pure ML model
+            pivot_pure_ml = grid_df.pivot_table(values='pure_ml_risk', 
+                                       index='blood_oxygen', 
+                                       columns='heart_rate')
+            sns.heatmap(pivot_pure_ml, ax=axes[2], cmap='YlOrRd', vmin=0, vmax=100)
+            axes[2].set_title(f'Pure ML Model Risk Score ({condition})')
+            axes[2].set_xlabel('Heart Rate')
+            axes[2].set_ylabel('Blood Oxygen')
+            
+            plt.tight_layout()
+            plt.savefig(f"{self.output_dir}/decision_boundary_{condition}_{self.timestamp}.png")
+        plt.close()
 
 def main():
-    """Main function to run the model testing"""
-    # Parse command line arguments
+    """Run model testing and generate visualizations"""
     import argparse
-    parser = argparse.ArgumentParser(description='Test and visualize health ML model')
-    parser.add_argument('--output-dir', default='model_test_results', 
-                        help='Directory to save test results and visualizations')
-    parser.add_argument('--test-conditions', action='store_true',
-                        help='Run tests across different conditions')
-    parser.add_argument('--test-age-groups', action='store_true',
-                        help='Run tests across different age groups')
-    parser.add_argument('--test-boundaries', action='store_true',
-                        help='Run tests around decision boundaries')
+    parser = argparse.ArgumentParser(description="Test condition-aware health ML model")
+    parser.add_argument("--output-dir", default=TEST_RESULTS_DIR, help="Directory to save test results")
+    parser.add_argument("--clean", action="store_true", help="Clean output directory before running")
     args = parser.parse_args()
     
-    # Create model tester
-    tester = ModelTester(output_dir=args.output_dir)
+    # Set up directories
+    if args.clean and os.path.exists(args.output_dir):
+        logger.info(f"Cleaning output directory: {args.output_dir}")
+        
+        # Create backup folder with timestamp
+        if os.listdir(args.output_dir):  # Only backup if not empty
+            backup_dir = f"{args.output_dir}_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            shutil.copytree(args.output_dir, backup_dir)
+            logger.info(f"Backed up existing results to {backup_dir}")
+        
+        # Clean directory
+        shutil.rmtree(args.output_dir)
+        os.makedirs(args.output_dir, exist_ok=True)
     
-    # Conditions to test
+    # Initialize tester
+    tester = HealthModelTester(output_dir=args.output_dir)
+    
+    # Define conditions to test
     conditions_to_test = [
-        "Hypertension", 
-        "Type 2 Diabetes", 
-        "Asthma", 
         "COPD", 
+        "Anxiety",
         "Heart Disease", 
-        "Arrhythmia", 
-        "Anxiety", 
-        "Depression",
-        "Obesity"
+        "Athlete",
+        "Diabetes",
+        "Hypertension",
+        "None"  # No condition
     ]
     
-    # Run tests
-    if args.test_conditions or not (args.test_conditions or args.test_age_groups or args.test_boundaries):
-        logger.info("Testing model across different health conditions")
-        condition_results = tester.test_model_across_conditions(conditions_to_test)
-        tester.visualize_condition_comparisons()
-        tester.visualize_error_distribution()
+    # Test all models across conditions
+    logger.info("Testing all models across different health conditions")
+    condition_results = tester.test_all_models_across_conditions(conditions_to_test)
     
-    if args.test_age_groups:
-        logger.info("Testing model across different age groups")
-        age_results = tester.test_model_across_age_groups()
-        
-    if args.test_boundaries:
-        logger.info("Testing model around decision boundaries")
-        boundary_results = tester.test_decision_boundaries()
-        
-        # Visualize for different profiles
-        profiles = [
-            "age40_conditionsnone",
-            "age70_conditionsnone",
-            "age50_conditionsAnxiety",
-            "age50_conditionsCOPD"
-        ]
-        
-        for profile in profiles:
-            tester.visualize_decision_boundaries(boundary_results, profile)
+    # Visualize results
+    logger.info("Generating visualizations")
+    tester.visualize_condition_performance()
     
-    logger.info(f"All tests complete. Results saved to {args.output_dir}")
+    # Print summary
+    logger.info("\n===== MODEL TEST SUMMARY =====")
+    logger.info(f"Tested all models with {len(conditions_to_test)} conditions")
+    
+    for condition, results in condition_results.items():
+        metrics = results['metrics']
+        logger.info(f"  {condition}: Hybrid MAE={metrics['hybrid_mae']:.2f}, Pure ML MAE={metrics['pure_ml_mae']:.2f}")
+    
+    logger.info(f"\nTest results saved to {args.output_dir}")
+    logger.info("Run dashboard_script.py to generate comprehensive dashboard")
+    
+    return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

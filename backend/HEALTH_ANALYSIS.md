@@ -135,6 +135,7 @@ To enhance the health analysis system with public health datasets, follow these 
    ```
 
 4. **Enhanced Risk Assessment**:
+
    ```python
    def calculate_risk_with_references(metrics, user_context):
        """Calculate risk score with reference to population data"""
@@ -190,6 +191,82 @@ User models are stored in the `user_models` directory as serialized files:
 
 - `user_model_{user_id}.joblib`: Personalized model for each user
 - Models are automatically updated as new data is received
+
+## Machine Learning System for Health Risk Prediction
+
+### Overview
+
+The system uses a hybrid approach that combines rule-based and machine learning predictions to assess health risks. The importance of each approach is weighted dynamically based on the amount of historical data available for the user.
+
+### Machine Learning Implementation
+
+#### Improved Condition-Aware ML Model (Current)
+
+The current implementation incorporates health conditions directly into the machine learning model:
+
+1. **Feature Engineering**: Health conditions are encoded as additional features in the input vector
+
+   - Base features: Heart rate, blood oxygen
+   - Condition indicators: COPD, anxiety, heart issues, athlete status
+
+2. **Training Data Generation**: The system generates training data with emphasis on condition-specific regions
+
+   - For COPD patients: More samples with lower blood oxygen levels (88-94%)
+   - For anxiety patients: More samples with elevated heart rates (70-115 bpm)
+   - For heart conditions: More samples with very low or high heart rates
+   - For athletes: More samples with lower resting heart rates (40-70 bpm)
+
+3. **Model Personalization**: Each user has their own model that is continually updated with new data
+   - Model stored in user_models directory
+   - Each model is pre-trained with condition-specific data before first use
+   - Models are updated with real user data over time
+
+#### Risk Score Calculation
+
+The final risk score is calculated as a weighted average of:
+
+- Machine learning prediction (ml_risk_score)
+- Rule-based calculation (rule_risk_score)
+
+The weight given to the ML model increases as more historical data becomes available:
+
+```python
+if len(historical_features) > 0:
+    ml_weight = min(0.7, 0.3 + (len(historical_features) / 100))
+    rule_weight = 1.0 - ml_weight
+    risk_score = (ml_risk_score * ml_weight) + (rule_risk_score * rule_weight)
+else:
+    risk_score = (ml_risk_score * 0.3) + (rule_risk_score * 0.7)
+```
+
+This means:
+
+- New users start with 30% ML weight, 70% rule weight
+- As data accumulates, ML weight can increase up to 70%
+
+### Resetting Models
+
+To reset all models and start with fresh machine learning models:
+
+```bash
+python reset_models.py
+```
+
+This script:
+
+1. Backs up all existing models to a timestamped directory
+2. Removes old model directories
+3. Creates fresh, empty model directories
+4. Also cleans up test result directories
+
+### Development Notes
+
+When developing new features or adjusting the ML model:
+
+1. Test with different health condition scenarios
+2. Verify that special health conditions are properly accounted for
+3. Monitor the model's performance as it learns from new data
+4. Check the relative weights of ML vs. rule-based predictions
 
 ## Future Improvements
 

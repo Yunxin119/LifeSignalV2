@@ -1,647 +1,1052 @@
 """
-Health ML Model Performance Dashboard
+Condition-Aware Health ML Model Dashboard Generator
 
-This script creates an interactive dashboard for visualizing health risk prediction model performance.
+This script creates a dashboard visualizing the performance of the condition-aware ML model.
 """
 
 import os
 import sys
-import numpy as np
 import pandas as pd
+import json
+import logging
+from datetime import datetime
+from glob import glob
+from sklearn.metrics import mean_absolute_error
+import bisect
+import shutil
+import argparse
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-import joblib
-from datetime import datetime
-import argparse
-import glob
 
-# Add parent directory to path to import project modules
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-# Import required project modules
-from services.health_service import HealthService
-from services.health_ml_service import HealthMLService
-from services.feature_engineering import FeatureEngineering
-from train.data_simulator import HealthDataSimulator
-
-# Set up logging
-import logging
+# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-class ModelDashboard:
-    """Interactive dashboard for visualizing model performance"""
+# Constants
+TEST_RESULTS_DIR = "model_test_results"
+DASHBOARD_DIR = "dashboard_results"
+
+class ConditionAwareDashboard:
+    """Creates a dashboard to visualize the performance of condition-aware health ML models"""
     
-    def __init__(self, results_dir="model_test_results", output_dir="dashboard_results"):
-        """Initialize the dashboard with results directory"""
-        self.results_dir = results_dir
-        self.output_dir = output_dir
-        os.makedirs(output_dir, exist_ok=True)
+    def __init__(self, test_results_dir=TEST_RESULTS_DIR, dashboard_dir=DASHBOARD_DIR):
+        """Initialize the dashboard creator"""
+        self.test_results_dir = test_results_dir
+        self.dashboard_dir = dashboard_dir
+        os.makedirs(dashboard_dir, exist_ok=True)
         self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    def load_test_data(self):
-        """Load all available test data"""
-        logger.info(f"Loading test data from {self.results_dir}")
+        # Dashboard components
+        self.sections = []
+        self.condition_results = {}
+        self.health_conditions = []
         
-        # Find all CSV files with test results
-        csv_files = glob.glob(os.path.join(self.results_dir, "*.csv"))
-        
-        # Initialize data containers
-        self.condition_data = None
-        self.age_group_data = None
-        self.boundary_data = {}
-        
-        # Load data from files
-        for file_path in csv_files:
-            file_name = os.path.basename(file_path)
+    def load_test_data(self, test_results_file=None):
+        """Load test results data from CSV"""
+        # If specific file not provided, find the most recent one
+        if not test_results_file:
+            csv_files = glob(f"{self.test_results_dir}/*_comparison_*.csv")
+            if not csv_files:
+                logger.error(f"No test result files found in {self.test_results_dir}")
+                return False
             
-            if 'all_conditions' in file_name:
-                # Load condition test data
-                self.condition_data = pd.read_csv(file_path)
-                logger.info(f"Loaded condition data: {len(self.condition_data)} records")
-                
-            elif 'age_groups' in file_name:
-                # Load age group data
-                self.age_group_data = pd.read_csv(file_path)
-                logger.info(f"Loaded age group data: {len(self.age_group_data)} records")
-                
-            elif 'boundary' in file_name:
-                # Load boundary test data
-                data = pd.read_csv(file_path)
-                
-                # Extract range name from filename
-                parts = file_name.split('_')
-                range_index = parts.index('range')
-                range_name = '_'.join(parts[range_index:]).split('.')[0]
-                
-                if range_name not in self.boundary_data:
-                    self.boundary_data[range_name] = data
-                    logger.info(f"Loaded boundary data for {range_name}: {len(data)} records")
+            # Sort by modification time and get the latest
+            test_results_file = max(csv_files, key=os.path.getmtime)
         
-        # Check what data was loaded
-        if self.condition_data is None and self.age_group_data is None and not self.boundary_data:
-            logger.warning("No test data found. You may need to run the model testing script first.")
+        logger.info(f"Loading test results from {test_results_file}")
+        
+        try:
+            # Load the data
+            self.df = pd.read_csv(test_results_file)
+            
+            # Ensure numeric columns are properly converted
+            numeric_columns = ['heart_rate', 'blood_oxygen', 'rule_risk', 'hybrid_risk', 'pure_ml_risk', 'hybrid_diff', 'pure_ml_diff']
+            for col in numeric_columns:
+                if col in self.df.columns:
+                    self.df[col] = pd.to_numeric(self.df[col], errors='coerce')
+            
+            # Handle any missing values
+            self.df = self.df.dropna(subset=['condition', 'rule_risk', 'hybrid_risk', 'pure_ml_risk'])
+            
+            logger.info(f"Loaded data with {len(self.df)} samples and columns: {', '.join(self.df.columns)}")
+            
+            # Extract unique conditions
+            self.health_conditions = sorted(self.df['condition'].unique())
+            logger.info(f"Found {len(self.health_conditions)} conditions: {', '.join(self.health_conditions)}")
+            
+            # Group results by condition
+            for condition in self.health_conditions:
+                condition_df = self.df[self.df['condition'] == condition]
+                
+                # Calculate metrics for this condition
+                metrics = {
+                    'samples': len(condition_df),
+                    'avg_rule_risk': condition_df['rule_risk'].mean(),
+                    'avg_hybrid_risk': condition_df['hybrid_risk'].mean(),
+                    'avg_pure_ml_risk': condition_df['pure_ml_risk'].mean(),
+                    'hybrid_mae': mean_absolute_error(condition_df['rule_risk'], condition_df['hybrid_risk']),
+                    'pure_ml_mae': mean_absolute_error(condition_df['rule_risk'], condition_df['pure_ml_risk']),
+                    'avg_hybrid_diff': (condition_df['hybrid_risk'] - condition_df['rule_risk']).mean(),
+                    'avg_pure_ml_diff': (condition_df['pure_ml_risk'] - condition_df['rule_risk']).mean(),
+                    'max_hybrid_diff': abs(condition_df['hybrid_risk'] - condition_df['rule_risk']).max(),
+                    'max_pure_ml_diff': abs(condition_df['pure_ml_risk'] - condition_df['rule_risk']).max()
+                }
+                
+                self.condition_results[condition] = {
+                    'df': condition_df,
+                    'metrics': metrics
+                }
+                
+                logger.info(f"Condition '{condition}': {metrics['samples']} samples, Hybrid MAE: {metrics['hybrid_mae']:.2f}, Pure ML MAE: {metrics['pure_ml_mae']:.2f}")
+                
+            logger.info(f"Loaded data for {len(self.health_conditions)} conditions with {len(self.df)} total samples")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error loading test results: {str(e)}")
+            import traceback
+            logger.error(traceback.format_exc())
             return False
-        
-        return True
     
-    def create_dashboard(self):
-        """Create comprehensive dashboard with visualizations"""
-        if not hasattr(self, 'condition_data') or self.condition_data is None:
-            if not self.load_test_data():
-                logger.error("Failed to load test data. Exiting.")
+    def create_dashboard(self, output_file=None):
+        """Create the full dashboard report"""
+        if not hasattr(self, 'df') or len(self.df) == 0:
+            logger.error("No test data loaded. Run load_test_data first.")
                 return False
         
-        logger.info("Creating dashboard visualizations")
+        if not output_file:
+            output_file = f"{self.dashboard_dir}/health_models_comparison_{self.timestamp}.html"
         
-        # Create main dashboard figure
-        plt.figure(figsize=(20, 12))
-        plt.suptitle("Health Risk Prediction Model Performance Dashboard", fontsize=20)
+        logger.info(f"Creating dashboard at {output_file}")
         
-        # Create grid for plots
-        gs = plt.GridSpec(3, 3, figure=plt.gcf())
+        # Create dashboard sections
+        self._create_title_page()
+        self._create_performance_summary()
+        self._create_model_comparison_overview()
         
-        # Visualize condition performance if data available
-        if self.condition_data is not None:
-            self._plot_condition_performance(gs[0, :2])
-            self._plot_error_distribution(gs[1, 0])
-            self._plot_error_by_vitals(gs[1, 1])
+        # Create detailed condition pages
+        for condition in self.health_conditions:
+            self._create_condition_detail_page(condition)
         
-        # Visualize age group performance if data available
-        if self.age_group_data is not None:
-            self._plot_age_group_performance(gs[0, 2])
+        # Create HTML report
+        html_content = '\n'.join(self.sections)
         
-        # Visualize boundary performance if data available
-        if self.boundary_data:
-            self._plot_decision_boundaries(gs[1:, 2])
+        with open(output_file, 'w') as f:
+            f.write(html_content)
         
-        # Visualize overall metrics
-        self._plot_overall_metrics(gs[2, :2])
-        
-        plt.tight_layout()
-        plt.subplots_adjust(top=0.93)
-        
-        # Save dashboard
-        dashboard_path = os.path.join(self.output_dir, f"model_dashboard_{self.timestamp}.png")
-        plt.savefig(dashboard_path, dpi=150, bbox_inches='tight')
-        logger.info(f"Saved dashboard to {dashboard_path}")
-        
-        # Create additional detailed visualizations
-        self._create_detailed_visualizations()
-        
-        return True
+        logger.info(f"Dashboard created at {output_file}")
+        return output_file
     
-    def _plot_condition_performance(self, grid_pos):
-        """Plot performance comparison across health conditions"""
-        ax = plt.subplot(grid_pos)
+    def _create_title_page(self):
+        """Create the title page for the dashboard"""
+        title_html = f"""
+        <div class="title-page">
+            <h1>Health Risk Prediction Models Comparison</h1>
+            <h2>Performance Analysis Dashboard</h2>
+            <p>Generated on {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+            
+            <div class="models-summary">
+                <h3>Models Comparison:</h3>
+                <ul>
+                    <li><strong>Rule-based Model:</strong> Traditional threshold-based approach</li>
+                    <li><strong>Hybrid Model:</strong> Condition-aware ML approach</li>
+                    <li><strong>Pure ML Model:</strong> Machine learning without condition awareness</li>
+                </ul>
+            </div>
+            
+            <div class="conditions-tested">
+                <h3>Health Conditions Tested:</h3>
+                <ul>
+                    {"".join([f'<li>{condition}</li>' for condition in self.health_conditions])}
+                </ul>
+            </div>
+            
+            <div class="navigation">
+                <h3>Dashboard Sections:</h3>
+                <ul>
+                    <li><a href="#performance-summary">Performance Summary</a></li>
+                    <li><a href="#model-comparison">Model Comparison Overview</a></li>
+                    <li><a href="#condition-details">Condition-Specific Details</a></li>
+                </ul>
+            </div>
+        </div>
         
-        # Calculate metrics by condition
-        condition_metrics = self.condition_data.groupby('condition').agg({
-            'ml_risk': 'mean',
-            'true_risk': 'mean',
-            'diff': ['mean', 'std']
-        })
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                color: #333;
+            }}
+            .title-page {{
+                text-align: center;
+                margin-bottom: 50px;
+                padding: 20px;
+                background: #f5f5f5;
+                border-radius: 8px;
+            }}
+            h1, h2, h3 {{
+                color: #2c3e50;
+            }}
+            .models-summary, .conditions-tested, .navigation {{
+                margin: 20px auto;
+                max-width: 600px;
+                text-align: left;
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }}
+            a {{
+                color: #3498db;
+                text-decoration: none;
+            }}
+            a:hover {{
+                text-decoration: underline;
+            }}
+            li {{
+                margin: 5px 0;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }}
+            th, td {{
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }}
+            th {{
+                background-color: #f2f2f2;
+            }}
+            tr:nth-child(even) {{
+                background-color: #f9f9f9;
+            }}
+            .section {{
+                margin: 40px 0;
+                padding: 20px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }}
+            .performance-table {{
+                overflow-x: auto;
+            }}
+            .chart-container {{
+                margin: 20px 0;
+            }}
+        </style>
+        """
         
-        # Reshape for plotting
-        plot_data = pd.DataFrame({
-            'condition': condition_metrics.index,
-            'avg_diff': condition_metrics[('diff', 'mean')],
-            'std_diff': condition_metrics[('diff', 'std')]
-        })
-        
-        # Sort by average difference
-        plot_data = plot_data.sort_values('avg_diff')
-        
-        # Plot error by condition
-        colors = ['green' if abs(val) < 5 else 'orange' if abs(val) < 10 else 'red' 
-                  for val in plot_data['avg_diff']]
-        
-        bars = ax.barh(plot_data['condition'], plot_data['avg_diff'], 
-                     xerr=plot_data['std_diff'], alpha=0.7, color=colors)
-        
-        # Add value labels
-        for bar, value in zip(bars, plot_data['avg_diff']):
-            width = bar.get_width()
-            if width >= 0:
-                x_pos = width + 1
-                ha = 'left'
-            else:
-                x_pos = width - 1
-                ha = 'right'
-            ax.text(x_pos, bar.get_y() + bar.get_height()/2, f"{value:.2f}", 
-                   va='center', ha=ha, fontsize=8)
-        
-        ax.set_xlabel('ML Risk - Rule Risk (Average Difference)')
-        ax.set_title('Performance by Health Condition')
-        ax.axvline(x=0, color='gray', linestyle='--')
-        
-        # Add zone indicators
-        ax.axvspan(-5, 5, alpha=0.1, color='green')
-        ax.axvspan(-10, -5, alpha=0.1, color='orange')
-        ax.axvspan(5, 10, alpha=0.1, color='orange')
-        ax.axvspan(-20, -10, alpha=0.1, color='red')
-        ax.axvspan(10, 20, alpha=0.1, color='red')
-        
-        return ax
+        self.sections.append(title_html)
     
-    def _plot_error_distribution(self, grid_pos):
-        """Plot error distribution histogram"""
-        ax = plt.subplot(grid_pos)
+    def _create_performance_summary(self):
+        """Create performance summary section with overall metrics"""
+        # Extract performance metrics by condition
+        condition_metrics = []
         
-        # Plot error histogram
-        sns.histplot(self.condition_data['diff'], bins=20, kde=True, ax=ax)
-        ax.set_title('Distribution of ML-Rule Differences')
-        ax.set_xlabel('Difference (ML Risk - Rule Risk)')
+        for condition in self.health_conditions:
+            condition_data = self.condition_results[condition]
+            metrics = condition_data['metrics']
+            
+            condition_metrics.append({
+                'condition': condition,
+                'samples': metrics['samples'],
+                'hybrid_mae': metrics['hybrid_mae'],
+                'pure_ml_mae': metrics['pure_ml_mae'],
+                'avg_hybrid_diff': metrics['avg_hybrid_diff'],
+                'avg_pure_ml_diff': metrics['avg_pure_ml_diff']
+            })
         
-        # Calculate and show statistics
-        mean_error = self.condition_data['diff'].mean()
-        median_error = self.condition_data['diff'].median()
-        std_error = self.condition_data['diff'].std()
+        # Sort by sample count
+        condition_metrics = sorted(condition_metrics, key=lambda x: x['samples'], reverse=True)
         
-        stats_text = f"Mean: {mean_error:.2f}\nMedian: {median_error:.2f}\nStd Dev: {std_error:.2f}"
-        ax.text(0.95, 0.95, stats_text, transform=ax.transAxes, 
-                verticalalignment='top', horizontalalignment='right',
-                bbox=dict(facecolor='white', alpha=0.8))
+        # Prepare data for charts
+        mae_chart_data = {
+            'labels': [metrics['condition'] for metrics in condition_metrics],
+            'datasets': [
+                {
+                    'label': 'Hybrid Model',
+                    'data': [metrics['hybrid_mae'] for metrics in condition_metrics],
+                    'backgroundColor': 'rgba(54, 162, 235, 0.5)',
+                    'borderColor': 'rgba(54, 162, 235, 1)',
+                    'borderWidth': 1
+                },
+                {
+                    'label': 'Pure ML Model',
+                    'data': [metrics['pure_ml_mae'] for metrics in condition_metrics],
+                    'backgroundColor': 'rgba(255, 99, 132, 0.5)',
+                    'borderColor': 'rgba(255, 99, 132, 1)',
+                    'borderWidth': 1
+                }
+            ]
+        }
         
-        return ax
+        diff_chart_data = {
+            'labels': [metrics['condition'] for metrics in condition_metrics],
+            'datasets': [
+                {
+                    'label': 'Hybrid Model',
+                    'data': [metrics['avg_hybrid_diff'] for metrics in condition_metrics],
+                    'backgroundColor': 'rgba(54, 162, 235, 0.5)',
+                    'borderColor': 'rgba(54, 162, 235, 1)',
+                    'borderWidth': 1
+                },
+                {
+                    'label': 'Pure ML Model',
+                    'data': [metrics['avg_pure_ml_diff'] for metrics in condition_metrics],
+                    'backgroundColor': 'rgba(255, 99, 132, 0.5)',
+                    'borderColor': 'rgba(255, 99, 132, 1)',
+                    'borderWidth': 1
+                }
+            ]
+        }
+        
+        # Convert chart data to JSON strings
+        mae_chart_json = json.dumps(mae_chart_data)
+        diff_chart_json = json.dumps(diff_chart_data)
+        
+        # Create HTML table
+        table_rows = ""
+        for metrics in condition_metrics:
+            row = f"""
+            <tr>
+                <td>{metrics['condition']}</td>
+                <td>{metrics['samples']}</td>
+                <td>{metrics['hybrid_mae']:.4f}</td>
+                <td>{metrics['pure_ml_mae']:.4f}</td>
+                <td>{metrics['avg_hybrid_diff']:.4f}</td>
+                <td>{metrics['avg_pure_ml_diff']:.4f}</td>
+            </tr>
+            """
+            table_rows += row
+        
+        # Build the HTML in parts to avoid nested f-strings
+        summary_html_start = """
+        <div id="performance-summary" class="section">
+            <h2>Performance Summary by Condition</h2>
+            
+            <div class="performance-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Health Condition</th>
+                            <th>Samples</th>
+                            <th>Hybrid MAE</th>
+                            <th>Pure ML MAE</th>
+                            <th>Avg Hybrid Diff</th>
+                            <th>Avg Pure ML Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        """
+        
+        summary_html_middle = table_rows
+        
+        summary_html_end = """
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Model Performance by Condition</h3>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                    <div style="flex: 1; min-width: 400px; margin: 10px;">
+                        <h4>Mean Absolute Error</h4>
+                        <canvas id="maeChart"></canvas>
+                    </div>
+                    <div style="flex: 1; min-width: 400px; margin: 10px;">
+                        <h4>Average Difference (ML - Rule)</h4>
+                        <canvas id="diffChart"></canvas>
+                    </div>
+                </div>
+                
+                <script>
+                    // MAE Chart
+                    var maeCtx = document.getElementById('maeChart').getContext('2d');
+                    var maeChart = new Chart(maeCtx, {
+                        type: 'bar',
+                        data: MAE_CHART_DATA_PLACEHOLDER,
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Mean Absolute Error'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Health Condition'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Difference Chart
+                    var diffCtx = document.getElementById('diffChart').getContext('2d');
+                    var diffChart = new Chart(diffCtx, {
+                        type: 'bar',
+                        data: DIFF_CHART_DATA_PLACEHOLDER,
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Average Difference (ML - Rule)'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Health Condition'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+        """
+        
+        # Replace placeholders with JSON data
+        summary_html_end = summary_html_end.replace("MAE_CHART_DATA_PLACEHOLDER", mae_chart_json)
+        summary_html_end = summary_html_end.replace("DIFF_CHART_DATA_PLACEHOLDER", diff_chart_json)
+        
+        # Combine all parts
+        summary_html = summary_html_start + summary_html_middle + summary_html_end
+        
+        self.sections.append(summary_html)
+        
+        # Add risk threshold comparison to performance summary
+        self._create_condition_threshold_comparison()
     
-    def _plot_error_by_vitals(self, grid_pos):
-        """Plot error by vital signs"""
-        ax = plt.subplot(grid_pos)
+    def _create_model_comparison_overview(self):
+        """Create model comparison overview section"""
         
-        # Create scatter plot of error by heart rate
-        scatter = ax.scatter(
-            self.condition_data['heart_rate'], 
-            self.condition_data['blood_oxygen'],
-            c=self.condition_data['diff'], 
-            cmap='coolwarm', 
-            alpha=0.6,
-            vmin=-20,
-            vmax=20
-        )
+        # Calculate overall performance
+        overall_hybrid_mae = mean_absolute_error(self.df['rule_risk'], self.df['hybrid_risk'])
+        overall_pure_ml_mae = mean_absolute_error(self.df['rule_risk'], self.df['pure_ml_risk'])
         
-        # Add colorbar
-        cbar = plt.colorbar(scatter, ax=ax)
-        cbar.set_label('ML Risk - Rule Risk')
+        # Scatter plot data for ML vs Rule comparison
+        scatter_data_hybrid = []
+        scatter_data_pure_ml = []
         
-        # Format tick labels to 2 decimal places
-        cbar.ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.2f}"))
+        # Limit to max 500 points for performance
+        sample_df = self.df.sample(min(500, len(self.df))) if len(self.df) > 500 else self.df
         
-        ax.set_xlabel('Heart Rate (BPM)')
-        ax.set_ylabel('Blood Oxygen (%)')
-        ax.set_title('Model Error by Vital Signs')
+        for _, row in sample_df.iterrows():
+            scatter_data_hybrid.append({
+                'x': float(row['rule_risk']),
+                'y': float(row['hybrid_risk']),
+                'condition': row['condition']
+            })
+            scatter_data_pure_ml.append({
+                'x': float(row['rule_risk']),
+                'y': float(row['pure_ml_risk']),
+                'condition': row['condition']
+            })
         
-        return ax
+        # Convert conditions list to JSON
+        conditions_json = json.dumps(self.health_conditions)
+        # Convert scatter data to JSON
+        hybrid_data_json = json.dumps(scatter_data_hybrid)
+        pure_ml_data_json = json.dumps(scatter_data_pure_ml)
+        
+        comparison_html = f"""
+        <div id="model-comparison" class="section">
+            <h2>Model Comparison Overview</h2>
+            <p>This section provides a detailed comparison between the three risk prediction models.</p>
+            
+            <div class="metrics-summary">
+                <h3>Overall Performance</h3>
+                <ul>
+                    <li><strong>Overall Hybrid Model MAE:</strong> {overall_hybrid_mae:.4f}</li>
+                    <li><strong>Overall Pure ML Model MAE:</strong> {overall_pure_ml_mae:.4f}</li>
+                    <li><strong>Total Samples:</strong> {len(self.df)}</li>
+                </ul>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Hybrid Model vs Rule-based Model</h3>
+                <canvas id="hybridScatterChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Pure ML Model vs Rule-based Model</h3>
+                <canvas id="pureMLScatterChart"></canvas>
+            </div>
+            
+            <script>
+                // Color scale for conditions
+                const conditions = CONDITIONS_LIST_PLACEHOLDER;
+                const colorScale = [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)',
+                    'rgba(199, 199, 199, 0.7)',
+                    'rgba(83, 102, 255, 0.7)',
+                    'rgba(40, 159, 64, 0.7)',
+                    'rgba(210, 99, 132, 0.7)'
+                ];
+                
+                const getColor = (condition) => {{
+                    const index = conditions.indexOf(condition);
+                    return index >= 0 ? colorScale[index % colorScale.length] : 'gray';
+                }};
+                
+                // Hybrid Scatter Chart
+                var hybridCtx = document.getElementById('hybridScatterChart').getContext('2d');
+                var hybridScatter = new Chart(hybridCtx, {{
+                    type: 'scatter',
+                    data: {{
+                        datasets: conditions.map(condition => ({{
+                            label: condition,
+                            data: HYBRID_DATA_PLACEHOLDER.filter(point => point.condition === condition),
+                            backgroundColor: getColor(condition),
+                            pointRadius: 4
+                        }}))
+                    }},
+                    options: {{
+                        responsive: true,
+                        plugins: {{
+                            tooltip: {{
+                                callbacks: {{
+                                    label: function(context) {{
+                                        const point = context.raw;
+                                        return point.condition + ' - Rule: ' + point.x.toFixed(2) + ', Hybrid: ' + point.y.toFixed(2);
+                                    }}
+                                }}
+                            }}
+                        }},
+                        scales: {{
+                            x: {{
+                                title: {{
+                                    display: true,
+                                    text: 'Rule-based Risk Score'
+                                }},
+                                min: 0,
+                                max: 100
+                            }},
+                            y: {{
+                                title: {{
+                                    display: true,
+                                    text: 'Hybrid Model Risk Score'
+                                }},
+                                min: 0,
+                                max: 100
+                            }}
+                        }}
+                    }}
+                }});
+                
+                // Pure ML Scatter Chart
+                var pureMLCtx = document.getElementById('pureMLScatterChart').getContext('2d');
+                var pureMLScatter = new Chart(pureMLCtx, {{
+                    type: 'scatter',
+                    data: {{
+                        datasets: conditions.map(condition => ({{
+                            label: condition,
+                            data: PURE_ML_DATA_PLACEHOLDER.filter(point => point.condition === condition),
+                            backgroundColor: getColor(condition),
+                            pointRadius: 4
+                        }}))
+                    }},
+                    options: {{
+                        responsive: true,
+                        plugins: {{
+                            tooltip: {{
+                                callbacks: {{
+                                    label: function(context) {{
+                                        const point = context.raw;
+                                        return point.condition + ' - Rule: ' + point.x.toFixed(2) + ', Pure ML: ' + point.y.toFixed(2);
+                                    }}
+                                }}
+                            }}
+                        }},
+                        scales: {{
+                            x: {{
+                                title: {{
+                                    display: true,
+                                    text: 'Rule-based Risk Score'
+                                }},
+                                min: 0,
+                                max: 100
+                            }},
+                            y: {{
+                                title: {{
+                                    display: true,
+                                    text: 'Pure ML Model Risk Score'
+                                }},
+                                min: 0,
+                                max: 100
+                            }}
+                        }}
+                    }}
+                }});
+            </script>
+        </div>
+        """
+        
+        # Replace placeholders with actual data
+        comparison_html = comparison_html.replace("CONDITIONS_LIST_PLACEHOLDER", conditions_json)
+        comparison_html = comparison_html.replace("HYBRID_DATA_PLACEHOLDER", hybrid_data_json)
+        comparison_html = comparison_html.replace("PURE_ML_DATA_PLACEHOLDER", pure_ml_data_json)
+        
+        self.sections.append(comparison_html)
     
-    def _plot_age_group_performance(self, grid_pos):
-        """Plot performance across age groups"""
-        ax = plt.subplot(grid_pos)
+    def _create_condition_detail_page(self, condition):
+        """Create detailed analysis page for a specific health condition"""
+        condition_data = self.condition_results[condition]
+        metrics = condition_data['metrics']
+        condition_df = condition_data['df']
         
-        if self.age_group_data is None:
-            ax.text(0.5, 0.5, "No age group data available", 
-                   ha='center', va='center', transform=ax.transAxes)
-            return ax
+        # Create heatmap data - sample to create a grid
+        hr_min, hr_max = 40, 180
+        bo_min, bo_max = 80, 100
         
-        # Calculate metrics by age group
-        age_metrics = self.age_group_data.groupby('age_group').agg({
-            'ml_risk': 'mean',
-            'true_risk': 'mean',
-            'diff': ['mean', 'std', 'count']
-        }).reset_index()
+        hr_range = list(range(hr_min, hr_max + 1, 10))
+        bo_range = list(range(bo_max, bo_min - 1, -2))  # Reversed for display
         
-        # Ensure age groups are in the correct order
-        if 'age_group' in age_metrics.columns:
-            # Sort age groups
-            age_metrics['min_age'] = age_metrics['age_group'].apply(
-                lambda x: int(x.split('-')[0]) if '-' in str(x) else 0
-            )
-            age_metrics = age_metrics.sort_values('min_age')
+        # Create heatmap data for each model
+        rule_heatmap = [[0 for _ in range(len(hr_range))] for _ in range(len(bo_range))]
+        hybrid_heatmap = [[0 for _ in range(len(hr_range))] for _ in range(len(bo_range))]
+        pure_ml_heatmap = [[0 for _ in range(len(hr_range))] for _ in range(len(bo_range))]
         
-        # Plot average risks by age group
-        width = 0.35
-        x = np.arange(len(age_metrics))
+        # Sample some points from condition_df to create heatmap
+        sample_df = condition_df.sample(min(100, len(condition_df))) if len(condition_df) > 100 else condition_df
         
-        # Create grouped bar chart
-        bars1 = ax.bar(x - width/2, age_metrics['true_risk']['mean'], width, 
-                      label='Rule Risk', color='steelblue')
-        bars2 = ax.bar(x + width/2, age_metrics['ml_risk']['mean'], width,
-                      label='ML Risk', color='darkorange')
-        
-        # Add value labels
-        for bars in [bars1, bars2]:
-            for bar in bars:
-                height = bar.get_height()
-                ax.text(bar.get_x() + bar.get_width()/2, height,
-                       f"{height:.2f}", ha='center', va='bottom', fontsize=8)
-        
-        # Add chart details
-        ax.set_ylabel('Risk Score')
-        ax.set_title('Risk Estimation by Age Group')
-        ax.set_xticks(x)
-        ax.set_xticklabels(age_metrics['age_group'])
-        ax.legend()
-        
-        # Add error information
-        for i, metrics in enumerate(age_metrics.itertuples()):
-            if hasattr(metrics, 'diff') and hasattr(metrics.diff, 'mean'):
-                diff = metrics.diff['mean']
-                err_text = f"Diff: {diff:.2f}"
-                ax.text(i, 0.1, err_text, ha='center', fontsize=7, 
-                       bbox=dict(facecolor='white', edgecolor='none', alpha=0.6))
-        
-        return ax
-    
-    def _plot_decision_boundaries(self, grid_pos):
-        """Plot decision boundary visualizations"""
-        ax = plt.subplot(grid_pos)
-        
-        if not self.boundary_data:
-            ax.text(0.5, 0.5, "No boundary data available", 
-                   ha='center', va='center', transform=ax.transAxes)
-            return ax
-        
-        # Take the first boundary dataset for the dashboard
-        range_name = list(self.boundary_data.keys())[0]
-        boundary_df = self.boundary_data[range_name]
-        
-        # Filter to a single profile for the dashboard
-        profiles = boundary_df['profile'].unique()
-        if len(profiles) > 0:
-            # Pick a profile with interesting differences if possible
-            profile_diffs = {}
-            for profile in profiles:
-                profile_data = boundary_df[boundary_df['profile'] == profile]
-                profile_diffs[profile] = profile_data['difference'].abs().mean()
+        for _, row in sample_df.iterrows():
+            hr = row['heart_rate']
+            bo = row['blood_oxygen']
+            hr_idx = bisect.bisect_left(hr_range, hr)
+            bo_idx = bisect.bisect_left(list(reversed(bo_range)), bo)
             
-            # Select profile with the most interesting differences
-            selected_profile = max(profile_diffs, key=profile_diffs.get)
-            boundary_df = boundary_df[boundary_df['profile'] == selected_profile]
+            if 0 <= hr_idx < len(hr_range) and 0 <= bo_idx < len(bo_range):
+                rule_heatmap[bo_idx][hr_idx] = row['rule_risk']
+                hybrid_heatmap[bo_idx][hr_idx] = row['hybrid_risk']
+                pure_ml_heatmap[bo_idx][hr_idx] = row['pure_ml_risk']
         
-        # Create a pivot table for heatmap
-        if 'heart_rate' in boundary_df.columns and 'blood_oxygen' in boundary_df.columns:
-            try:
-                # Round values to reduce unique combinations if needed
-                boundary_df['heart_rate_bin'] = boundary_df['heart_rate'].round(0)
-                boundary_df['blood_oxygen_bin'] = boundary_df['blood_oxygen'].round(0)
+        # Scatter data for differences
+        hybrid_diff_data = []
+        pure_ml_diff_data = []
+        
+        for _, row in sample_df.iterrows():
+            hybrid_diff_data.append({
+                'x': float(row['heart_rate']),
+                'y': float(row['blood_oxygen']),
+                'r': min(20, abs(row['hybrid_diff']) * 2 + 2),  # Size based on difference
+                'diff': float(row['hybrid_diff'])
+            })
+            
+            pure_ml_diff_data.append({
+                'x': float(row['heart_rate']),
+                'y': float(row['blood_oxygen']),
+                'r': min(20, abs(row['pure_ml_diff']) * 2 + 2),  # Size based on difference
+                'diff': float(row['pure_ml_diff'])
+            })
+        
+        # Convert data to JSON strings to avoid f-string issues
+        hr_labels_json = json.dumps(hr_range)
+        bo_labels_json = json.dumps(bo_range)
+        rule_heatmap_json = json.dumps(rule_heatmap)
+        hybrid_heatmap_json = json.dumps(hybrid_heatmap)
+        pure_ml_heatmap_json = json.dumps(pure_ml_heatmap)
+        hybrid_diff_json = json.dumps(hybrid_diff_data)
+        pure_ml_diff_json = json.dumps(pure_ml_diff_data)
+        
+        condition_html = f"""
+        <div id="condition-{condition}" class="section">
+            <h2>Condition Analysis: {condition}</h2>
+            
+            <div class="metrics-summary">
+                <h3>Performance Metrics</h3>
+                <ul>
+                    <li><strong>Samples:</strong> {metrics['samples']}</li>
+                    <li><strong>Average Rule-based Risk:</strong> {metrics['avg_rule_risk']:.2f}</li>
+                    <li><strong>Average Hybrid Model Risk:</strong> {metrics['avg_hybrid_risk']:.2f}</li>
+                    <li><strong>Average Pure ML Risk:</strong> {metrics['avg_pure_ml_risk']:.2f}</li>
+                    <li><strong>Hybrid Model MAE:</strong> {metrics['hybrid_mae']:.2f}</li>
+                    <li><strong>Pure ML Model MAE:</strong> {metrics['pure_ml_mae']:.2f}</li>
+                    <li><strong>Average Hybrid Difference:</strong> {metrics['avg_hybrid_diff']:.2f}</li>
+                    <li><strong>Average Pure ML Difference:</strong> {metrics['avg_pure_ml_diff']:.2f}</li>
+                </ul>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Risk Score Heatmaps</h3>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                    <div style="flex: 1; min-width: 300px; margin: 10px;">
+                        <h4>Rule-based Model</h4>
+                        <canvas id="ruleHeatmap-{condition}"></canvas>
+                    </div>
+                    <div style="flex: 1; min-width: 300px; margin: 10px;">
+                        <h4>Hybrid Model</h4>
+                        <canvas id="hybridHeatmap-{condition}"></canvas>
+                    </div>
+                    <div style="flex: 1; min-width: 300px; margin: 10px;">
+                        <h4>Pure ML Model</h4>
+                        <canvas id="pureMLHeatmap-{condition}"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Model Differences</h3>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                    <div style="flex: 1; min-width: 400px; margin: 10px;">
+                        <h4>Hybrid Model Differences</h4>
+                        <canvas id="hybridDiff-{condition}"></canvas>
+                    </div>
+                    <div style="flex: 1; min-width: 400px; margin: 10px;">
+                        <h4>Pure ML Model Differences</h4>
+                        <canvas id="pureMLDiff-{condition}"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                // Heatmap configuration helper
+                function createHeatmap(ctx, data, labels, title) {{
+                    const chartData = {{
+                        labels: labels.x,
+                        datasets: labels.y.map((label, i) => ({{
+                            label: label,
+                            data: data[i],
+                            fill: false,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(255, 99, 132)'
+                        }}))
+                    }};
+                    
+                    return new Chart(ctx, {{
+                        type: 'heatmap',
+                        data: chartData,
+                        options: {{
+                            plugins: {{
+                                tooltip: {{
+                                    callbacks: {{
+                                        label: function(context) {{
+                                            return `Blood Oxygen: ${{labels.y[context.dataIndex]}}, Heart Rate: ${{labels.x[context.datasetIndex]}}, Risk: ${{context.raw.toFixed(2)}}`;
+                                        }}
+                                    }}
+                                }}
+                            }},
+                            scales: {{
+                                x: {{
+                                    title: {{
+                                        display: true,
+                                        text: 'Heart Rate'
+                                    }}
+                                }},
+                                y: {{
+                                    title: {{
+                                        display: true,
+                                        text: 'Blood Oxygen'
+                                    }}
+                                }}
+                            }}
+                        }}
+                    }});
+                }}
                 
-                # Create pivot table
-                heatmap_data = boundary_df.pivot_table(
-                    values='difference', 
-                    index='blood_oxygen_bin', 
-                    columns='heart_rate_bin',
-                    aggfunc='mean'
-                )
+                // Create heatmaps for this condition
+                const hrLabels = HR_LABELS_PLACEHOLDER;
+                const boLabels = BO_LABELS_PLACEHOLDER;
+                const heatmapLabels = {{ x: hrLabels, y: boLabels }};
                 
-                # Plot heatmap
-                sns.heatmap(heatmap_data, cmap='coolwarm', center=0, 
-                           vmin=-15, vmax=15, ax=ax)
+                // Rule-based heatmap
+                const ruleCtx = document.getElementById('ruleHeatmap-{condition}').getContext('2d');
+                createHeatmap(ruleCtx, RULE_HEATMAP_PLACEHOLDER, heatmapLabels);
                 
-                # Format tick labels to show only 2 decimal places
-                ax.collections[0].colorbar.formatter = plt.FuncFormatter(lambda x, _: f"{x:.2f}")
-                ax.collections[0].colorbar.update_ticks()
+                // Hybrid heatmap
+                const hybridCtx = document.getElementById('hybridHeatmap-{condition}').getContext('2d');
+                createHeatmap(hybridCtx, HYBRID_HEATMAP_PLACEHOLDER, heatmapLabels);
                 
-                ax.set_title(f'Risk Difference Heatmap\nProfile: {selected_profile if "selected_profile" in locals() else "Default"}')
-                ax.set_xlabel('Heart Rate (BPM)')
-                ax.set_ylabel('Blood Oxygen (%)')
-            except Exception as e:
-                logger.error(f"Failed to create heatmap: {e}")
-                ax.text(0.5, 0.5, f"Heatmap error: {e}", 
-                       ha='center', va='center', transform=ax.transAxes)
-        else:
-            ax.text(0.5, 0.5, "Missing required columns for boundary visualization", 
-                   ha='center', va='center', transform=ax.transAxes)
-        
-        return ax
-    
-    def _plot_overall_metrics(self, grid_pos):
-        """Plot overall model performance metrics"""
-        ax = plt.subplot(grid_pos)
-        
-        # Combine all available data
-        all_data = []
-        
-        if self.condition_data is not None:
-            all_data.append(self.condition_data)
-        
-        if self.age_group_data is not None:
-            all_data.append(self.age_group_data)
-        
-        if all_data:
-            combined_data = pd.concat(all_data, ignore_index=True)
-            
-            # Calculate metrics
-            metrics = {}
-            
-            # Calculate MAE and RMSE
-            if 'true_risk' in combined_data.columns and 'ml_risk' in combined_data.columns:
-                metrics['MAE'] = mean_absolute_error(
-                    combined_data['true_risk'], combined_data['ml_risk'])
-                metrics['RMSE'] = np.sqrt(mean_squared_error(
-                    combined_data['true_risk'], combined_data['ml_risk']))
-            
-            # Calculate percentage of predictions within different error ranges
-            if 'diff' in combined_data.columns:
-                metrics['Within ±5'] = (combined_data['diff'].abs() <= 5).mean() * 100
-                metrics['Within ±10'] = (combined_data['diff'].abs() <= 10).mean() * 100
-                metrics['Within ±15'] = (combined_data['diff'].abs() <= 15).mean() * 100
-            
-            # Calculate correlation
-            if 'true_risk' in combined_data.columns and 'ml_risk' in combined_data.columns:
-                metrics['Correlation'] = combined_data['true_risk'].corr(combined_data['ml_risk'])
-            
-            # Create metrics display
-            metrics_text = "\n".join([
-                f"{metric}: {value:.2f}{' %' if 'Within' in metric else ''}"
-                for metric, value in metrics.items()
-            ])
-            
-            # Create scatter plot
-            if 'true_risk' in combined_data.columns and 'ml_risk' in combined_data.columns:
-                scatter = ax.scatter(
-                    combined_data['true_risk'], 
-                    combined_data['ml_risk'],
-                    alpha=0.4, 
-                    c=combined_data['diff'] if 'diff' in combined_data.columns else 'blue',
-                    cmap='coolwarm' if 'diff' in combined_data.columns else None,
-                    vmin=-20 if 'diff' in combined_data.columns else None,
-                    vmax=20 if 'diff' in combined_data.columns else None
-                )
+                // Pure ML heatmap
+                const pureMLCtx = document.getElementById('pureMLHeatmap-{condition}').getContext('2d');
+                createHeatmap(pureMLCtx, PURE_ML_HEATMAP_PLACEHOLDER, heatmapLabels);
                 
-                # Add colorbar if using difference for color
-                if 'diff' in combined_data.columns:
-                    cbar = plt.colorbar(scatter, ax=ax)
-                    cbar.set_label('ML - Rule Difference')
-                    # Format tick labels to 2 decimal places
-                    cbar.ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.2f}"))
+                // Bubble chart for differences
+                function createDiffBubbleChart(ctx, data, title) {{
+                    return new Chart(ctx, {{
+                        type: 'bubble',
+                        data: {{
+                            datasets: [{{
+                                label: 'Positive Differences',
+                                data: data.filter(point => point.diff >= 0),
+                                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                borderColor: 'rgba(75, 192, 192, 1)'
+                            }},
+                            {{
+                                label: 'Negative Differences',
+                                data: data.filter(point => point.diff < 0),
+                                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                borderColor: 'rgba(255, 99, 132, 1)'
+                            }}]
+                        }},
+                        options: {{
+                            plugins: {{
+                                tooltip: {{
+                                    callbacks: {{
+                                        label: function(context) {{
+                                            const point = context.raw;
+                                            return `Heart Rate: ${{point.x}}, Blood Oxygen: ${{point.y}}, Diff: ${{point.diff.toFixed(2)}}`;
+                                        }}
+                                    }}
+                                }}
+                            }},
+                            scales: {{
+                                x: {{
+                                    title: {{
+                                        display: true,
+                                        text: 'Heart Rate'
+                                    }},
+                                    min: 40,
+                                    max: 180
+                                }},
+                                y: {{
+                                    title: {{
+                                        display: true,
+                                        text: 'Blood Oxygen'
+                                    }},
+                                    min: 80,
+                                    max: 100
+                                }}
+                            }}
+                        }}
+                    }});
+                }}
                 
-                # Add perfect prediction line
-                min_val = min(combined_data['true_risk'].min(), combined_data['ml_risk'].min())
-                max_val = max(combined_data['true_risk'].max(), combined_data['ml_risk'].max())
-                ax.plot([min_val, max_val], [min_val, max_val], 'k--', alpha=0.5)
+                // Create difference bubble charts
+                const hybridDiffCtx = document.getElementById('hybridDiff-{condition}').getContext('2d');
+                createDiffBubbleChart(hybridDiffCtx, HYBRID_DIFF_PLACEHOLDER);
                 
-                ax.set_xlabel('Rule-Based Risk Score')
-                ax.set_ylabel('ML-Based Risk Score')
-                ax.set_title('ML vs Rule-Based Risk Prediction')
+                const pureMLDiffCtx = document.getElementById('pureMLDiff-{condition}').getContext('2d');
+                createDiffBubbleChart(pureMLDiffCtx, PURE_ML_DIFF_PLACEHOLDER);
+            </script>
+        </div>
+        """
+        
+        # Replace placeholders with actual data
+        condition_html = condition_html.replace("HR_LABELS_PLACEHOLDER", hr_labels_json)
+        condition_html = condition_html.replace("BO_LABELS_PLACEHOLDER", bo_labels_json)
+        condition_html = condition_html.replace("RULE_HEATMAP_PLACEHOLDER", rule_heatmap_json)
+        condition_html = condition_html.replace("HYBRID_HEATMAP_PLACEHOLDER", hybrid_heatmap_json)
+        condition_html = condition_html.replace("PURE_ML_HEATMAP_PLACEHOLDER", pure_ml_heatmap_json)
+        condition_html = condition_html.replace("HYBRID_DIFF_PLACEHOLDER", hybrid_diff_json)
+        condition_html = condition_html.replace("PURE_ML_DIFF_PLACEHOLDER", pure_ml_diff_json)
+        
+        self.sections.append(condition_html)
+
+    def _create_condition_threshold_comparison(self):
+        """Create a visualization comparing risk thresholds across conditions"""
+        # Create comparison table HTML
+        html = """
+        <div class="threshold-comparison section">
+            <h2 id="threshold-comparison">Risk Threshold Comparison by Condition</h2>
+            <p>This table shows how normal ranges for vital signs differ across health conditions:</p>
+            
+            <div class="performance-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Health Condition</th>
+                            <th>Normal Heart Rate (min)</th>
+                            <th>Normal Heart Rate (max)</th>
+                            <th>Normal Blood Oxygen (min)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Healthy</td>
+                            <td>60 bpm</td>
+                            <td>100 bpm</td>
+                            <td>95%</td>
+                        </tr>
+                        <tr>
+                            <td>COPD</td>
+                            <td>60 bpm</td>
+                            <td>100 bpm</td>
+                            <td>92%</td>
+                        </tr>
+                        <tr>
+                            <td>Anxiety</td>
+                            <td>60 bpm</td>
+                            <td>115 bpm</td>
+                            <td>95%</td>
+                        </tr>
+                        <tr>
+                            <td>Heart Disease</td>
+                            <td>60 bpm</td>
+                            <td>100 bpm</td>
+                            <td>95%</td>
+                        </tr>
+                        <tr>
+                            <td>Athlete</td>
+                            <td>50 bpm</td>
+                            <td>100 bpm</td>
+                            <td>95%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Risk Threshold Visualization</h3>
+                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <canvas id="thresholdChart" width="800" height="400"></canvas>
+                </div>
                 
-                # Add metrics box
-                ax.text(0.05, 0.95, metrics_text, transform=ax.transAxes,
-                       verticalalignment='top', fontsize=9,
-                       bbox=dict(facecolor='white', alpha=0.9))
-            else:
-                # If we don't have the required columns, just show metrics
-                ax.text(0.5, 0.5, f"Overall Metrics:\n\n{metrics_text}",
-                       ha='center', va='center', transform=ax.transAxes,
-                       fontsize=12, bbox=dict(facecolor='white', alpha=0.9))
-        else:
-            ax.text(0.5, 0.5, "No data available for metrics calculation", 
-                   ha='center', va='center', transform=ax.transAxes)
+                <script>
+                    // Create the threshold visualization chart
+                    const ctx = document.getElementById('thresholdChart').getContext('2d');
+                    
+                    // Define the data manually without complex JSON
+                    const conditions = ["Healthy", "COPD", "Anxiety", "Heart Disease", "Athlete"];
+                    const hrLowData = [60, 60, 60, 60, 50];
+                    const hrHighData = [100, 100, 115, 100, 100];
+                    const boLowData = [95, 92, 95, 95, 95];
+                    
+                    const thresholdChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: conditions,
+                            datasets: [
+                                {
+                                    label: 'Min Heart Rate (bpm)',
+                                    data: hrLowData,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'Max Heart Rate (bpm)',
+                                    data: hrHighData,
+                                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'Min Blood Oxygen (%)',
+                                    data: boLowData,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    min: 40,
+                                    max: 120,
+                                    title: {
+                                        display: true,
+                                        text: 'Value'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Health Condition'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Normal Vital Sign Ranges by Health Condition'
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </div>
+            
+            <div class="threshold-impact">
+                <h3>Impact on Risk Calculation</h3>
+                <p>These adjusted thresholds affect how risk scores are calculated for patients with different health conditions:</p>
+                <ul>
+                    <li><strong>COPD/Emphysema:</strong> Lower blood oxygen threshold (92% vs 95%) means that blood oxygen levels between 92-95% are considered normal for COPD patients but would indicate elevated risk for others.</li>
+                    <li><strong>Anxiety:</strong> Higher maximum heart rate threshold (115 bpm vs 100 bpm) accounts for the fact that anxiety patients often have higher baseline heart rates without indicating the same level of risk.</li>
+                    <li><strong>Athletes:</strong> Lower minimum heart rate threshold (50 bpm vs 60 bpm) recognizes that athletes typically have lower resting heart rates due to increased cardiovascular efficiency.</li>
+                </ul>
+                <p>The condition-aware models are trained to incorporate these threshold adjustments when calculating risk scores, leading to more personalized and accurate risk assessments.</p>
+            </div>
+        </div>
+        """
         
-        return ax
-    
-    def _create_detailed_visualizations(self):
-        """Create additional detailed visualizations"""
-        logger.info("Creating detailed visualizations")
-        
-        if self.condition_data is not None:
-            self._create_condition_detail_plots()
-        
-        if self.boundary_data:
-            self._create_boundary_detail_plots()
-    
-    def _create_condition_detail_plots(self):
-        """Create detailed plots for each condition"""
-        logger.info("Creating condition-specific detail plots")
-        
-        conditions = self.condition_data['condition'].unique()
-        
-        for condition in conditions:
-            condition_data = self.condition_data[self.condition_data['condition'] == condition]
-            
-            plt.figure(figsize=(15, 10))
-            plt.suptitle(f"Performance Detail: {condition}", fontsize=16)
-            
-            # Create grid for plots
-            gs = plt.GridSpec(2, 2, figure=plt.gcf())
-            
-            # Plot 1: Scatter plot of true vs ml risk
-            ax1 = plt.subplot(gs[0, 0])
-            ax1.scatter(condition_data['true_risk'], condition_data['ml_risk'], alpha=0.6)
-            ax1.set_xlabel('Rule-Based Risk')
-            ax1.set_ylabel('ML-Based Risk')
-            ax1.set_title('Risk Prediction Comparison')
-            
-            # Add perfect prediction line
-            min_val = min(condition_data['true_risk'].min(), condition_data['ml_risk'].min())
-            max_val = max(condition_data['true_risk'].max(), condition_data['ml_risk'].max())
-            ax1.plot([min_val, max_val], [min_val, max_val], 'k--', alpha=0.5)
-            
-            # Calculate metrics
-            mae = mean_absolute_error(condition_data['true_risk'], condition_data['ml_risk'])
-            rmse = np.sqrt(mean_squared_error(condition_data['true_risk'], condition_data['ml_risk']))
-            corr = condition_data['true_risk'].corr(condition_data['ml_risk'])
-            
-            metrics_text = f"MAE: {mae:.2f}\nRMSE: {rmse:.2f}\nCorr: {corr:.2f}"
-            ax1.text(0.05, 0.95, metrics_text, transform=ax1.transAxes,
-                    verticalalignment='top', fontsize=9,
-                    bbox=dict(facecolor='white', alpha=0.9))
-            
-            # Plot 2: Error histogram
-            ax2 = plt.subplot(gs[0, 1])
-            sns.histplot(condition_data['diff'], bins=15, kde=True, ax=ax2)
-            ax2.set_title('Distribution of Differences')
-            ax2.set_xlabel('ML Risk - Rule Risk')
-            
-            mean_diff = condition_data['diff'].mean()
-            median_diff = condition_data['diff'].median()
-            std_diff = condition_data['diff'].std()
-            
-            diff_text = f"Mean Diff: {mean_diff:.2f}\nMedian Diff: {median_diff:.2f}\nStd Dev: {std_diff:.2f}"
-            ax2.text(0.95, 0.95, diff_text, transform=ax2.transAxes,
-                    verticalalignment='top', horizontalalignment='right',
-                    bbox=dict(facecolor='white', alpha=0.9))
-            
-            # Plot 3: Error by heart rate
-            ax3 = plt.subplot(gs[1, 0])
-            scatter3 = ax3.scatter(condition_data['heart_rate'], condition_data['diff'], 
-                                 alpha=0.6, c=condition_data['blood_oxygen'], cmap='viridis')
-            ax3.set_xlabel('Heart Rate (BPM)')
-            ax3.set_ylabel('ML Risk - Rule Risk')
-            ax3.set_title('Error by Heart Rate')
-            ax3.axhline(y=0, color='r', linestyle='-', alpha=0.3)
-            
-            cbar3 = plt.colorbar(scatter3, ax=ax3)
-            cbar3.set_label('Blood Oxygen (%)')
-            # Format tick labels to 2 decimal places
-            cbar3.ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.2f}"))
-            
-            # Plot 4: Error by blood oxygen
-            ax4 = plt.subplot(gs[1, 1])
-            scatter4 = ax4.scatter(condition_data['blood_oxygen'], condition_data['diff'], 
-                                 alpha=0.6, c=condition_data['heart_rate'], cmap='plasma')
-            ax4.set_xlabel('Blood Oxygen (%)')
-            ax4.set_ylabel('ML Risk - Rule Risk')
-            ax4.set_title('Error by Blood Oxygen')
-            ax4.axhline(y=0, color='r', linestyle='-', alpha=0.3)
-            
-            cbar4 = plt.colorbar(scatter4, ax=ax4)
-            cbar4.set_label('Heart Rate (BPM)')
-            # Format tick labels to 2 decimal places
-            cbar4.ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.2f}"))
-            
-            plt.tight_layout()
-            plt.subplots_adjust(top=0.9)
-            
-            # Save the figure
-            condition_file = condition.replace(" ", "_").lower()
-            detail_path = os.path.join(self.output_dir, f"detail_{condition_file}_{self.timestamp}.png")
-            plt.savefig(detail_path, dpi=150, bbox_inches='tight')
-            plt.close()
-            
-            logger.info(f"Saved detail plot for {condition} to {detail_path}")
-    
-    def _create_boundary_detail_plots(self):
-        """Create detailed boundary visualization plots"""
-        logger.info("Creating detailed boundary plots")
-        
-        for range_name, boundary_df in self.boundary_data.items():
-            profiles = boundary_df['profile'].unique()
-            
-            for profile in profiles:
-                profile_data = boundary_df[boundary_df['profile'] == profile]
-                
-                # Create pivot tables for different visualizations
-                try:
-                    # Round values to reduce unique combinations
-                    profile_data['heart_rate_bin'] = profile_data['heart_rate'].round(0)
-                    profile_data['blood_oxygen_bin'] = profile_data['blood_oxygen'].round(0)
-                    
-                    # Create pivot tables
-                    diff_data = profile_data.pivot_table(
-                        values='difference', 
-                        index='blood_oxygen_bin', 
-                        columns='heart_rate_bin',
-                        aggfunc='mean'
-                    )
-                    
-                    true_data = profile_data.pivot_table(
-                        values='true_risk', 
-                        index='blood_oxygen_bin', 
-                        columns='heart_rate_bin',
-                        aggfunc='mean'
-                    )
-                    
-                    ml_data = profile_data.pivot_table(
-                        values='ml_risk', 
-                        index='blood_oxygen_bin', 
-                        columns='heart_rate_bin',
-                        aggfunc='mean'
-                    )
-                    
-                    # Create visualization
-                    plt.figure(figsize=(18, 6))
-                    plt.suptitle(f"Risk Model Comparison: {profile}\nRange: {range_name}", fontsize=16)
-                    
-                    # Plot 1: Rule-based risk
-                    ax1 = plt.subplot(131)
-                    im1 = sns.heatmap(true_data, cmap='viridis', ax=ax1)
-                    ax1.set_title('Rule-Based Risk')
-                    ax1.set_xlabel('Heart Rate (BPM)')
-                    ax1.set_ylabel('Blood Oxygen (%)')
-                    # Format colorbar to show 2 decimal places
-                    im1.collections[0].colorbar.formatter = plt.FuncFormatter(lambda x, _: f"{x:.2f}")
-                    im1.collections[0].colorbar.update_ticks()
-                    
-                    # Plot 2: ML-based risk
-                    ax2 = plt.subplot(132)
-                    im2 = sns.heatmap(ml_data, cmap='viridis', ax=ax2)
-                    ax2.set_title('ML-Based Risk')
-                    ax2.set_xlabel('Heart Rate (BPM)')
-                    ax2.set_ylabel('Blood Oxygen (%)')
-                    # Format colorbar to show 2 decimal places
-                    im2.collections[0].colorbar.formatter = plt.FuncFormatter(lambda x, _: f"{x:.2f}")
-                    im2.collections[0].colorbar.update_ticks()
-                    
-                    # Plot 3: Difference
-                    ax3 = plt.subplot(133)
-                    im3 = sns.heatmap(diff_data, cmap='coolwarm', center=0, 
-                                    vmin=-15, vmax=15, ax=ax3)
-                    ax3.set_title('ML - Rule Difference')
-                    ax3.set_xlabel('Heart Rate (BPM)')
-                    ax3.set_ylabel('Blood Oxygen (%)')
-                    # Format colorbar to show 2 decimal places
-                    im3.collections[0].colorbar.formatter = plt.FuncFormatter(lambda x, _: f"{x:.2f}")
-                    im3.collections[0].colorbar.update_ticks()
-                    
-                    plt.tight_layout()
-                    plt.subplots_adjust(top=0.85)
-                    
-                    # Save the figure
-                    profile_file = profile.replace(" ", "_").lower()
-                    range_file = range_name.replace(" ", "_").lower()
-                    detail_path = os.path.join(
-                        self.output_dir, 
-                        f"boundary_{range_file}_{profile_file}_{self.timestamp}.png"
-                    )
-                    plt.savefig(detail_path, dpi=150, bbox_inches='tight')
-                    plt.close()
-                    
-                    logger.info(f"Saved boundary plot for {profile} to {detail_path}")
-                except Exception as e:
-                    logger.error(f"Failed to create boundary plot for {profile}: {e}")
+        self.sections.append(html)
         
 def main():
-    """Main function to run the dashboard"""
-    parser = argparse.ArgumentParser(description='Generate model performance dashboard')
-    parser.add_argument('--results-dir', default='model_test_results',
-                        help='Directory containing model test results')
-    parser.add_argument('--output-dir', default='dashboard_results',
-                        help='Directory to save dashboard visualizations')
-    
+    """Create dashboard from test results"""
+    parser = argparse.ArgumentParser(description="Create dashboard for condition-aware ML model")
+    parser.add_argument("--results-dir", default=TEST_RESULTS_DIR, help="Directory with test results")
+    parser.add_argument("--output-dir", default=DASHBOARD_DIR, help="Directory to save dashboard")
+    parser.add_argument("--clean", action="store_true", help="Clean output directory before running")
+    parser.add_argument("--test-file", help="Specific test result file to use (optional)")
     args = parser.parse_args()
     
-    dashboard = ModelDashboard(results_dir=args.results_dir, output_dir=args.output_dir)
-    dashboard.create_dashboard()
+    # Clean output directory if requested
+    if args.clean and os.path.exists(args.output_dir):
+        logger.info(f"Cleaning output directory: {args.output_dir}")
+        
+        # Create backup folder with timestamp
+        if os.listdir(args.output_dir):  # Only backup if not empty
+            backup_dir = f"{args.output_dir}_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            shutil.copytree(args.output_dir, backup_dir)
+            logger.info(f"Backed up existing results to {backup_dir}")
+        
+        # Clean directory
+        shutil.rmtree(args.output_dir)
+        os.makedirs(args.output_dir, exist_ok=True)
+    
+    # Create dashboard
+    dashboard = ConditionAwareDashboard(test_results_dir=args.results_dir, dashboard_dir=args.output_dir)
+    
+    # Load the test data first
+    if args.test_file:
+        logger.info(f"Using specified test file: {args.test_file}")
+        if not dashboard.load_test_data(args.test_file):
+            logger.error("Failed to load specified test file")
+            return 1
+    else:
+        logger.info("Searching for latest test results file")
+        if not dashboard.load_test_data():
+            logger.error("Failed to load test data")
+            return 1
+    
+    # Now create the dashboard with the loaded data
+    if dashboard.create_dashboard():
+        logger.info(f"Dashboard created successfully in {args.output_dir}")
+        
+        # List generated visualizations
+        files = os.listdir(args.output_dir)
+        logger.info("Generated files:")
+        for file in files:
+            logger.info(f"  - {file}")
+                
+        return 0
+    else:
+        logger.error("Failed to create dashboard")
+        return 1
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
