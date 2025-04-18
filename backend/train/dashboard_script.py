@@ -112,7 +112,7 @@ class ConditionAwareDashboard:
         """Create the full dashboard report"""
         if not hasattr(self, 'df') or len(self.df) == 0:
             logger.error("No test data loaded. Run load_test_data first.")
-                return False
+            return False
         
         if not output_file:
             output_file = f"{self.dashboard_dir}/health_models_comparison_{self.timestamp}.html"

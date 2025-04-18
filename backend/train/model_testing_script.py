@@ -434,7 +434,7 @@ class HealthModelTester:
                 bo = np.random.uniform(93, 100)
                 test_points.append((hr, bo))
                 
-            else:
+        else:
             # For other conditions or no condition, use a general distribution
             for _ in range(samples):
                 hr = np.random.uniform(50, 120)
