@@ -79,6 +79,9 @@ class HealthService: ObservableObject {
                 // Check if we need to detect anomalies client-side for older data
                 self.detectAnomalies()
                 
+                // Process AI analysis for different risk levels
+                self.updateAIAnalysisForRiskLevels()
+                
                 // Reset retry count on success
                 self.retryCount = 0
                 print("Successfully loaded \(response.healthData.count) health data entries")
@@ -110,6 +113,9 @@ class HealthService: ObservableObject {
                 print("Alternative parsing strategy 1 succeeded")
                 self.healthData = response.healthData
                 self.detectAnomalies()
+                
+                // Ensure AI analysis is prioritized for medium/high risk cases
+                updateAIAnalysisForRiskLevels()
                 return
             }
             
@@ -165,6 +171,9 @@ class HealthService: ObservableObject {
                         print("Manual parsing succeeded with \(parsedHealthData.count) entries")
                         self.healthData = parsedHealthData
                         self.detectAnomalies()
+                        
+                        // Ensure AI analysis is prioritized for medium/high risk cases
+                        updateAIAnalysisForRiskLevels()
                         return
                     }
                 } else {
@@ -214,6 +223,9 @@ class HealthService: ObservableObject {
                         print("Alternative parsing strategy 2 succeeded with \(parsedHealthData.count) entries")
                         self.healthData = parsedHealthData
                         self.detectAnomalies()
+                        
+                        // Ensure AI analysis is prioritized for medium/high risk cases
+                        updateAIAnalysisForRiskLevels()
                         return
                     }
                 }
@@ -222,6 +234,32 @@ class HealthService: ObservableObject {
             print("All alternative parsing attempts failed")
         } catch {
             print("Alternative parsing error: \(error)")
+        }
+    }
+    
+    // Process AI analysis content based on risk class
+    private func updateAIAnalysisForRiskLevels() {
+        for (index, healthData) in self.healthData.enumerated() {
+            if healthData.riskClass > 0 && (healthData.aiAnalysis == nil || healthData.aiAnalysis?.isEmpty == true) {
+                // For medium/high risk with no AI analysis, generate a fallback
+                var updatedData = healthData
+                updatedData.aiAnalysis = generateFallbackAnalysis(for: healthData)
+                self.healthData[index] = updatedData
+            }
+        }
+    }
+    
+    // Generate fallback AI analysis for medium/high risk when backend AI is unavailable
+    private func generateFallbackAnalysis(for healthData: HealthData) -> String {
+        // Simple fallback based on vitals and risk class
+        let heartRateStatus = healthData.heartRate > 100 ? "elevated" : 
+                             (healthData.heartRate < 60 ? "lower than normal" : "within normal range")
+        let bloodOxygenStatus = healthData.bloodOxygen < 95 ? "lower than optimal" : "normal"
+        
+        if healthData.riskClass == 2 {
+            return "URGENT: Your vitals show concerning patterns that require attention. Your heart rate is \(heartRateStatus) at \(Int(healthData.heartRate)) BPM and blood oxygen is \(bloodOxygenStatus) at \(Int(healthData.bloodOxygen))%. Please contact your healthcare provider soon and follow the recommendations provided."
+        } else {
+            return "Your vital signs need monitoring. Heart rate is \(heartRateStatus) at \(Int(healthData.heartRate)) BPM and blood oxygen is \(bloodOxygenStatus) at \(Int(healthData.bloodOxygen))%. Consider following the recommendations provided and monitoring your condition."
         }
     }
     
@@ -244,7 +282,23 @@ class HealthService: ObservableObject {
                     var updatedData = data
                     updatedData.isAnomaly = true
                     
-                    // Calculate a simple risk score
+                    // Determine risk class
+                    var riskClass = 0
+                    
+                    // High risk conditions
+                    if bloodOxygenAnomaly && (heartRateAnomalyLow || heartRateAnomalyHigh) {
+                        riskClass = 2
+                    }
+                    // Medium risk conditions
+                    else if bloodOxygenAnomaly || (heartRateAnomalyLow && data.heartRate < 45) || (heartRateAnomalyHigh && data.heartRate > 120) {
+                        riskClass = 1
+                    }
+                    
+                    // Update risk information
+                    updatedData.riskClass = riskClass
+                    updatedData.riskCategory = riskClass == 0 ? "Low Risk" : (riskClass == 1 ? "Medium Risk" : "High Risk")
+                    
+                    // Calculate legacy risk score for backward compatibility
                     var riskScore = 0.0
                     
                     if heartRateAnomalyLow {
@@ -356,6 +410,8 @@ class HealthService: ObservableObject {
             timestamp: dateFormatter.string(from: Date()),
             isAnomaly: false,
             riskScore: 12,
+            riskClass: 0,
+            riskCategory: "Low Risk",
             recommendations: ["Stay hydrated", "Continue regular monitoring"],
             aiAnalysis: "Your vital signs are within normal ranges. Keep up the good work with regular exercise and proper hydration."
         )
@@ -370,6 +426,8 @@ class HealthService: ObservableObject {
             timestamp: dateFormatter.string(from: Date().addingTimeInterval(-3600)),
             isAnomaly: true,
             riskScore: 68,
+            riskClass: 2,
+            riskCategory: "High Risk",
             recommendations: ["Rest and avoid physical exertion", "Monitor vital signs closely", "Contact your healthcare provider if symptoms persist"],
             aiAnalysis: "Your heart rate is elevated and blood oxygen is slightly below normal. This could be due to physical exertion, stress, or an underlying condition."
         )
@@ -387,6 +445,8 @@ class HealthService: ObservableObject {
                 timestamp: dateFormatter.string(from: Date().addingTimeInterval(-7200)),
                 isAnomaly: false,
                 riskScore: 8,
+                riskClass: 0,
+                riskCategory: "Low Risk",
                 recommendations: ["Maintain healthy lifestyle"]
             ),
             HealthData(
@@ -396,6 +456,8 @@ class HealthService: ObservableObject {
                 timestamp: dateFormatter.string(from: Date().addingTimeInterval(-10800)),
                 isAnomaly: false,
                 riskScore: 5,
+                riskClass: 0,
+                riskCategory: "Low Risk",
                 recommendations: ["Continue normal activities"]
             )
         ]

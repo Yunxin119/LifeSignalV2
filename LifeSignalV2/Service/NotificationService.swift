@@ -138,16 +138,36 @@ class NotificationService: NSObject, ObservableObject, UNUserNotificationCenterD
         )
     }
     
-    func sendHealthAnomalyNotification(heartRate: Double, bloodOxygen: Double, riskScore: Double) {
+    func sendHealthAnomalyNotification(heartRate: Double, bloodOxygen: Double, riskClass: Int, riskCategory: String) {
         let content = UNMutableNotificationContent()
-        content.title = "Health Alert: Anomaly Detected"
-        content.body = "Heart Rate: \(Int(heartRate)) bpm, Blood Oxygen: \(Int(bloodOxygen))%, Risk Score: \(Int(riskScore)). Please check the app for details."
-        content.sound = UNNotificationSound.defaultCritical
+        
+        // Customize title and sound based on risk class
+        if riskClass == 2 { // High risk
+            content.title = "URGENT Health Alert: High Risk Detected"
+            content.sound = UNNotificationSound.defaultCritical
+        } else if riskClass == 1 { // Medium risk
+            content.title = "Health Alert: Attention Required"
+            content.sound = UNNotificationSound.default
+        } else { // Low risk
+            content.title = "Health Alert: Anomaly Detected"
+            content.sound = UNNotificationSound.default
+        }
+        
+        // Create notification body with appropriate urgency
+        if riskClass == 2 {
+            content.body = "URGENT: Heart Rate: \(Int(heartRate)) bpm, Blood Oxygen: \(Int(bloodOxygen))%. Risk Level: \(riskCategory). Please check detailed AI recommendations immediately."
+        } else if riskClass == 1 {
+            content.body = "Heart Rate: \(Int(heartRate)) bpm, Blood Oxygen: \(Int(bloodOxygen))%. Risk Level: \(riskCategory). AI recommendations available."
+        } else {
+            content.body = "Heart Rate: \(Int(heartRate)) bpm, Blood Oxygen: \(Int(bloodOxygen))%. Risk Level: \(riskCategory). Please check the app for details."
+        }
+        
         content.categoryIdentifier = "HEALTH_ALERT"
         content.userInfo = [
             "heartRate": heartRate,
             "bloodOxygen": bloodOxygen,
-            "riskScore": riskScore
+            "riskClass": riskClass,
+            "riskCategory": riskCategory
         ]
         
         // Create request with nil trigger for immediate delivery

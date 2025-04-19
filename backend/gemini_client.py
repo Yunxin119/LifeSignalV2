@@ -209,5 +209,125 @@ class GeminiClient:
             logger.error(f"Error analyzing health trends with Gemini: {e}")
             return {"error": str(e)}
 
+    def generate_risk_specific_advice(self, health_data, risk_class, risk_category, recommendations, user_context=None):
+        """
+        Generate targeted advice for medium or high risk health situations
+        
+        Args:
+            health_data (dict): Health metrics data
+            risk_class (int): Risk classification (1=medium, 2=high)
+            risk_category (str): Risk category name
+            recommendations (list): Existing recommendations
+            user_context (dict, optional): User context information
+            
+        Returns:
+            str: Risk-specific advice and recommendations
+        """
+        try:
+            # Format health data
+            metrics = []
+            for key, value in health_data.items():
+                if isinstance(value, (int, float, str)):
+                    metrics.append(f"{key}: {value}")
+            
+            metrics_str = "\n".join(metrics)
+            
+            # Format recommendations
+            recs_str = "\n".join([f"- {rec}" for rec in recommendations]) if recommendations else "None provided"
+            
+            # Format user context
+            context_str = ""
+            if user_context:
+                context_items = []
+                for key, value in user_context.items():
+                    if key == 'health_conditions' and isinstance(value, list):
+                        context_items.append(f"health_conditions: {', '.join(value)}")
+                    elif key == 'age':
+                        context_items.append(f"age: {value}")
+                    elif key == 'medical_history' and isinstance(value, list):
+                        context_items.append(f"medical_history: {', '.join(value)}")
+                    else:
+                        context_items.append(f"{key}: {value}")
+                
+                context_str = "\n".join(context_items)
+            
+            # Create urgency level based on risk class
+            urgency = "HIGH URGENCY" if risk_class == 2 else "MEDIUM URGENCY"
+            
+            # Create prompt based on risk level
+            if risk_class == 2:  # High risk
+                prompt = f"""
+                {urgency}: PROVIDE URGENT HEALTH ADVICE
+                
+                Risk Classification: {risk_category} (Level {risk_class})
+                
+                Current Health Metrics:
+                {metrics_str}
+                
+                Current System Recommendations:
+                {recs_str}
+                
+                User Context:
+                {context_str}
+                
+                You are a medical AI assistant analyzing concerning health metrics. The patient has been classified as HIGH RISK. 
+                Provide urgent, concise advice focusing on:
+                
+                1. A clear explanation of why these readings are concerning in simple language
+                2. What immediate actions should be taken (specify timeframe - minutes, hours)
+                3. Specific warning signs to watch for that would require emergency services
+                4. Precise instructions for what to tell medical professionals when contacting them
+                5. Any immediate steps that may help stabilize the condition before medical help arrives
+                
+                FORMAT: Provide a direct, concise response of 3-5 paragraphs maximum. Use clear, simple language appropriate for a medical emergency.
+                This is urgent medical advice, so be direct and specific without hedging or unnecessary qualifiers.
+                Do not include a generic disclaimer.
+                
+                IMPORTANT: Be professional and factual but convey appropriate urgency. Do not understate or overstate the risk.
+                """
+            else:  # Medium risk
+                prompt = f"""
+                {urgency}: PROVIDE FOCUSED HEALTH ADVICE
+                
+                Risk Classification: {risk_category} (Level {risk_class})
+                
+                Current Health Metrics:
+                {metrics_str}
+                
+                Current System Recommendations:
+                {recs_str}
+                
+                User Context:
+                {context_str}
+                
+                You are a medical AI assistant analyzing concerning health metrics. The patient has been classified as MEDIUM RISK.
+                Provide focused, actionable advice addressing:
+                
+                1. A clear explanation of why these readings require attention
+                2. What actions should be taken within the next few hours or today
+                3. Specific recommendations for monitoring the condition
+                4. When to escalate to seeking medical attention (specific thresholds or symptoms)
+                5. Lifestyle adjustments that may help improve the condition
+                
+                FORMAT: Provide a direct, concise response of 2-4 paragraphs. Use clear language that encourages appropriate action without causing unnecessary alarm.
+                Focus on practical steps the person can take.
+                
+                IMPORTANT: Be factual but calm. Convey the need for attention without creating panic.
+                """
+            
+            # Generate response
+            logger.info(f"Generating {urgency} health advice for risk class {risk_class}")
+            response = self.model.generate_content(prompt)
+            
+            # Return formatted advice
+            return response.text.strip()
+            
+        except Exception as e:
+            logger.error(f"Error generating risk-specific advice: {e}")
+            if risk_class == 2:
+                return "URGENT: Your vital signs indicate a high-risk situation that requires prompt medical attention. Please review the recommendations provided and contact your healthcare provider as soon as possible."
+            else:
+                return "Your vital signs indicate a situation that requires monitoring. Please follow the recommendations provided and consider contacting your healthcare provider if your condition doesn't improve."
+
 # Create a singleton instance
 gemini = GeminiClient() 

@@ -14,6 +14,9 @@ struct HealthData: Identifiable, Decodable, Equatable {
     let timestamp: String  // Using string initially to handle different timestamp formats
     var isAnomaly: Bool
     var riskScore: Double
+    var riskClass: Int
+    var riskCategory: String
+    var riskProbabilities: [String: Double]?
     var recommendations: [String]
     var aiAnalysis: String?
     var anomalyScore: Double?
@@ -30,7 +33,10 @@ struct HealthData: Identifiable, Decodable, Equatable {
         case aiAnalysis = "ai_analysis"
         case recommendations
         case isAnomaly = "is_anomaly"
-        case riskScore = "risk_score"
+        case riskScore = "legacy_risk_score"
+        case riskClass = "risk_class"
+        case riskCategory = "risk_category"
+        case riskProbabilities = "risk_probabilities"
         case anomalyScore = "anomaly_score"
         case trendAnalysis = "trend_analysis"
         case analysisResult = "analysis_result"
@@ -44,7 +50,10 @@ struct HealthData: Identifiable, Decodable, Equatable {
     
     enum AnalysisResultKeys: String, CodingKey {
         case isAnomaly = "is_anomaly"
-        case riskScore = "risk_score"
+        case riskScore = "legacy_risk_score"
+        case riskClass = "risk_class"
+        case riskCategory = "risk_category"
+        case riskProbabilities = "risk_probabilities"
         case recommendations
         case anomalyScore = "anomaly_score"
         case trendAnalysis = "trend_analysis"
@@ -67,9 +76,13 @@ struct HealthData: Identifiable, Decodable, Equatable {
         // Default values for required properties
         var foundIsAnomaly = false
         var foundRiskScore = false
+        var foundRiskClass = false
+        var foundRiskCategory = false
         var foundRecommendations = false
         isAnomaly = false
         riskScore = 0.0
+        riskClass = 0
+        riskCategory = "Low Risk"
         recommendations = []
         
         // Try to get recommendations from top level first
@@ -93,6 +106,21 @@ struct HealthData: Identifiable, Decodable, Equatable {
             foundRiskScore = true
         }
         
+        // Try to get risk class from top level
+        if let topLevelRiskClass = try? container.decode(Int.self, forKey: .riskClass) {
+            riskClass = topLevelRiskClass
+            foundRiskClass = true
+        }
+        
+        // Try to get risk category from top level
+        if let topLevelRiskCategory = try? container.decode(String.self, forKey: .riskCategory) {
+            riskCategory = topLevelRiskCategory
+            foundRiskCategory = true
+        }
+        
+        // Try to get risk probabilities from top level
+        riskProbabilities = try? container.decode([String: Double].self, forKey: .riskProbabilities)
+        
         // Try to get values from analysis_result at top level
         if let analysisResultContainer = try? container.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult) {
             // Get anomaly flag if not already found
@@ -105,6 +133,23 @@ struct HealthData: Identifiable, Decodable, Equatable {
             if !foundRiskScore {
                 riskScore = (try? analysisResultContainer.decode(Double.self, forKey: .riskScore)) ?? 0.0
                 foundRiskScore = true
+            }
+            
+            // Get risk class if not already found
+            if !foundRiskClass {
+                riskClass = (try? analysisResultContainer.decode(Int.self, forKey: .riskClass)) ?? 0
+                foundRiskClass = true
+            }
+            
+            // Get risk category if not already found
+            if !foundRiskCategory {
+                riskCategory = (try? analysisResultContainer.decode(String.self, forKey: .riskCategory)) ?? "Low Risk"
+                foundRiskCategory = true
+            }
+            
+            // Get risk probabilities if not already found
+            if riskProbabilities == nil {
+                riskProbabilities = try? analysisResultContainer.decode([String: Double].self, forKey: .riskProbabilities)
             }
             
             // Get recommendations if not already found
@@ -120,7 +165,7 @@ struct HealthData: Identifiable, Decodable, Equatable {
         }
         
         // If still not found, try in additional_metrics -> analysis_result
-        if !foundIsAnomaly || !foundRiskScore || !foundRecommendations {
+        if !foundIsAnomaly || !foundRiskScore || !foundRiskClass || !foundRiskCategory || !foundRecommendations || riskProbabilities == nil {
             do {
                 if let additionalMetrics = try? container.nestedContainer(keyedBy: AdditionalMetricsKeys.self, forKey: .additionalMetrics),
                    let analysisResult = try? additionalMetrics.nestedContainer(keyedBy: AnalysisResultKeys.self, forKey: .analysisResult) {
@@ -133,6 +178,21 @@ struct HealthData: Identifiable, Decodable, Equatable {
                     // Get risk score if not already found
                     if !foundRiskScore {
                         riskScore = (try? analysisResult.decode(Double.self, forKey: .riskScore)) ?? 0.0
+                    }
+                    
+                    // Get risk class if not already found
+                    if !foundRiskClass {
+                        riskClass = (try? analysisResult.decode(Int.self, forKey: .riskClass)) ?? 0
+                    }
+                    
+                    // Get risk category if not already found
+                    if !foundRiskCategory {
+                        riskCategory = (try? analysisResult.decode(String.self, forKey: .riskCategory)) ?? "Low Risk"
+                    }
+                    
+                    // Get risk probabilities if not already found
+                    if riskProbabilities == nil {
+                        riskProbabilities = try? analysisResult.decode([String: Double].self, forKey: .riskProbabilities)
                     }
                     
                     // Get recommendations if not already found
@@ -182,13 +242,16 @@ struct HealthData: Identifiable, Decodable, Equatable {
         additionalMetrics = try? container.decode([String: Double].self, forKey: .additionalMetrics)
     }
     
-    init(id: String, heartRate: Double, bloodOxygen: Double, timestamp: String, isAnomaly: Bool, riskScore: Double, recommendations: [String], aiAnalysis: String? = nil, additionalMetrics: [String: Double]? = nil) {
+    init(id: String, heartRate: Double, bloodOxygen: Double, timestamp: String, isAnomaly: Bool, riskScore: Double, riskClass: Int = 0, riskCategory: String = "Low Risk", recommendations: [String], aiAnalysis: String? = nil, additionalMetrics: [String: Double]? = nil) {
         self.id = id
         self.heartRate = heartRate
         self.bloodOxygen = bloodOxygen
         self.timestamp = timestamp
         self.isAnomaly = isAnomaly
         self.riskScore = riskScore
+        self.riskClass = riskClass
+        self.riskCategory = riskCategory
+        self.riskProbabilities = nil
         self.recommendations = recommendations
         self.aiAnalysis = aiAnalysis
         self.anomalyScore = nil

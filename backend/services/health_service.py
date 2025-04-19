@@ -117,6 +117,23 @@ class HealthService:
             # Get AI-generated analysis
             ai_analysis = gemini.generate_health_advice(health_data, user_context)
             
+            # Enhance AI analysis with risk-specific content for medium/high risk
+            if risk_class > 0:  # Medium or high risk
+                risk_specific_analysis = gemini.generate_risk_specific_advice(
+                    health_data, 
+                    risk_class,
+                    risk_category,
+                    recommendations,
+                    user_context
+                )
+                
+                # Combine or replace the analysis based on risk level
+                if risk_specific_analysis:
+                    if risk_class == 2:  # High risk - prioritize risk advice
+                        ai_analysis = risk_specific_analysis
+                    else:  # Medium risk - combine advice
+                        ai_analysis = f"{risk_specific_analysis}\n\nAdditional context: {ai_analysis}"
+            
             # Prepare result
             result = {
                 'timestamp': datetime.now().isoformat(),
@@ -212,14 +229,14 @@ class HealthService:
             health_conditions_text = " ".join(health_conditions)
             
             # Adjust heart rate range for anxiety
-            if any(term in health_conditions_text for c in ['anxiety', 'panic disorder', 'stress disorder']):
+            if any(c in health_conditions_text for c in ['anxiety', 'panic disorder', 'stress disorder']):
                 hr_normal_high += 15  # Allow higher heart rate for anxiety patients
                 condition_specific_adjustments = True
                 condition_notes.append("Adjusted heart rate threshold for anxiety")
                 logging.debug(f"[RULE_ADJUST] Anxiety detected, increased HR upper threshold to {hr_normal_high}")
             
             # Adjust blood oxygen threshold for COPD
-            if any(term in health_conditions_text for c in ['copd', 'emphysema', 'chronic bronchitis']):
+            if any(c in health_conditions_text for c in ['copd', 'emphysema', 'chronic bronchitis']):
                 bo_normal_low = 92  # Lower threshold for COPD patients
                 condition_specific_adjustments = True
                 condition_notes.append("Adjusted blood oxygen threshold for COPD")

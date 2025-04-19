@@ -1,14 +1,11 @@
 """
 Script to visualize classification boundaries for health risk classification.
 
-This script:
-1. Generates a dense grid of vital sign values
-2. Classifies each point with various methods
-3. Visualizes decision boundaries
-4. Creates comparative visualizations
+This script creates detailed visualizations of how the model classifies different 
+regions of vital signs, including condition-specific boundaries and probability landscapes.
 
 Usage:
-python visualize_classification_boundaries.py --user_id YOUR_USER_ID
+python visualize_classification_boundaries.py [--user_id USER_ID] [--model MODEL_PATH]
 """
 
 import os
@@ -21,7 +18,7 @@ from matplotlib.colors import ListedColormap
 import seaborn as sns
 import logging
 from datetime import datetime
-from sklearn.model_selection import train_test_split
+import joblib
 
 # Configure logging
 logging.basicConfig(
@@ -29,13 +26,13 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler('boundaries_visualization.log')
+        logging.FileHandler('boundary_visualization.log')
     ]
 )
 
 logger = logging.getLogger(__name__)
 
-# Make sure the services modules are in the path
+# Make sure modules are in the path
 sys.path.append('.')
 
 # Import necessary modules
@@ -48,24 +45,23 @@ from models.user import User
 RESULTS_DIR = "boundary_visualizations"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-def generate_grid_data():
+def generate_grid_data(resolution=0.5):
     """
     Generate a grid of heart rate and blood oxygen values
     
+    Args:
+        resolution (float): Step size for the grid
+        
     Returns:
-        tuple: (xx, yy, X) grid data
+        tuple: (xx, yy, X) mesh grid data
     """
     # Create a mesh grid to visualize decision boundaries
-    hr_min, hr_max = 30, 180
+    hr_min, hr_max = 25, 190
     bo_min, bo_max = 80, 100
     
-    # Step size in the mesh
-    hr_step = 2
-    bo_step = 0.2
-    
-    # Create meshgrid
-    hr_range = np.arange(hr_min, hr_max, hr_step)
-    bo_range = np.arange(bo_min, bo_max, bo_step)
+    # Create meshgrid with specified resolution
+    hr_range = np.arange(hr_min, hr_max, resolution)
+    bo_range = np.arange(bo_min, bo_max, resolution)
     xx, yy = np.meshgrid(hr_range, bo_range)
     
     # Reshape for classification
@@ -73,13 +69,14 @@ def generate_grid_data():
     
     return xx, yy, X
 
-def classify_grid_points(X, user_id, user_context=None):
+def classify_grid_points(X, model=None, user_id=None, user_context=None):
     """
     Classify grid points using different methods
     
     Args:
         X (numpy.ndarray): Grid points as [heart_rate, blood_oxygen] pairs
-        user_id (str): User ID
+        model (object, optional): Pre-trained model
+        user_id (str, optional): User ID for the classification service
         user_context (dict, optional): User context information
         
     Returns:
@@ -119,19 +116,44 @@ def classify_grid_points(X, user_id, user_context=None):
             results['rule_proba'][idx] = rule_probs
             
             # ML classification
-            try:
-                ml_result = ClassificationModel.predict_risk_class(user_id, [hr, bo], user_context)
-                ml_class = ml_result['risk_class']
-                ml_probs = [ml_result['probabilities']['low'], 
-                           ml_result['probabilities']['medium'], 
-                           ml_result['probabilities']['high']]
+            if model is not None:
+                # Use provided model
+                ml_class = model.predict([[hr, bo]])[0]
+                ml_probs = model.predict_proba([[hr, bo]])[0]
+                
+                # Simple 50/50 blend for hybrid
+                hybrid_probs = []
+                for k in range(3):
+                    hybrid_probs.append(0.5 * ml_probs[k] + 0.5 * rule_probs[k])
+                hybrid_class = np.argmax(hybrid_probs)
                 
                 results['ml'][idx] = ml_class
                 results['ml_proba'][idx] = ml_probs
-                results['hybrid'][idx] = ml_class  # Hybrid result already computed in predict_risk_class
-                results['hybrid_proba'][idx] = ml_probs
-            except Exception as e:
-                logger.warning(f"Error in ML classification: {e}")
+                results['hybrid'][idx] = hybrid_class
+                results['hybrid_proba'][idx] = hybrid_probs
+            elif user_id is not None:
+                # Use classification service
+                try:
+                    ml_result = ClassificationModel.predict_risk_class(user_id, [hr, bo], user_context)
+                    ml_class = ml_result['risk_class']
+                    ml_probs = [
+                        ml_result['probabilities']['low'], 
+                        ml_result['probabilities']['medium'], 
+                        ml_result['probabilities']['high']
+                    ]
+                    
+                    results['ml'][idx] = ml_class
+                    results['ml_proba'][idx] = ml_probs
+                    results['hybrid'][idx] = ml_class  # Hybrid result already computed in predict_risk_class
+                    results['hybrid_proba'][idx] = ml_probs
+                except Exception as e:
+                    logger.warning(f"Error in ML classification: {e}")
+                    results['ml'][idx] = rule_class
+                    results['ml_proba'][idx] = rule_probs
+                    results['hybrid'][idx] = rule_class
+                    results['hybrid_proba'][idx] = rule_probs
+            else:
+                # No model or user ID, just use rule-based
                 results['ml'][idx] = rule_class
                 results['ml_proba'][idx] = rule_probs
                 results['hybrid'][idx] = rule_class
@@ -139,7 +161,7 @@ def classify_grid_points(X, user_id, user_context=None):
     
     return results
 
-def visualize_boundaries(xx, yy, results, user_context=None):
+def visualize_boundaries(xx, yy, results, user_context=None, health_condition=None):
     """
     Visualize classification boundaries
     
@@ -148,6 +170,7 @@ def visualize_boundaries(xx, yy, results, user_context=None):
         yy (numpy.ndarray): Meshgrid y-values
         results (dict): Classification results
         user_context (dict, optional): User context information
+        health_condition (str, optional): Health condition being visualized
     """
     # Reshape results back to grid
     rule_Z = results['rule'].reshape(xx.shape)
@@ -157,164 +180,180 @@ def visualize_boundaries(xx, yy, results, user_context=None):
     # Create color maps
     colors = ['green', 'orange', 'red']
     cmap = ListedColormap(colors)
+    risk_labels = ['Low Risk', 'Medium Risk', 'High Risk']
     
-    # Create figure
-    plt.figure(figsize=(18, 6))
+    # Create figure with three subplots
+    fig, axs = plt.subplots(1, 3, figsize=(18, 6))
     
     # Plot rule-based boundaries
-    plt.subplot(1, 3, 1)
-    plt.contourf(xx, yy, rule_Z, alpha=0.8, cmap=cmap)
-    plt.title('Rule-based Classification Boundaries')
-    plt.xlabel('Heart Rate (BPM)')
-    plt.ylabel('Blood Oxygen (%)')
-    
-    # Add color bar
-    norm = mcolors.BoundaryNorm([0, 1, 2, 3], cmap.N)
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    sm.set_array([])
-    plt.colorbar(sm, ticks=[0.33, 1, 1.67], label='Risk Class')
-    plt.clim(-0.5, 2.5)
-    plt.colorbar(sm, ticks=[0.33, 1, 1.67])
-    plt.clim(-0.5, 2.5)
-    plt.gca().set_yticks([85, 90, 95, 100])
+    contourf1 = axs[0].contourf(xx, yy, rule_Z, alpha=0.8, cmap=cmap, levels=[0, 1, 2, 3])
+    axs[0].set_title('Rule-based Classification')
+    axs[0].set_xlabel('Heart Rate (BPM)')
+    axs[0].set_ylabel('Blood Oxygen (%)')
+    axs[0].set_yticks([85, 90, 95, 100])
     
     # Plot ML boundaries
-    plt.subplot(1, 3, 2)
-    plt.contourf(xx, yy, ml_Z, alpha=0.8, cmap=cmap)
-    plt.title('ML Model Classification Boundaries')
-    plt.xlabel('Heart Rate (BPM)')
-    plt.ylabel('Blood Oxygen (%)')
-    
-    # Add color bar
-    norm = mcolors.BoundaryNorm([0, 1, 2, 3], cmap.N)
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    sm.set_array([])
-    plt.colorbar(sm, ticks=[0.33, 1, 1.67], label='Risk Class')
-    plt.clim(-0.5, 2.5)
-    plt.gca().set_yticks([85, 90, 95, 100])
+    contourf2 = axs[1].contourf(xx, yy, ml_Z, alpha=0.8, cmap=cmap, levels=[0, 1, 2, 3])
+    axs[1].set_title('ML Model Classification')
+    axs[1].set_xlabel('Heart Rate (BPM)')
+    axs[1].set_ylabel('Blood Oxygen (%)')
+    axs[1].set_yticks([85, 90, 95, 100])
     
     # Plot hybrid boundaries
-    plt.subplot(1, 3, 3)
-    plt.contourf(xx, yy, hybrid_Z, alpha=0.8, cmap=cmap)
-    plt.title('Hybrid Classification Boundaries')
-    plt.xlabel('Heart Rate (BPM)')
-    plt.ylabel('Blood Oxygen (%)')
+    contourf3 = axs[2].contourf(xx, yy, hybrid_Z, alpha=0.8, cmap=cmap, levels=[0, 1, 2, 3])
+    axs[2].set_title('Hybrid Classification')
+    axs[2].set_xlabel('Heart Rate (BPM)')
+    axs[2].set_ylabel('Blood Oxygen (%)')
+    axs[2].set_yticks([85, 90, 95, 100])
     
-    # Add color bar
-    norm = mcolors.BoundaryNorm([0, 1, 2, 3], cmap.N)
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    sm.set_array([])
-    plt.colorbar(sm, ticks=[0.33, 1, 1.67], label='Risk Class')
-    plt.clim(-0.5, 2.5)
-    plt.gca().set_yticks([85, 90, 95, 100])
-    
-    # Add context information in title if available
-    conditions = []
-    if user_context and 'health_conditions' in user_context and user_context['health_conditions']:
-        conditions = user_context['health_conditions']
-        
-    if conditions:
-        plt.suptitle(f"Classification Boundaries\nHealth Conditions: {', '.join(conditions)}", fontsize=16)
+    # Add condition information in title if available
+    if health_condition:
+        fig.suptitle(f"Classification Boundaries for {health_condition.title()} Condition", fontsize=16)
     else:
-        plt.suptitle("Classification Boundaries", fontsize=16)
+        fig.suptitle("Classification Boundaries", fontsize=16)
+    
+    # Add a single colorbar for all subplots
+    cbar = fig.colorbar(contourf3, ax=axs, orientation='horizontal', pad=0.1)
+    cbar.set_ticks([0.33, 1.0, 1.67])
+    cbar.set_ticklabels(risk_labels)
     
     plt.tight_layout()
-    plt.subplots_adjust(top=0.85)
+    plt.subplots_adjust(top=0.85, bottom=0.15)
     
     # Save figure
-    plt.savefig(os.path.join(RESULTS_DIR, 'classification_boundaries.png'), dpi=300)
+    filename = f"classification_boundaries_{health_condition or 'default'}.png"
+    plt.savefig(os.path.join(RESULTS_DIR, filename), dpi=300)
     
-    # Visualize probability distributions
-    visualize_probability_distributions(xx, yy, results)
-
-def visualize_probability_distributions(xx, yy, results):
-    """
-    Visualize probability distributions for each risk class
-    
-    Args:
-        xx (numpy.ndarray): Meshgrid x-values
-        yy (numpy.ndarray): Meshgrid y-values
-        results (dict): Classification results
-    """
-    # Reshape probability results back to grid
+    # Visualize probability distributions for each risk class
     for risk_class in range(3):
+        risk_names = ['Low Risk', 'Medium Risk', 'High Risk']
+        
+        # Reshape probability results
         rule_proba = results['rule_proba'][:, risk_class].reshape(xx.shape)
         ml_proba = results['ml_proba'][:, risk_class].reshape(xx.shape)
         hybrid_proba = results['hybrid_proba'][:, risk_class].reshape(xx.shape)
         
-        # Create figure
-        plt.figure(figsize=(18, 6))
+        # Create figure with three subplots
+        fig, axs = plt.subplots(1, 3, figsize=(18, 6))
         
         # Plot rule-based probabilities
-        plt.subplot(1, 3, 1)
-        plt.contourf(xx, yy, rule_proba, alpha=0.8, cmap='Blues')
-        plt.colorbar(label='Probability')
-        plt.title(f'Rule-based: {["Low", "Medium", "High"][risk_class]} Risk Probability')
-        plt.xlabel('Heart Rate (BPM)')
-        plt.ylabel('Blood Oxygen (%)')
-        plt.gca().set_yticks([85, 90, 95, 100])
+        im1 = axs[0].contourf(xx, yy, rule_proba, alpha=0.8, cmap='Blues', levels=np.linspace(0, 1, 11))
+        axs[0].set_title(f'Rule-based: {risk_names[risk_class]} Probability')
+        axs[0].set_xlabel('Heart Rate (BPM)')
+        axs[0].set_ylabel('Blood Oxygen (%)')
+        axs[0].set_yticks([85, 90, 95, 100])
+        fig.colorbar(im1, ax=axs[0], label='Probability')
         
         # Plot ML probabilities
-        plt.subplot(1, 3, 2)
-        plt.contourf(xx, yy, ml_proba, alpha=0.8, cmap='Blues')
-        plt.colorbar(label='Probability')
-        plt.title(f'ML Model: {["Low", "Medium", "High"][risk_class]} Risk Probability')
-        plt.xlabel('Heart Rate (BPM)')
-        plt.ylabel('Blood Oxygen (%)')
-        plt.gca().set_yticks([85, 90, 95, 100])
+        im2 = axs[1].contourf(xx, yy, ml_proba, alpha=0.8, cmap='Blues', levels=np.linspace(0, 1, 11))
+        axs[1].set_title(f'ML Model: {risk_names[risk_class]} Probability')
+        axs[1].set_xlabel('Heart Rate (BPM)')
+        axs[1].set_ylabel('Blood Oxygen (%)')
+        axs[1].set_yticks([85, 90, 95, 100])
+        fig.colorbar(im2, ax=axs[1], label='Probability')
         
         # Plot hybrid probabilities
-        plt.subplot(1, 3, 3)
-        plt.contourf(xx, yy, hybrid_proba, alpha=0.8, cmap='Blues')
-        plt.colorbar(label='Probability')
-        plt.title(f'Hybrid: {["Low", "Medium", "High"][risk_class]} Risk Probability')
-        plt.xlabel('Heart Rate (BPM)')
-        plt.ylabel('Blood Oxygen (%)')
-        plt.gca().set_yticks([85, 90, 95, 100])
+        im3 = axs[2].contourf(xx, yy, hybrid_proba, alpha=0.8, cmap='Blues', levels=np.linspace(0, 1, 11))
+        axs[2].set_title(f'Hybrid: {risk_names[risk_class]} Probability')
+        axs[2].set_xlabel('Heart Rate (BPM)')
+        axs[2].set_ylabel('Blood Oxygen (%)')
+        axs[2].set_yticks([85, 90, 95, 100])
+        fig.colorbar(im3, ax=axs[2], label='Probability')
+        
+        # Add condition information
+        if health_condition:
+            fig.suptitle(f"{risk_names[risk_class]} Probability Distribution for {health_condition.title()} Condition", fontsize=16)
+        else:
+            fig.suptitle(f"{risk_names[risk_class]} Probability Distribution", fontsize=16)
         
         plt.tight_layout()
-        plt.savefig(os.path.join(RESULTS_DIR, f'{["low", "medium", "high"][risk_class]}_risk_probability.png'), dpi=300)
-
+        plt.subplots_adjust(top=0.85)
+        
+        # Save figure
+        filename = f"{risk_class}_{risk_names[risk_class].lower().replace(' ', '_')}_probability_{health_condition or 'default'}.png"
+        plt.savefig(os.path.join(RESULTS_DIR, filename), dpi=300)
+    
+    # Visualize regions where ML and rule-based models disagree
+    fig, ax = plt.subplots(figsize=(12, 10))
+    
+    # Create disagreement mask
+    disagreement = (rule_Z != ml_Z).astype(int)
+    
+    # Plot disagreement regions
+    im = ax.contourf(xx, yy, disagreement, alpha=0.5, cmap='Reds')
+    fig.colorbar(im, ax=ax, label='Disagreement')
+    ax.set_title('Regions where Rule-based and ML Model Disagree')
+    ax.set_xlabel('Heart Rate (BPM)')
+    ax.set_ylabel('Blood Oxygen (%)')
+    
+    # Add condition information
+    if health_condition:
+        fig.suptitle(f"Model Disagreement for {health_condition.title()} Condition", fontsize=16)
+    
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.9)
+    
+    # Save figure
+    filename = f"model_disagreement_{health_condition or 'default'}.png"
+    plt.savefig(os.path.join(RESULTS_DIR, filename), dpi=300)
+    
 def main():
-    """Main function to run visualization"""
+    """Main function to run boundary visualization"""
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Visualize classification boundaries')
-    parser.add_argument('--user_id', required=True, help='User ID for ML model')
+    parser.add_argument('--user_id', type=str, help='User ID for ML model')
+    parser.add_argument('--model', type=str, help='Path to pre-trained model file')
+    parser.add_argument('--resolution', type=float, default=0.5, help='Grid resolution')
+    parser.add_argument('--condition', type=str, default=None, help='Health condition to visualize')
     
     args = parser.parse_args()
     
-    start_time = datetime.now()
-    logger.info(f"Starting boundary visualization for user {args.user_id}...")
+    # Load model if specified
+    model = None
+    if args.model and os.path.exists(args.model):
+        logger.info(f"Loading model from {args.model}")
+        model = joblib.load(args.model)
     
-    # Get user context
-    user = User.get_by_id(args.user_id)
-    user_context = {}
-    if user:
-        if 'age' in user:
-            user_context['age'] = user['age']
-        if 'health_conditions' in user:
-            user_context['health_conditions'] = user['health_conditions']
+    # Get user context if condition specified
+    user_context = None
+    if args.condition:
+        user_context = {'health_conditions': [args.condition]}
+        logger.info(f"Visualizing boundaries for condition: {args.condition}")
+    elif args.user_id:
+        # Get user context from database
+        user = User.get_by_id(args.user_id)
+        if user and 'health_conditions' in user and user['health_conditions']:
+            user_context = {'health_conditions': user['health_conditions']}
+            logger.info(f"Using context from user {args.user_id}: {user_context}")
+    
+    start_time = datetime.now()
+    logger.info("Starting boundary visualization...")
     
     # Generate grid data
-    xx, yy, X = generate_grid_data()
+    xx, yy, X = generate_grid_data(resolution=args.resolution)
+    logger.info(f"Generated grid with {len(X)} points at resolution {args.resolution}")
     
     # Classify grid points
-    results = classify_grid_points(X, args.user_id, user_context)
+    results = classify_grid_points(X, model, args.user_id, user_context)
     
     # Visualize boundaries
-    visualize_boundaries(xx, yy, results, user_context)
+    visualize_boundaries(xx, yy, results, user_context, args.condition)
     
     # Calculate total runtime
     total_time = (datetime.now() - start_time).total_seconds() / 60
-    logger.info(f"Visualization complete in {total_time:.2f} minutes")
+    logger.info(f"Boundary visualization complete in {total_time:.2f} minutes")
     
     # Print summary
     print("\n======= VISUALIZATION COMPLETE =======")
-    print(f"User ID: {args.user_id}")
-    if user_context and 'health_conditions' in user_context and user_context['health_conditions']:
-        print(f"Health conditions: {', '.join(user_context['health_conditions'])}")
+    if args.user_id:
+        print(f"User ID: {args.user_id}")
+    if args.model:
+        print(f"Model: {args.model}")
+    if args.condition:
+        print(f"Health condition: {args.condition}")
+    print(f"Grid resolution: {args.resolution}")
     print(f"Visualizations saved to: {RESULTS_DIR}")
-    print("=======================================\n")
+    print("========================================\n")
 
 if __name__ == "__main__":
     main()

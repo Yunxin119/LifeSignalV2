@@ -1,0 +1,101 @@
+EDGE CASE TESTING SUMMARY
+========================
+
+Total edge cases tested: 62
+
+Overall Accuracy:
+  Rule-based: 1.0000
+  ML Model: 0.9032
+  Hybrid: 0.9032
+
+Accuracy by Case Type:
+  Anxiety Attack:
+    Rule-based: 1.0000
+    ML Model: 0.6667
+    Hybrid: 0.6667
+  Asthma Attack:
+    Rule-based: 1.0000
+    ML Model: 0.6667
+    Hybrid: 0.6667
+  Athletic Low HR:
+    Rule-based: 1.0000
+    ML Model: 0.0000
+    Hybrid: 0.0000
+  Athletic Very Low HR:
+    Rule-based: 1.0000
+    ML Model: 0.0000
+    Hybrid: 0.0000
+  Bradycardia:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  COPD Baseline:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  COPD Exacerbation:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  Extreme Blood Oxygen:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  Extreme Heart Rate:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  Heart Disease:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  Low-Medium Boundary:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  Medium-High Boundary:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  Paradoxical:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  Sleep Apnea Episode:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  Tachycardia:
+    Rule-based: 1.0000
+    ML Model: 0.0000
+    Hybrid: 0.0000
+
+Accuracy by Health Condition:
+  anxiety:
+    Rule-based: 1.0000
+    ML Model: 0.6667
+    Hybrid: 0.6667
+  asthma:
+    Rule-based: 1.0000
+    ML Model: 0.6667
+    Hybrid: 0.6667
+  athlete:
+    Rule-based: 1.0000
+    ML Model: 0.0000
+    Hybrid: 0.0000
+  copd:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  healthy:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
+  heart_disease:
+    Rule-based: 1.0000
+    ML Model: 0.6667
+    Hybrid: 0.6667
+  sleep_apnea:
+    Rule-based: 1.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
