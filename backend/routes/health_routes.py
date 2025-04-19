@@ -139,3 +139,77 @@ def analyze_trends_with_ai():
     }
     
     return jsonify(response), 200 
+
+@health_bp.route('/evaluate-model', methods=['GET'])
+@token_required
+def evaluate_classification_model():
+    """Evaluate classification model performance"""
+    user_id = request.user_id
+    
+    # Get optional test size parameter
+    test_size = request.args.get('test_size', default=30, type=int)
+    
+    # Run evaluation
+    evaluation_results = HealthService.evaluate_classification_model(user_id)
+    
+    if 'error' in evaluation_results:
+        return jsonify(evaluation_results), 400
+    
+    return jsonify(evaluation_results), 200
+
+@health_bp.route('/test-classification', methods=['POST'])
+@token_required
+def test_classification():
+    """Test classification model with specific vital signs"""
+    data = request.get_json()
+    user_id = request.user_id
+    
+    # Validate required fields
+    required_fields = ['heart_rate', 'blood_oxygen']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({'error': f'Missing required field: {field}'}), 400
+    
+    # Extract fields
+    heart_rate = float(data.get('heart_rate'))
+    blood_oxygen = float(data.get('blood_oxygen'))
+    
+    # Get user context
+    from models.user import User
+    user = User.get_by_id(user_id)
+    user_context = {}
+    if user:
+        if 'age' in user:
+            user_context['age'] = user['age']
+        if 'health_conditions' in user:
+            user_context['health_conditions'] = user['health_conditions']
+    
+    # Get rule-based risk score
+    from services.health_service import HealthService
+    rule_risk_score = HealthService.calculate_risk_score(heart_rate, blood_oxygen, user_context)
+    
+    # Get rule-based risk class and probabilities
+    from services.risk_classification import RiskClassification
+    rule_class = RiskClassification.score_to_class(rule_risk_score)
+    rule_probabilities = RiskClassification.score_to_probabilities(rule_risk_score)
+    
+    # Get ML classification
+    from services.classification_model import ClassificationModel
+    ml_prediction = ClassificationModel.predict_risk_class(user_id, [heart_rate, blood_oxygen], user_context)
+    
+    # Prepare result
+    result = {
+        'heart_rate': heart_rate,
+        'blood_oxygen': blood_oxygen,
+        'rule_risk_score': rule_risk_score,
+        'rule_risk_class': rule_class,
+        'rule_risk_category': RiskClassification.RISK_CATEGORY_NAMES[rule_class],
+        'rule_probabilities': {
+            'low': float(rule_probabilities[0]),
+            'medium': float(rule_probabilities[1]),
+            'high': float(rule_probabilities[2])
+        },
+        'ml_prediction': ml_prediction
+    }
+    
+    return jsonify(result), 200
