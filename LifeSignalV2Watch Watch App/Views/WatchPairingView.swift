@@ -3,8 +3,16 @@ import SwiftUI
 struct WatchPairingView: View {
     @EnvironmentObject var authService: WatchAuthService
     @State private var pairingCode = ""
+    @State private var isSubmitting = false
     @State private var showAlert = false
     @State private var alertMessage = ""
+
+    let buttons: [[String]] = [
+        ["1", "2", "3"],
+        ["4", "5", "6"],
+        ["7", "8", "9"],
+        ["⌫", "0", "✓"]
+    ]
     
     var body: some View {
         ScrollView {
@@ -22,28 +30,34 @@ struct WatchPairingView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
-                
-                TextField("Pairing Code", text: $pairingCode)
-                    .multilineTextAlignment(.center)
+
+                // 显示当前输入
+                Text(pairingCode)
+                    .font(.title)
                     .frame(height: 40)
                     .padding()
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(8)
-                
-                Button(action: submitPairingCode) {
-                    if authService.isLoading {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                    } else {
-                        Text("Connect")
-                            .bold()
+
+                // 九键布局
+                ForEach(buttons, id: \.self) { row in
+                    HStack {
+                        ForEach(row, id: \.self) { title in
+                            Button(action: {
+                                handleButtonPress(title)
+                            }) {
+                                Text(title)
+                                    .frame(width: 45, height: 45)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .clipShape(Circle())
+                                    .font(.headline)
+                            }
+                            .disabled(isSubmitting)
+                        }
                     }
                 }
-                .buttonStyle(.bordered)
-                .tint(.blue)
-                .disabled(pairingCode.isEmpty || authService.isLoading)
-                .padding(.top, 10)
-                
+
                 if let error = authService.error {
                     Text(error)
                         .font(.caption)
@@ -63,14 +77,28 @@ struct WatchPairingView: View {
         }
     }
     
+    private func handleButtonPress(_ title: String) {
+        switch title {
+        case "⌫":
+            if !pairingCode.isEmpty {
+                pairingCode.removeLast()
+            }
+        case "✓":
+            submitPairingCode()
+        default:
+            pairingCode += title
+        }
+    }
+
     private func submitPairingCode() {
         guard !pairingCode.isEmpty else { return }
-        
+        isSubmitting = true
+
         Task {
             let success = await authService.submitPairingCode(pairingCode: pairingCode)
-            
-            if !success {
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                isSubmitting = false
+                if !success && authService.error != nil {
                     alertMessage = authService.error ?? "Failed to pair device"
                     showAlert = true
                 }
@@ -83,3 +111,4 @@ struct WatchPairingView: View {
     WatchPairingView()
         .environmentObject(WatchAuthService.shared)
 }
+
