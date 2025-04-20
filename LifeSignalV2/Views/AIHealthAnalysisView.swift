@@ -12,6 +12,7 @@ struct AIHealthAnalysisView: View {
     @EnvironmentObject private var authModel: UserAuthModel
     
     @State private var timeRange: Int = 30
+    @State private var isFirstAppear: Bool = true
     
     var body: some View {
         ScrollView {
@@ -110,7 +111,10 @@ struct AIHealthAnalysisView: View {
             .padding(.vertical)
             .navigationTitle("AI Health Analysis")
             .onAppear {
-                refreshData()
+                if isFirstAppear {
+                    refreshData()
+                    isFirstAppear = false
+                }
             }
             .alert(isPresented: .init(
                 get: { analysisService.errorMessage != nil },
