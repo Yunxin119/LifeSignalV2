@@ -244,7 +244,7 @@ class HealthService:
                 
             # Athletes might have lower resting heart rates
             if 'athlete' in health_conditions_text:
-                hr_normal_low = 50  # Lower threshold for athletes
+                hr_normal_low = 40  # Lower threshold for athletes
                 condition_specific_adjustments = True
                 condition_notes.append("Adjusted heart rate threshold for athletic condition")
                 logging.debug(f"[RULE_ADJUST] Athletic condition detected, lowered HR lower threshold to {hr_normal_low}")

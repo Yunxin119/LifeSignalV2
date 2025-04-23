@@ -2619,3 +2619,2067 @@ sleep_apnea             1.0    1.000000        1.000000
 2025-04-18 23:43:06,926 - INFO - Detailed results saved to edge_case_results/edge_case_results.csv
 2025-04-18 23:43:08,789 - INFO - Visualizations saved to edge_case_results/visualizations
 2025-04-18 23:43:08,789 - INFO - Edge case testing complete in 0.03 minutes
+2025-04-20 13:41:43,269 - INFO - Connected to MongoDB successfully
+2025-04-20 13:41:43,460 - INFO - Gemini API client initialized successfully
+2025-04-20 13:41:43,461 - INFO - Starting edge case testing...
+2025-04-20 13:41:43,461 - INFO - No model specified, using classification service with test user ID
+2025-04-20 13:41:43,461 - INFO - Generating boundary value test cases...
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 16.24
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 8.19
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 11.92
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 12.65
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 4.45
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 2.43
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 7.23
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 3.59
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 96.66
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 91.09
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 80.14
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 93.67
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 92.93
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 93.36
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 97.55
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 83.40
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 82.82
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 86.66
+2025-04-20 13:41:43,461 - INFO - Generating extreme value test cases...
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,461 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,462 - INFO - Generating condition-specific test cases...
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_ADJUST] Applied condition-specific risk adjustment: Adjusted blood oxygen threshold for COPD
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 86.25
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 5.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,462 - INFO - Generating paradoxical test cases...
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,462 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,463 - INFO - Generated 62 edge cases for testing
+2025-04-20 13:41:43,465 - INFO - Edge cases saved to edge_case_results/edge_cases.csv
+2025-04-20 13:41:43,465 - INFO - No model provided or model not found. Using random user ID for classification.
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 16.24
+2025-04-20 13:41:43,466 - INFO - Creating new classification model for user test_user
+2025-04-20 13:41:43,466 - INFO - Creating new classification model
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,466 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 74.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 63.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 71.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 60.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 49.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 38.50
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,467 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 57.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 46.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 35.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 24.75
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,468 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,469 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,470 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,472 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 57.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 46.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 35.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 24.75
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 71.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 60.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 49.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 38.50
+2025-04-20 13:41:43,473 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 74.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 63.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,474 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,475 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,476 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,477 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,478 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,479 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,480 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:43,594 - INFO - Base classification model trained with 588 samples
+2025-04-20 13:41:43,601 - INFO - [RULE_FINAL] Final rule-based risk score: 16.24
+2025-04-20 13:41:43,692 - INFO - No historical data found for user test_user
+2025-04-20 13:41:43,693 - INFO - ML classification: 0 (completed in 226.51ms)
+2025-04-20 13:41:43,693 - INFO - [RULE_FINAL] Final rule-based risk score: 8.19
+2025-04-20 13:41:43,693 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:43,700 - INFO - [RULE_FINAL] Final rule-based risk score: 8.19
+2025-04-20 13:41:43,785 - INFO - No historical data found for user test_user
+2025-04-20 13:41:43,785 - INFO - ML classification: 0 (completed in 92.31ms)
+2025-04-20 13:41:43,786 - INFO - [RULE_FINAL] Final rule-based risk score: 11.92
+2025-04-20 13:41:43,786 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:43,791 - INFO - [RULE_FINAL] Final rule-based risk score: 11.92
+2025-04-20 13:41:43,877 - INFO - No historical data found for user test_user
+2025-04-20 13:41:43,877 - INFO - ML classification: 0 (completed in 91.26ms)
+2025-04-20 13:41:43,877 - INFO - [RULE_FINAL] Final rule-based risk score: 12.65
+2025-04-20 13:41:43,877 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:43,882 - INFO - [RULE_FINAL] Final rule-based risk score: 12.65
+2025-04-20 13:41:43,960 - INFO - No historical data found for user test_user
+2025-04-20 13:41:43,960 - INFO - ML classification: 0 (completed in 82.86ms)
+2025-04-20 13:41:43,961 - INFO - [RULE_FINAL] Final rule-based risk score: 4.45
+2025-04-20 13:41:43,961 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:43,965 - INFO - [RULE_FINAL] Final rule-based risk score: 4.45
+2025-04-20 13:41:44,049 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,050 - INFO - ML classification: 0 (completed in 89.00ms)
+2025-04-20 13:41:44,050 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:44,050 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,055 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:44,130 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,130 - INFO - ML classification: 0 (completed in 80.48ms)
+2025-04-20 13:41:44,131 - INFO - [RULE_FINAL] Final rule-based risk score: 2.43
+2025-04-20 13:41:44,131 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,136 - INFO - [RULE_FINAL] Final rule-based risk score: 2.43
+2025-04-20 13:41:44,219 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,219 - INFO - ML classification: 0 (completed in 88.44ms)
+2025-04-20 13:41:44,220 - INFO - [RULE_FINAL] Final rule-based risk score: 7.23
+2025-04-20 13:41:44,220 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,225 - INFO - [RULE_FINAL] Final rule-based risk score: 7.23
+2025-04-20 13:41:44,301 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,301 - INFO - ML classification: 0 (completed in 81.81ms)
+2025-04-20 13:41:44,302 - INFO - [RULE_FINAL] Final rule-based risk score: 3.59
+2025-04-20 13:41:44,302 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,307 - INFO - [RULE_FINAL] Final rule-based risk score: 3.59
+2025-04-20 13:41:44,382 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,382 - INFO - ML classification: 0 (completed in 80.39ms)
+2025-04-20 13:41:44,383 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:44,383 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,387 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:41:44,472 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,472 - INFO - ML classification: 0 (completed in 89.35ms)
+2025-04-20 13:41:44,472 - INFO - [RULE_FINAL] Final rule-based risk score: 96.66
+2025-04-20 13:41:44,472 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,477 - INFO - [RULE_FINAL] Final rule-based risk score: 96.66
+2025-04-20 13:41:44,553 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,554 - INFO - ML classification: 2 (completed in 81.16ms)
+2025-04-20 13:41:44,554 - INFO - [RULE_FINAL] Final rule-based risk score: 91.09
+2025-04-20 13:41:44,554 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,559 - INFO - [RULE_FINAL] Final rule-based risk score: 91.09
+2025-04-20 13:41:44,638 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,638 - INFO - ML classification: 2 (completed in 84.48ms)
+2025-04-20 13:41:44,639 - INFO - [RULE_FINAL] Final rule-based risk score: 80.14
+2025-04-20 13:41:44,639 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,644 - INFO - [RULE_FINAL] Final rule-based risk score: 80.14
+2025-04-20 13:41:44,722 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,723 - INFO - ML classification: 2 (completed in 83.92ms)
+2025-04-20 13:41:44,723 - INFO - [RULE_FINAL] Final rule-based risk score: 93.67
+2025-04-20 13:41:44,723 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,728 - INFO - [RULE_FINAL] Final rule-based risk score: 93.67
+2025-04-20 13:41:44,806 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,806 - INFO - ML classification: 2 (completed in 82.78ms)
+2025-04-20 13:41:44,806 - INFO - [RULE_FINAL] Final rule-based risk score: 92.93
+2025-04-20 13:41:44,806 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,811 - INFO - [RULE_FINAL] Final rule-based risk score: 92.93
+2025-04-20 13:41:44,887 - INFO - No historical data found for user test_user
+2025-04-20 13:41:44,887 - INFO - ML classification: 2 (completed in 80.63ms)
+2025-04-20 13:41:44,887 - INFO - [RULE_FINAL] Final rule-based risk score: 93.36
+2025-04-20 13:41:44,887 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:44,892 - INFO - [RULE_FINAL] Final rule-based risk score: 93.36
+2025-04-20 13:41:45,031 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,031 - INFO - ML classification: 2 (completed in 143.90ms)
+2025-04-20 13:41:45,031 - INFO - [RULE_FINAL] Final rule-based risk score: 97.55
+2025-04-20 13:41:45,031 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,037 - INFO - [RULE_FINAL] Final rule-based risk score: 97.55
+2025-04-20 13:41:45,131 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,131 - INFO - ML classification: 2 (completed in 99.62ms)
+2025-04-20 13:41:45,131 - INFO - [RULE_FINAL] Final rule-based risk score: 83.40
+2025-04-20 13:41:45,131 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,136 - INFO - [RULE_FINAL] Final rule-based risk score: 83.40
+2025-04-20 13:41:45,212 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,212 - INFO - ML classification: 2 (completed in 80.61ms)
+2025-04-20 13:41:45,212 - INFO - [RULE_FINAL] Final rule-based risk score: 82.82
+2025-04-20 13:41:45,212 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,217 - INFO - [RULE_FINAL] Final rule-based risk score: 82.82
+2025-04-20 13:41:45,314 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,314 - INFO - ML classification: 2 (completed in 101.55ms)
+2025-04-20 13:41:45,314 - INFO - [RULE_FINAL] Final rule-based risk score: 86.66
+2025-04-20 13:41:45,314 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,319 - INFO - [RULE_FINAL] Final rule-based risk score: 86.66
+2025-04-20 13:41:45,404 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,404 - INFO - ML classification: 2 (completed in 90.08ms)
+2025-04-20 13:41:45,405 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:45,405 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,410 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:45,490 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,490 - INFO - ML classification: 2 (completed in 85.54ms)
+2025-04-20 13:41:45,491 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:45,491 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,497 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:45,581 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,581 - INFO - ML classification: 2 (completed in 89.94ms)
+2025-04-20 13:41:45,581 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:45,581 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,586 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:45,663 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,664 - INFO - ML classification: 1 (completed in 82.63ms)
+2025-04-20 13:41:45,664 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:45,664 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,669 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:45,755 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,755 - INFO - ML classification: 2 (completed in 91.39ms)
+2025-04-20 13:41:45,756 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:45,756 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,760 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:45,838 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,839 - INFO - ML classification: 2 (completed in 82.70ms)
+2025-04-20 13:41:45,839 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:45,839 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,844 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:45,922 - INFO - No historical data found for user test_user
+2025-04-20 13:41:45,923 - INFO - ML classification: 1 (completed in 83.73ms)
+2025-04-20 13:41:45,923 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:45,923 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:45,928 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:46,004 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,004 - INFO - ML classification: 2 (completed in 81.03ms)
+2025-04-20 13:41:46,004 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:46,004 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,009 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:46,089 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,089 - INFO - ML classification: 2 (completed in 84.95ms)
+2025-04-20 13:41:46,089 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,090 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,094 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,171 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,171 - INFO - ML classification: 1 (completed in 81.67ms)
+2025-04-20 13:41:46,171 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:46,172 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,176 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:46,261 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,261 - INFO - ML classification: 2 (completed in 89.16ms)
+2025-04-20 13:41:46,261 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:46,261 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,266 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:41:46,345 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,345 - INFO - ML classification: 2 (completed in 84.40ms)
+2025-04-20 13:41:46,346 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,346 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,350 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,440 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,440 - INFO - ML classification: 1 (completed in 94.46ms)
+2025-04-20 13:41:46,440 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,441 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,445 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,522 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,522 - INFO - ML classification: 1 (completed in 81.39ms)
+2025-04-20 13:41:46,522 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,522 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,527 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,606 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,606 - INFO - ML classification: 1 (completed in 84.11ms)
+2025-04-20 13:41:46,607 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:46,607 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,611 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:46,687 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,687 - INFO - ML classification: 2 (completed in 80.59ms)
+2025-04-20 13:41:46,688 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,688 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,692 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,780 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,780 - INFO - ML classification: 1 (completed in 92.50ms)
+2025-04-20 13:41:46,780 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,780 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,785 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,863 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,863 - INFO - ML classification: 1 (completed in 82.35ms)
+2025-04-20 13:41:46,863 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:46,863 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,868 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:46,950 - INFO - No historical data found for user test_user
+2025-04-20 13:41:46,950 - INFO - ML classification: 2 (completed in 87.20ms)
+2025-04-20 13:41:46,951 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:46,951 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:46,956 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,056 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,057 - INFO - ML classification: 1 (completed in 105.85ms)
+2025-04-20 13:41:47,057 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,057 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,062 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,141 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,141 - INFO - ML classification: 1 (completed in 83.84ms)
+2025-04-20 13:41:47,141 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:47,141 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,146 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:41:47,251 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,251 - INFO - ML classification: 2 (completed in 109.79ms)
+2025-04-20 13:41:47,251 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,251 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,255 - INFO - Predicting with condition features: COPD=0.0, Anxiety=1.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:47,256 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,335 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,335 - INFO - ML classification: 1 (completed in 83.86ms)
+2025-04-20 13:41:47,335 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,335 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,339 - INFO - Predicting with condition features: COPD=0.0, Anxiety=1.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:47,340 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,421 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,421 - INFO - ML classification: 1 (completed in 85.63ms)
+2025-04-20 13:41:47,421 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:47,421 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,425 - INFO - Predicting with condition features: COPD=0.0, Anxiety=1.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:47,426 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:41:47,513 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,513 - INFO - ML classification: 1 (completed in 91.98ms)
+2025-04-20 13:41:47,514 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:47,514 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,518 - INFO - Predicting with condition features: COPD=1.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:47,518 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:41:47,603 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,603 - INFO - ML classification: 1 (completed in 89.28ms)
+2025-04-20 13:41:47,603 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,603 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,607 - INFO - Predicting with condition features: COPD=1.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:47,608 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:47,689 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,689 - INFO - ML classification: 1 (completed in 85.63ms)
+2025-04-20 13:41:47,689 - INFO - [RULE_ADJUST] Applied condition-specific risk adjustment: Adjusted blood oxygen threshold for COPD
+2025-04-20 13:41:47,689 - INFO - [RULE_FINAL] Final rule-based risk score: 86.25
+2025-04-20 13:41:47,689 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,693 - INFO - Predicting with condition features: COPD=1.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:47,694 - INFO - [RULE_ADJUST] Applied condition-specific risk adjustment: Adjusted blood oxygen threshold for COPD
+2025-04-20 13:41:47,694 - INFO - [RULE_FINAL] Final rule-based risk score: 86.25
+2025-04-20 13:41:47,780 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,780 - INFO - ML classification: 2 (completed in 90.70ms)
+2025-04-20 13:41:47,780 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:41:47,780 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,784 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=1.0, Athlete=0.0
+2025-04-20 13:41:47,785 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:41:47,869 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,870 - INFO - ML classification: 1 (completed in 89.32ms)
+2025-04-20 13:41:47,870 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:47,870 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,874 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=1.0, Athlete=0.0
+2025-04-20 13:41:47,875 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:41:47,955 - INFO - No historical data found for user test_user
+2025-04-20 13:41:47,955 - INFO - ML classification: 1 (completed in 85.00ms)
+2025-04-20 13:41:47,955 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:47,955 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:47,960 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=1.0, Athlete=0.0
+2025-04-20 13:41:47,960 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:41:48,035 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,035 - INFO - ML classification: 2 (completed in 79.65ms)
+2025-04-20 13:41:48,035 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:48,035 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,039 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=1.0
+2025-04-20 13:41:48,040 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:48,120 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,121 - INFO - ML classification: 1 (completed in 85.26ms)
+2025-04-20 13:41:48,121 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:48,121 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,125 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=1.0
+2025-04-20 13:41:48,126 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:48,201 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,201 - INFO - ML classification: 1 (completed in 80.48ms)
+2025-04-20 13:41:48,202 - INFO - [RULE_FINAL] Final rule-based risk score: 5.00
+2025-04-20 13:41:48,202 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,206 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=1.0
+2025-04-20 13:41:48,207 - INFO - [RULE_FINAL] Final rule-based risk score: 5.00
+2025-04-20 13:41:48,293 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,293 - INFO - ML classification: 0 (completed in 90.96ms)
+2025-04-20 13:41:48,293 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,293 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,297 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:48,298 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,386 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,386 - INFO - ML classification: 1 (completed in 93.01ms)
+2025-04-20 13:41:48,386 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,386 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,391 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:48,392 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,471 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,471 - INFO - ML classification: 1 (completed in 84.56ms)
+2025-04-20 13:41:48,471 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,471 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,476 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:48,476 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,565 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,565 - INFO - ML classification: 1 (completed in 93.47ms)
+2025-04-20 13:41:48,565 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:48,565 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,570 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:48,571 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:41:48,647 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,647 - INFO - ML classification: 0 (completed in 81.71ms)
+2025-04-20 13:41:48,647 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:41:48,647 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,651 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:48,652 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:41:48,732 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,732 - INFO - ML classification: 2 (completed in 84.83ms)
+2025-04-20 13:41:48,732 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:48,733 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,736 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:41:48,737 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:41:48,813 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,813 - INFO - ML classification: 0 (completed in 80.86ms)
+2025-04-20 13:41:48,814 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,814 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,819 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,895 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,895 - INFO - ML classification: 1 (completed in 81.51ms)
+2025-04-20 13:41:48,895 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,896 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,900 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,975 - INFO - No historical data found for user test_user
+2025-04-20 13:41:48,975 - INFO - ML classification: 1 (completed in 79.62ms)
+2025-04-20 13:41:48,975 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:48,975 - INFO - Loading classification model for user test_user
+2025-04-20 13:41:48,980 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:41:49,066 - INFO - No historical data found for user test_user
+2025-04-20 13:41:49,066 - INFO - ML classification: 1 (completed in 90.27ms)
+2025-04-20 13:41:49,067 - INFO - Edge case results:
+2025-04-20 13:41:49,067 - INFO -   Rule accuracy: 1.0000
+2025-04-20 13:41:49,067 - INFO -   ML accuracy: 0.9516
+2025-04-20 13:41:49,067 - INFO -   Hybrid accuracy: 0.9516
+2025-04-20 13:41:49,070 - INFO - Accuracy by case type:
+2025-04-20 13:41:49,070 - INFO -                       rule_correct  ml_correct  hybrid_correct
+case_type                                                     
+Anxiety Attack                 1.0    0.666667        0.666667
+Asthma Attack                  1.0    1.000000        1.000000
+Athletic Low HR                1.0    0.500000        0.500000
+Athletic Very Low HR           1.0    0.000000        0.000000
+Bradycardia                    1.0    1.000000        1.000000
+COPD Baseline                  1.0    1.000000        1.000000
+COPD Exacerbation              1.0    1.000000        1.000000
+Extreme Blood Oxygen           1.0    1.000000        1.000000
+Extreme Heart Rate             1.0    1.000000        1.000000
+Heart Disease                  1.0    1.000000        1.000000
+Low-Medium Boundary            1.0    1.000000        1.000000
+Medium-High Boundary           1.0    1.000000        1.000000
+Paradoxical                    1.0    1.000000        1.000000
+Sleep Apnea Episode            1.0    1.000000        1.000000
+Tachycardia                    1.0    1.000000        1.000000
+2025-04-20 13:41:49,077 - INFO - Accuracy by condition:
+2025-04-20 13:41:49,077 - INFO -                rule_correct  ml_correct  hybrid_correct
+condition                                              
+anxiety                 1.0    0.666667        0.666667
+asthma                  1.0    1.000000        1.000000
+athlete                 1.0    0.333333        0.333333
+copd                    1.0    1.000000        1.000000
+healthy                 1.0    1.000000        1.000000
+heart_disease           1.0    1.000000        1.000000
+sleep_apnea             1.0    1.000000        1.000000
+2025-04-20 13:41:49,081 - INFO - Detailed results saved to edge_case_results/edge_case_results.csv
+2025-04-20 13:41:51,074 - INFO - Visualizations saved to edge_case_results/visualizations
+2025-04-20 13:41:51,074 - INFO - Edge case testing complete in 0.13 minutes
+2025-04-20 13:44:18,550 - INFO - Connected to MongoDB successfully
+2025-04-20 13:44:18,739 - INFO - Gemini API client initialized successfully
+2025-04-20 13:44:18,739 - INFO - Starting edge case testing...
+2025-04-20 13:44:18,739 - INFO - No model specified, using classification service with test user ID
+2025-04-20 13:44:18,739 - INFO - Generating boundary value test cases...
+2025-04-20 13:44:18,739 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,739 - INFO - [RULE_FINAL] Final rule-based risk score: 4.39
+2025-04-20 13:44:18,739 - INFO - [RULE_FINAL] Final rule-based risk score: 11.54
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 9.89
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 13.67
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 10.95
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 6.02
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 90.93
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 81.84
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 91.51
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 78.19
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 80.30
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 97.11
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 81.51
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 98.44
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 88.82
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 97.28
+2025-04-20 13:44:18,740 - INFO - Generating extreme value test cases...
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,740 - INFO - Generating condition-specific test cases...
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,740 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_ADJUST] Applied condition-specific risk adjustment: Adjusted blood oxygen threshold for COPD
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 86.25
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 5.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,741 - INFO - Generating paradoxical test cases...
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,741 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,742 - INFO - Generated 62 edge cases for testing
+2025-04-20 13:44:18,744 - INFO - Edge cases saved to edge_case_results/edge_cases.csv
+2025-04-20 13:44:18,744 - INFO - No model provided or model not found. Using random user ID for classification.
+2025-04-20 13:44:18,745 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,745 - INFO - Creating new classification model for user test_user
+2025-04-20 13:44:18,745 - INFO - Creating new classification model
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 74.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 63.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,746 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 71.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 60.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 49.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 38.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 57.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 46.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 35.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 24.75
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,747 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,748 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,749 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,750 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 10.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 68.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 57.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 46.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 35.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 24.75
+2025-04-20 13:44:18,751 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 12.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 71.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 60.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 49.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 38.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 96.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 74.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 63.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 37.50
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,752 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,753 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,754 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,755 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,756 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,757 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 99.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 77.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,758 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:18,868 - INFO - Base classification model trained with 588 samples
+2025-04-20 13:44:18,874 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:18,960 - INFO - No historical data found for user test_user
+2025-04-20 13:44:18,960 - INFO - ML classification: 0 (completed in 215.02ms)
+2025-04-20 13:44:18,961 - INFO - [RULE_FINAL] Final rule-based risk score: 4.39
+2025-04-20 13:44:18,961 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:18,968 - INFO - [RULE_FINAL] Final rule-based risk score: 4.39
+2025-04-20 13:44:19,177 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,177 - INFO - ML classification: 0 (completed in 216.08ms)
+2025-04-20 13:44:19,177 - INFO - [RULE_FINAL] Final rule-based risk score: 11.54
+2025-04-20 13:44:19,177 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,182 - INFO - [RULE_FINAL] Final rule-based risk score: 11.54
+2025-04-20 13:44:19,267 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,268 - INFO - ML classification: 0 (completed in 90.21ms)
+2025-04-20 13:44:19,268 - INFO - [RULE_FINAL] Final rule-based risk score: 9.89
+2025-04-20 13:44:19,268 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,273 - INFO - [RULE_FINAL] Final rule-based risk score: 9.89
+2025-04-20 13:44:19,374 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,375 - INFO - ML classification: 0 (completed in 106.62ms)
+2025-04-20 13:44:19,375 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:19,375 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,382 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:19,465 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,465 - INFO - ML classification: 0 (completed in 89.79ms)
+2025-04-20 13:44:19,466 - INFO - [RULE_FINAL] Final rule-based risk score: 13.67
+2025-04-20 13:44:19,466 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,471 - INFO - [RULE_FINAL] Final rule-based risk score: 13.67
+2025-04-20 13:44:19,553 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,553 - INFO - ML classification: 0 (completed in 87.82ms)
+2025-04-20 13:44:19,554 - INFO - [RULE_FINAL] Final rule-based risk score: 10.95
+2025-04-20 13:44:19,554 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,559 - INFO - [RULE_FINAL] Final rule-based risk score: 10.95
+2025-04-20 13:44:19,641 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,641 - INFO - ML classification: 0 (completed in 87.22ms)
+2025-04-20 13:44:19,641 - INFO - [RULE_FINAL] Final rule-based risk score: 6.02
+2025-04-20 13:44:19,641 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,646 - INFO - [RULE_FINAL] Final rule-based risk score: 6.02
+2025-04-20 13:44:19,726 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,726 - INFO - ML classification: 0 (completed in 84.53ms)
+2025-04-20 13:44:19,726 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:19,726 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,731 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:19,809 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,809 - INFO - ML classification: 0 (completed in 82.69ms)
+2025-04-20 13:44:19,809 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:19,809 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,814 - INFO - [RULE_FINAL] Final rule-based risk score: 0.00
+2025-04-20 13:44:19,894 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,894 - INFO - ML classification: 0 (completed in 85.00ms)
+2025-04-20 13:44:19,895 - INFO - [RULE_FINAL] Final rule-based risk score: 90.93
+2025-04-20 13:44:19,895 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,900 - INFO - [RULE_FINAL] Final rule-based risk score: 90.93
+2025-04-20 13:44:19,983 - INFO - No historical data found for user test_user
+2025-04-20 13:44:19,983 - INFO - ML classification: 2 (completed in 87.98ms)
+2025-04-20 13:44:19,983 - INFO - [RULE_FINAL] Final rule-based risk score: 81.84
+2025-04-20 13:44:19,983 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:19,988 - INFO - [RULE_FINAL] Final rule-based risk score: 81.84
+2025-04-20 13:44:20,072 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,073 - INFO - ML classification: 2 (completed in 89.56ms)
+2025-04-20 13:44:20,073 - INFO - [RULE_FINAL] Final rule-based risk score: 91.51
+2025-04-20 13:44:20,073 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,078 - INFO - [RULE_FINAL] Final rule-based risk score: 91.51
+2025-04-20 13:44:20,163 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,163 - INFO - ML classification: 2 (completed in 90.47ms)
+2025-04-20 13:44:20,164 - INFO - [RULE_FINAL] Final rule-based risk score: 78.19
+2025-04-20 13:44:20,164 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,169 - INFO - [RULE_FINAL] Final rule-based risk score: 78.19
+2025-04-20 13:44:20,247 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,247 - INFO - ML classification: 2 (completed in 83.44ms)
+2025-04-20 13:44:20,248 - INFO - [RULE_FINAL] Final rule-based risk score: 80.30
+2025-04-20 13:44:20,248 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,253 - INFO - [RULE_FINAL] Final rule-based risk score: 80.30
+2025-04-20 13:44:20,331 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,332 - INFO - ML classification: 2 (completed in 83.73ms)
+2025-04-20 13:44:20,332 - INFO - [RULE_FINAL] Final rule-based risk score: 97.11
+2025-04-20 13:44:20,332 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,337 - INFO - [RULE_FINAL] Final rule-based risk score: 97.11
+2025-04-20 13:44:20,413 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,413 - INFO - ML classification: 2 (completed in 80.87ms)
+2025-04-20 13:44:20,413 - INFO - [RULE_FINAL] Final rule-based risk score: 81.51
+2025-04-20 13:44:20,413 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,418 - INFO - [RULE_FINAL] Final rule-based risk score: 81.51
+2025-04-20 13:44:20,505 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,505 - INFO - ML classification: 2 (completed in 92.23ms)
+2025-04-20 13:44:20,506 - INFO - [RULE_FINAL] Final rule-based risk score: 98.44
+2025-04-20 13:44:20,506 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,512 - INFO - [RULE_FINAL] Final rule-based risk score: 98.44
+2025-04-20 13:44:20,596 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,596 - INFO - ML classification: 2 (completed in 90.05ms)
+2025-04-20 13:44:20,596 - INFO - [RULE_FINAL] Final rule-based risk score: 88.82
+2025-04-20 13:44:20,596 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,601 - INFO - [RULE_FINAL] Final rule-based risk score: 88.82
+2025-04-20 13:44:20,677 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,677 - INFO - ML classification: 2 (completed in 81.36ms)
+2025-04-20 13:44:20,678 - INFO - [RULE_FINAL] Final rule-based risk score: 97.28
+2025-04-20 13:44:20,678 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,683 - INFO - [RULE_FINAL] Final rule-based risk score: 97.28
+2025-04-20 13:44:20,768 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,768 - INFO - ML classification: 2 (completed in 89.92ms)
+2025-04-20 13:44:20,768 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:20,768 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,773 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:20,857 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,857 - INFO - ML classification: 2 (completed in 88.87ms)
+2025-04-20 13:44:20,858 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:20,858 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,863 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:20,944 - INFO - No historical data found for user test_user
+2025-04-20 13:44:20,944 - INFO - ML classification: 2 (completed in 86.61ms)
+2025-04-20 13:44:20,945 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:20,945 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:20,949 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,034 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,034 - INFO - ML classification: 1 (completed in 89.60ms)
+2025-04-20 13:44:21,035 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:21,035 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,039 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:21,116 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,117 - INFO - ML classification: 2 (completed in 81.96ms)
+2025-04-20 13:44:21,117 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:21,117 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,122 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:21,197 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,198 - INFO - ML classification: 2 (completed in 80.75ms)
+2025-04-20 13:44:21,198 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,198 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,203 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,278 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,278 - INFO - ML classification: 1 (completed in 80.32ms)
+2025-04-20 13:44:21,279 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:21,279 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,283 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:21,368 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,368 - INFO - ML classification: 2 (completed in 89.65ms)
+2025-04-20 13:44:21,369 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:21,369 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,373 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:21,454 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,454 - INFO - ML classification: 2 (completed in 85.16ms)
+2025-04-20 13:44:21,454 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,454 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,460 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,535 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,535 - INFO - ML classification: 1 (completed in 81.29ms)
+2025-04-20 13:44:21,536 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:21,536 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,541 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:21,626 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,626 - INFO - ML classification: 2 (completed in 90.55ms)
+2025-04-20 13:44:21,627 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:21,627 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,632 - INFO - [RULE_FINAL] Final rule-based risk score: 88.00
+2025-04-20 13:44:21,713 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,713 - INFO - ML classification: 2 (completed in 86.02ms)
+2025-04-20 13:44:21,713 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,713 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,718 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,793 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,793 - INFO - ML classification: 1 (completed in 79.86ms)
+2025-04-20 13:44:21,793 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,793 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,798 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,874 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,874 - INFO - ML classification: 1 (completed in 80.95ms)
+2025-04-20 13:44:21,874 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,875 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,879 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:21,968 - INFO - No historical data found for user test_user
+2025-04-20 13:44:21,968 - INFO - ML classification: 1 (completed in 93.29ms)
+2025-04-20 13:44:21,968 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:21,968 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:21,973 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:22,053 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,053 - INFO - ML classification: 2 (completed in 84.74ms)
+2025-04-20 13:44:22,053 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,053 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,058 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,136 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,136 - INFO - ML classification: 1 (completed in 83.07ms)
+2025-04-20 13:44:22,137 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,137 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,141 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,224 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,224 - INFO - ML classification: 1 (completed in 87.49ms)
+2025-04-20 13:44:22,224 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:22,225 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,229 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:22,313 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,313 - INFO - ML classification: 2 (completed in 88.83ms)
+2025-04-20 13:44:22,314 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,314 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,319 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,399 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,400 - INFO - ML classification: 1 (completed in 85.91ms)
+2025-04-20 13:44:22,400 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,400 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,405 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,485 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,485 - INFO - ML classification: 1 (completed in 84.92ms)
+2025-04-20 13:44:22,485 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:22,485 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,490 - INFO - [RULE_FINAL] Final rule-based risk score: 100.00
+2025-04-20 13:44:22,586 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,586 - INFO - ML classification: 2 (completed in 100.91ms)
+2025-04-20 13:44:22,586 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,586 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,591 - INFO - Predicting with condition features: COPD=0.0, Anxiety=1.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:22,592 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,667 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,667 - INFO - ML classification: 1 (completed in 80.75ms)
+2025-04-20 13:44:22,668 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,668 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,672 - INFO - Predicting with condition features: COPD=0.0, Anxiety=1.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:22,673 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,749 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,749 - INFO - ML classification: 1 (completed in 81.38ms)
+2025-04-20 13:44:22,749 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:22,749 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,753 - INFO - Predicting with condition features: COPD=0.0, Anxiety=1.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:22,754 - INFO - [RULE_FINAL] Final rule-based risk score: 25.00
+2025-04-20 13:44:22,830 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,830 - INFO - ML classification: 1 (completed in 80.47ms)
+2025-04-20 13:44:22,830 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:22,830 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,834 - INFO - Predicting with condition features: COPD=1.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:22,835 - INFO - [RULE_FINAL] Final rule-based risk score: 40.00
+2025-04-20 13:44:22,919 - INFO - No historical data found for user test_user
+2025-04-20 13:44:22,919 - INFO - ML classification: 1 (completed in 89.08ms)
+2025-04-20 13:44:22,920 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:22,920 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:22,924 - INFO - Predicting with condition features: COPD=1.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:22,924 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:23,004 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,004 - INFO - ML classification: 1 (completed in 84.59ms)
+2025-04-20 13:44:23,005 - INFO - [RULE_ADJUST] Applied condition-specific risk adjustment: Adjusted blood oxygen threshold for COPD
+2025-04-20 13:44:23,005 - INFO - [RULE_FINAL] Final rule-based risk score: 86.25
+2025-04-20 13:44:23,005 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,026 - INFO - Predicting with condition features: COPD=1.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:23,027 - INFO - [RULE_ADJUST] Applied condition-specific risk adjustment: Adjusted blood oxygen threshold for COPD
+2025-04-20 13:44:23,027 - INFO - [RULE_FINAL] Final rule-based risk score: 86.25
+2025-04-20 13:44:23,111 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,111 - INFO - ML classification: 2 (completed in 105.63ms)
+2025-04-20 13:44:23,111 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:44:23,111 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,115 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=1.0, Athlete=0.0
+2025-04-20 13:44:23,116 - INFO - [RULE_FINAL] Final rule-based risk score: 52.25
+2025-04-20 13:44:23,202 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,202 - INFO - ML classification: 1 (completed in 90.58ms)
+2025-04-20 13:44:23,202 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:23,202 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,206 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=1.0, Athlete=0.0
+2025-04-20 13:44:23,207 - INFO - [RULE_FINAL] Final rule-based risk score: 66.00
+2025-04-20 13:44:23,290 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,290 - INFO - ML classification: 1 (completed in 87.95ms)
+2025-04-20 13:44:23,291 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:23,291 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,295 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=1.0, Athlete=0.0
+2025-04-20 13:44:23,296 - INFO - [RULE_FINAL] Final rule-based risk score: 82.50
+2025-04-20 13:44:23,371 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,371 - INFO - ML classification: 2 (completed in 80.17ms)
+2025-04-20 13:44:23,371 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:23,371 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,375 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=1.0
+2025-04-20 13:44:23,376 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:23,452 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,453 - INFO - ML classification: 1 (completed in 81.30ms)
+2025-04-20 13:44:23,453 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:23,453 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,457 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=1.0
+2025-04-20 13:44:23,458 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:23,542 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,542 - INFO - ML classification: 1 (completed in 88.90ms)
+2025-04-20 13:44:23,542 - INFO - [RULE_FINAL] Final rule-based risk score: 5.00
+2025-04-20 13:44:23,542 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,546 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=1.0
+2025-04-20 13:44:23,547 - INFO - [RULE_FINAL] Final rule-based risk score: 5.00
+2025-04-20 13:44:23,623 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,623 - INFO - ML classification: 0 (completed in 81.05ms)
+2025-04-20 13:44:23,623 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:23,623 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,627 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:23,628 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:23,707 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,707 - INFO - ML classification: 1 (completed in 83.32ms)
+2025-04-20 13:44:23,707 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:23,707 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,711 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:23,712 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:23,790 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,790 - INFO - ML classification: 1 (completed in 83.22ms)
+2025-04-20 13:44:23,791 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:23,791 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,795 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:23,796 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:23,878 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,878 - INFO - ML classification: 1 (completed in 87.64ms)
+2025-04-20 13:44:23,879 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:23,879 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,883 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:23,884 - INFO - [RULE_FINAL] Final rule-based risk score: 20.00
+2025-04-20 13:44:23,967 - INFO - No historical data found for user test_user
+2025-04-20 13:44:23,967 - INFO - ML classification: 0 (completed in 88.49ms)
+2025-04-20 13:44:23,968 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:44:23,968 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:23,972 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:23,973 - INFO - [RULE_FINAL] Final rule-based risk score: 85.25
+2025-04-20 13:44:24,048 - INFO - No historical data found for user test_user
+2025-04-20 13:44:24,048 - INFO - ML classification: 2 (completed in 80.59ms)
+2025-04-20 13:44:24,049 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:24,049 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:24,053 - INFO - Predicting with condition features: COPD=0.0, Anxiety=0.0, Heart=0.0, Athlete=0.0
+2025-04-20 13:44:24,054 - INFO - [RULE_FINAL] Final rule-based risk score: 30.00
+2025-04-20 13:44:24,132 - INFO - No historical data found for user test_user
+2025-04-20 13:44:24,132 - INFO - ML classification: 0 (completed in 83.91ms)
+2025-04-20 13:44:24,133 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:24,133 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:24,137 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:24,212 - INFO - No historical data found for user test_user
+2025-04-20 13:44:24,212 - INFO - ML classification: 1 (completed in 79.42ms)
+2025-04-20 13:44:24,213 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:24,213 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:24,217 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:24,296 - INFO - No historical data found for user test_user
+2025-04-20 13:44:24,296 - INFO - ML classification: 1 (completed in 83.43ms)
+2025-04-20 13:44:24,296 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:24,296 - INFO - Loading classification model for user test_user
+2025-04-20 13:44:24,301 - INFO - [RULE_FINAL] Final rule-based risk score: 50.00
+2025-04-20 13:44:24,378 - INFO - No historical data found for user test_user
+2025-04-20 13:44:24,378 - INFO - ML classification: 1 (completed in 81.92ms)
+2025-04-20 13:44:24,380 - INFO - Edge case results:
+2025-04-20 13:44:24,380 - INFO -   Rule accuracy: 1.0000
+2025-04-20 13:44:24,380 - INFO -   ML accuracy: 0.9516
+2025-04-20 13:44:24,380 - INFO -   Hybrid accuracy: 0.9516
+2025-04-20 13:44:24,384 - INFO - Accuracy by case type:
+2025-04-20 13:44:24,384 - INFO -                       rule_correct  ml_correct  hybrid_correct
+case_type                                                     
+Anxiety Attack                 1.0    0.666667        0.666667
+Asthma Attack                  1.0    1.000000        1.000000
+Athletic Low HR                1.0    0.500000        0.500000
+Athletic Very Low HR           1.0    0.000000        0.000000
+Bradycardia                    1.0    1.000000        1.000000
+COPD Baseline                  1.0    1.000000        1.000000
+COPD Exacerbation              1.0    1.000000        1.000000
+Extreme Blood Oxygen           1.0    1.000000        1.000000
+Extreme Heart Rate             1.0    1.000000        1.000000
+Heart Disease                  1.0    1.000000        1.000000
+Low-Medium Boundary            1.0    1.000000        1.000000
+Medium-High Boundary           1.0    1.000000        1.000000
+Paradoxical                    1.0    1.000000        1.000000
+Sleep Apnea Episode            1.0    1.000000        1.000000
+Tachycardia                    1.0    1.000000        1.000000
+2025-04-20 13:44:24,390 - INFO - Accuracy by condition:
+2025-04-20 13:44:24,391 - INFO -                rule_correct  ml_correct  hybrid_correct
+condition                                              
+anxiety                 1.0    0.666667        0.666667
+asthma                  1.0    1.000000        1.000000
+athlete                 1.0    0.333333        0.333333
+copd                    1.0    1.000000        1.000000
+healthy                 1.0    1.000000        1.000000
+heart_disease           1.0    1.000000        1.000000
+sleep_apnea             1.0    1.000000        1.000000
+2025-04-20 13:44:24,394 - INFO - Detailed results saved to edge_case_results/edge_case_results.csv
+2025-04-20 13:44:26,274 - INFO - Visualizations saved to edge_case_results/visualizations
+2025-04-20 13:44:26,274 - INFO - Edge case testing complete in 0.13 minutes

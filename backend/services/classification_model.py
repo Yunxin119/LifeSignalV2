@@ -114,7 +114,7 @@ class ClassificationModel:
         y_samples = []
         
         # Generate samples across the range of heart rates and blood oxygen
-        for hr in range(40, 180, 5):  # Heart rate from 40 to 180
+        for hr in range(30, 180, 5):  # Heart rate from 30 to 180
             for bo in range(80, 101):  # Blood oxygen from 80 to 100
                 features = [hr, bo]
                 
@@ -187,7 +187,7 @@ class ClassificationModel:
             # Athlete samples with lower resting heart rate
             if 'athlete' in conditions_text:
                 for _ in range(200):
-                    hr = np.random.uniform(40, 70)  # Lower heart rates for athletes
+                    hr = np.random.uniform(30, 70)  # Lower heart rates for athletes
                     bo = np.random.uniform(95, 100)
                     
                     features = [hr, bo, 0.0, 0.0, 0.0, 1.0]  # Athlete=1, others=0

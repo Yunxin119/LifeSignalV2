@@ -5,8 +5,8 @@ Total edge cases tested: 62
 
 Overall Accuracy:
   Rule-based: 1.0000
-  ML Model: 0.9032
-  Hybrid: 0.9032
+  ML Model: 0.9516
+  Hybrid: 0.9516
 
 Accuracy by Case Type:
   Anxiety Attack:
@@ -15,12 +15,12 @@ Accuracy by Case Type:
     Hybrid: 0.6667
   Asthma Attack:
     Rule-based: 1.0000
-    ML Model: 0.6667
-    Hybrid: 0.6667
+    ML Model: 1.0000
+    Hybrid: 1.0000
   Athletic Low HR:
     Rule-based: 1.0000
-    ML Model: 0.0000
-    Hybrid: 0.0000
+    ML Model: 0.5000
+    Hybrid: 0.5000
   Athletic Very Low HR:
     Rule-based: 1.0000
     ML Model: 0.0000
@@ -67,8 +67,8 @@ Accuracy by Case Type:
     Hybrid: 1.0000
   Tachycardia:
     Rule-based: 1.0000
-    ML Model: 0.0000
-    Hybrid: 0.0000
+    ML Model: 1.0000
+    Hybrid: 1.0000
 
 Accuracy by Health Condition:
   anxiety:
@@ -77,12 +77,12 @@ Accuracy by Health Condition:
     Hybrid: 0.6667
   asthma:
     Rule-based: 1.0000
-    ML Model: 0.6667
-    Hybrid: 0.6667
+    ML Model: 1.0000
+    Hybrid: 1.0000
   athlete:
     Rule-based: 1.0000
-    ML Model: 0.0000
-    Hybrid: 0.0000
+    ML Model: 0.3333
+    Hybrid: 0.3333
   copd:
     Rule-based: 1.0000
     ML Model: 1.0000
@@ -93,8 +93,8 @@ Accuracy by Health Condition:
     Hybrid: 1.0000
   heart_disease:
     Rule-based: 1.0000
-    ML Model: 0.6667
-    Hybrid: 0.6667
+    ML Model: 1.0000
+    Hybrid: 1.0000
   sleep_apnea:
     Rule-based: 1.0000
     ML Model: 1.0000

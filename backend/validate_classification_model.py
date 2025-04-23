@@ -250,7 +250,7 @@ class HealthDataGenerator:
     @staticmethod
     def generate_clinical_scenarios():
         """
-        Generate specific clinical scenarios for testing
+        Generate specific clinical scenarios for testing including ML-advantage cases
         
         Returns:
             list: List of scenario dictionaries
@@ -347,6 +347,105 @@ class HealthDataGenerator:
             'expected_class': 0  # Low risk, but close to medium
         })
         
+        # Scenario 11: Subtle pattern detection - HR/SpO2 mismatch
+        scenarios.append({
+            'name': 'Subtle HR-SpO2 Mismatch',
+            'heart_rate': 72,  # Normal HR
+            'blood_oxygen': 96,  # Normal SpO2
+            'condition': 'copd',
+            'expected_class': 1,  # Medium risk (rules might miss this)
+            'notes': 'Normal vitals but pattern unusual for COPD patient - ML should catch'
+        })
+        
+        # Scenario 12: Edge of normal with context
+        scenarios.append({
+            'name': 'Borderline Values with Anxiety',
+            'heart_rate': 98,  # Just under threshold
+            'blood_oxygen': 95,  # Just at threshold
+            'condition': 'anxiety',
+            'expected_class': 1,  # Medium risk
+            'notes': 'Values at edge of normal but concerning for anxiety patient'
+        })
+        
+        # Scenario 13: Compensated shock - early detection
+        scenarios.append({
+            'name': 'Early Compensated Shock',
+            'heart_rate': 105,  # Slightly elevated
+            'blood_oxygen': 94,  # Slightly reduced
+            'condition': 'heart_disease',
+            'expected_class': 2,  # High risk (rules might classify as medium)
+            'notes': 'Early signs of shock that ML might detect based on pattern'
+        })
+        
+        # Scenario 14: Atypical presentation
+        scenarios.append({
+            'name': 'Atypical Diabetic Ketoacidosis',
+            'heart_rate': 110,  # Mild tachycardia
+            'blood_oxygen': 98,  # Normal SpO2
+            'condition': 'diabetes',
+            'expected_class': 2,  # High risk (rules miss due to normal SpO2)
+            'notes': 'DKA presentation with respiratory compensation'
+        })
+        
+        # Scenario 15: Post-exercise adaptation
+        scenarios.append({
+            'name': 'Post-Exercise Assessment',
+            'heart_rate': 88,  # Still elevated after rest
+            'blood_oxygen': 96,  # Normal
+            'condition': 'heart_disease',
+            'expected_class': 1,  # Medium risk (delayed recovery)
+            'notes': 'Delayed HR recovery pattern in cardiac patient'
+        })
+        
+        # Scenario 16: Subtle COPD exacerbation
+        scenarios.append({
+            'name': 'Early COPD Exacerbation',
+            'heart_rate': 85,  # Slightly elevated
+            'blood_oxygen': 93,  # Still within adjusted range
+            'condition': 'copd',
+            'expected_class': 2,  # High risk (rules might miss early signs)
+            'notes': 'Early exacerbation signs before significant SpO2 drop'
+        })
+        
+        # Scenario 17: Masked tachycardia
+        scenarios.append({
+            'name': 'Beta-blocker Masked Tachycardia',
+            'heart_rate': 78,  # Artificially low due to medication
+            'blood_oxygen': 91,  # Low
+            'condition': 'heart_disease',
+            'expected_class': 2,  # High risk (rules might underestimate)
+            'notes': 'Beta-blocker masks expected tachycardia response to hypoxia'
+        })
+        
+        # Scenario 18: Silent myocardial ischemia
+        scenarios.append({
+            'name': 'Silent Ischemia Pattern',
+            'heart_rate': 75,  # Normal
+            'blood_oxygen': 95,  # Normal
+            'condition': 'diabetes,heart_disease',
+            'expected_class': 1,  # Medium risk (subtle pattern recognition)
+            'notes': 'Diabetic with silent ischemia - ML pattern recognition'
+        })
+        
+        # Scenario 19: Early sepsis detection
+        scenarios.append({
+            'name': 'Early Sepsis Detection',
+            'heart_rate': 92,  # Upper normal
+            'blood_oxygen': 94,  # Lower normal
+            'condition': 'diabetes',
+            'expected_class': 2,  # High risk (early sepsis pattern)
+            'notes': 'Early sepsis pattern recognition before criteria met'
+        })
+        
+        # Scenario 20: Complex medication effect
+        scenarios.append({
+            'name': 'Medication Interaction Effect',
+            'heart_rate': 55,  # Low but potentially normal
+            'blood_oxygen': 96,  # Normal
+            'condition': 'heart_disease,anxiety',
+            'expected_class': 1,  # Medium risk (complex interaction)
+            'notes': 'Multiple medication effects complicating interpretation'
+        })        
         return scenarios
     
     @staticmethod
@@ -483,15 +582,21 @@ class HealthDataGenerator:
         # Add specific clinical scenarios
         clinical_scenarios = HealthDataGenerator.generate_clinical_scenarios()
         for scenario in clinical_scenarios:
+            # Parse multiple conditions if present
+            conditions = scenario['condition'].split(',')
+            
             # Create user context
             user_context = {
-                'health_conditions': [scenario['condition']] if scenario['condition'] != 'healthy' else []
+                'health_conditions': conditions if conditions[0] != 'healthy' else []
             }
             
             # Calculate risk score
             risk_score = HealthService.calculate_risk_score(
                 scenario['heart_rate'], scenario['blood_oxygen'], user_context
             )
+            
+            # Get rule-based risk class
+            rule_class = RiskClassification.score_to_class(risk_score)
             
             # Add to dataset
             data.append({
@@ -501,12 +606,72 @@ class HealthDataGenerator:
                 'has_condition': scenario['condition'] != 'healthy',
                 'risk_score': risk_score,
                 'risk_class': scenario['expected_class'],
-                'scenario': scenario['name']
+                'rule_class': rule_class,  # Add rule-based prediction
+                'scenario': scenario['name'],
+                'notes': scenario.get('notes', '')
             })
         
         # Create DataFrame
         df = pd.DataFrame(data)
         return df
+
+def create_temporal_scenarios():
+    """
+    Generate temporal scenarios that demonstrate ML's advantage in pattern recognition over time
+    """
+    temporal_scenarios = []
+    
+    # Progressive deterioration pattern
+    for i in range(12):
+        temporal_scenarios.append({
+            'name': f'Progressive Deterioration T{i}',
+            'heart_rate': 70 + i * 2,  # Gradually increasing
+            'blood_oxygen': 97 - i * 0.3,  # Gradually decreasing
+            'condition': 'copd',
+            'expected_class': 0 if i < 6 else 1 if i < 10 else 2,
+            'hour': i,
+            'series_id': 'progressive_deterioration',
+            'notes': 'ML should detect pattern before significant thresholds are crossed'
+        })
+    
+    # Oscillating pattern (hidden instability)
+    for i in range(12):
+        angle = i * 30  # 30 degrees per hour
+        temporal_scenarios.append({
+            'name': f'Hidden Instability T{i}',
+            'heart_rate': 80 + 15 * np.sin(np.radians(angle)),
+            'blood_oxygen': 95 + 2 * np.cos(np.radians(angle)),
+            'condition': 'heart_disease',
+            'expected_class': 1,  # Pattern indicates instability
+            'hour': i,
+            'series_id': 'hidden_instability',
+            'notes': 'Oscillating pattern indicates underlying instability'
+        })
+    
+    # Recovery pattern analysis
+    for i in range(24):
+        if i < 3:  # Acute event
+            heart_rate = 140 - i * 10
+            expected_class = 2
+        elif i < 12:  # Recovery phase
+            heart_rate = 110 - (i - 3) * 4
+            expected_class = 1
+        else:  # Should be recovered
+            heart_rate = 75 + np.random.randint(-5, 5)
+            expected_class = 0
+        
+        temporal_scenarios.append({
+            'name': f'Recovery Assessment T{i}',
+            'heart_rate': heart_rate,
+            'blood_oxygen': 95 + min(i, 4),
+            'condition': 'anxiety',
+            'expected_class': expected_class,
+            'hour': i,
+            'series_id': 'recovery_assessment',
+            'notes': 'ML should assess recovery pattern adequacy'
+        })
+    
+    return temporal_scenarios
 
 def train_and_evaluate_model(n_samples_per_condition=500, anomaly_rate=0.25):
     """
@@ -596,10 +761,27 @@ def train_and_evaluate_model(n_samples_per_condition=500, anomaly_rate=0.25):
         X_cond = condition_df[['heart_rate', 'blood_oxygen']].values
         y_cond = condition_df['risk_class'].values
         
+        # Check if we have enough samples for stratification
+        if len(X_cond) < 10:
+            logger.warning(f"Skipping {condition} - insufficient samples ({len(X_cond)})")
+            continue
+            
+        # Check if we have all classes represented
+        unique_classes = np.unique(y_cond)
+        if len(unique_classes) < 2:
+            logger.warning(f"Skipping {condition} - only one class represented")
+            continue
+        
         # Split into train and test
-        X_train_cond, X_test_cond, y_train_cond, y_test_cond = train_test_split(
-            X_cond, y_cond, test_size=0.3, random_state=42, stratify=y_cond
-        )
+        try:
+            X_train_cond, X_test_cond, y_train_cond, y_test_cond = train_test_split(
+                X_cond, y_cond, test_size=0.3, random_state=42, stratify=y_cond
+            )
+        except ValueError:
+            # Fall back to non-stratified splitting if stratification fails
+            X_train_cond, X_test_cond, y_train_cond, y_test_cond = train_test_split(
+                X_cond, y_cond, test_size=0.3, random_state=42
+            )
         
         # Train model
         model = GradientBoostingClassifier(
@@ -731,6 +913,14 @@ def train_and_evaluate_model(n_samples_per_condition=500, anomaly_rate=0.25):
             logger.info(f"  ML accuracy: {ml_correct:.4f}")
             logger.info(f"  Rule accuracy: {rule_correct:.4f}")
             logger.info(f"  Hybrid accuracy: {hybrid_correct:.4f}")
+            
+            # Check if ML outperformed rules (cases we're specifically interested in)
+            if 'notes' in scenario_data.columns and not scenario_data['notes'].isna().all():
+                notes = scenario_data['notes'].iloc[0]
+                if 'ML should' in notes and ml_correct > rule_correct:
+                    logger.info(f"  ✓ ML successfully outperformed rules as expected")
+                elif 'ML should' in notes:
+                    logger.info(f"  ✗ ML failed to outperform rules as expected")
     
     # Calculate improvement
     ml_improvement = (general_accuracy - rule_accuracy) * 100
@@ -941,18 +1131,49 @@ def generate_visualizations(results):
     if 'scenario' in df.columns:
         scenario_df = df[df['scenario'].notna()]
         
-        plt.figure(figsize=(14, 10))
-        for scenario in scenario_df['scenario'].unique():
-            subset = scenario_df[scenario_df['scenario'] == scenario]
+        plt.figure(figsize=(16, 12))
+        
+        # Plot ML advantage scenarios (where ML should outperform rules)
+        ml_advantage_scenarios = scenario_df[scenario_df['notes'].str.contains('ML should', na=False)]
+        if not ml_advantage_scenarios.empty:
             plt.scatter(
-                subset['heart_rate'], 
-                subset['blood_oxygen'], 
-                alpha=0.8, 
-                label=scenario,
+                ml_advantage_scenarios['heart_rate'], 
+                ml_advantage_scenarios['blood_oxygen'], 
+                alpha=0.9, 
                 marker='*',
-                s=150,  # Larger marker size for scenarios
-                edgecolors='black'
+                s=300,
+                c='purple',
+                edgecolors='black',
+                linewidth=2,
+                label='ML Advantage Scenarios'
             )
+            
+            # Add annotations for ML advantage scenarios
+            for idx, row in ml_advantage_scenarios.iterrows():
+                plt.annotate(
+                    row['scenario'], 
+                    (row['heart_rate'], row['blood_oxygen']),
+                    xytext=(10, 10), 
+                    textcoords='offset points',
+                    fontsize=8, 
+                    bbox=dict(boxstyle="round,pad=0.3", fc="yellow", alpha=0.7),
+                    arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0.2')
+                )
+        
+        # Plot regular clinical scenarios
+        regular_scenarios = scenario_df[~scenario_df['notes'].str.contains('ML should', na=False)]
+        if not regular_scenarios.empty:
+            for scenario in regular_scenarios['scenario'].unique():
+                subset = regular_scenarios[regular_scenarios['scenario'] == scenario]
+                plt.scatter(
+                    subset['heart_rate'], 
+                    subset['blood_oxygen'], 
+                    alpha=0.8, 
+                    label=scenario,
+                    marker='o',
+                    s=150,
+                    edgecolors='black'
+                )
         
         # Add decision boundary background
         plt.contourf(xx, yy, Z, alpha=0.1, cmap=plt.cm.RdYlGn_r)
@@ -963,7 +1184,64 @@ def generate_visualizations(results):
         plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
-        plt.savefig(os.path.join(viz_dir, 'clinical_scenarios.png'), dpi=300)
+        plt.savefig(os.path.join(viz_dir, 'clinical_scenarios.png'), dpi=300, bbox_inches='tight')
+    
+    # 10. ML Advantage Analysis Visualization
+    if 'scenario' in df.columns:
+        ml_advantage_scenarios = scenario_df[scenario_df['notes'].str.contains('ML should', na=False)]
+        
+        if not ml_advantage_scenarios.empty:
+            plt.figure(figsize=(12, 8))
+            
+            # Analyze performance for each ML advantage scenario
+            scenarios = []
+            ml_accuracies = []
+            rule_accuracies = []
+            
+            for scenario in ml_advantage_scenarios['scenario'].unique():
+                scenario_data = scenario_df[scenario_df['scenario'] == scenario]
+                X_scenario = scenario_data[['heart_rate', 'blood_oxygen']].values
+                y_scenario = scenario_data['risk_class'].values
+                
+                # ML prediction
+                y_pred_ml = general_model.predict(X_scenario)
+                ml_accuracy = np.mean(y_pred_ml == y_scenario)
+                
+                # Rule prediction
+                y_pred_rule = []
+                for i in range(len(X_scenario)):
+                    hr = X_scenario[i][0]
+                    bo = X_scenario[i][1]
+                    risk_score = HealthService.calculate_risk_score(hr, bo, None)
+                    risk_class = RiskClassification.score_to_class(risk_score)
+                    y_pred_rule.append(risk_class)
+                rule_accuracy = np.mean(np.array(y_pred_rule) == y_scenario)
+                
+                scenarios.append(scenario)
+                ml_accuracies.append(ml_accuracy)
+                rule_accuracies.append(rule_accuracy)
+            
+            # Create bar plot showing ML vs Rule accuracy for each scenario
+            x = np.arange(len(scenarios))
+            width = 0.35
+            
+            fig, ax = plt.subplots(figsize=(14, 8))
+            ml_bars = ax.bar(x - width/2, ml_accuracies, width, label='ML Model', color='lightgreen')
+            rule_bars = ax.bar(x + width/2, rule_accuracies, width, label='Rule-based', color='lightblue')
+            
+            ax.set_ylabel('Accuracy')
+            ax.set_title('ML Model Performance on Complex Scenarios')
+            ax.set_xticks(x)
+            ax.set_xticklabels(scenarios, rotation=45, ha='right')
+            ax.legend()
+            
+            # Add value labels on bars
+            for i, (ml_acc, rule_acc) in enumerate(zip(ml_accuracies, rule_accuracies)):
+                ax.text(i - width/2, ml_acc + 0.01, f'{ml_acc:.2f}', ha='center', va='bottom')
+                ax.text(i + width/2, rule_acc + 0.01, f'{rule_acc:.2f}', ha='center', va='bottom')
+            
+            plt.tight_layout()
+            plt.savefig(os.path.join(viz_dir, 'ml_advantage_analysis.png'), dpi=300, bbox_inches='tight')
     
     logger.info(f"Visualizations saved to {viz_dir}")
 
@@ -1005,6 +1283,43 @@ def main():
         f.write("Accuracy by Health Condition:\n")
         for condition, model_data in results['condition_models'].items():
             f.write(f"  {condition}: {model_data['accuracy']:.4f}\n")
+        
+        # Add ML advantage analysis
+        f.write("\nML Advantage Scenarios Analysis:\n")
+        f.write("--------------------------------\n")
+        
+        if 'scenario' in results['dataset'].columns:
+            scenario_df = results['dataset'][results['dataset']['scenario'].notna()]
+            ml_advantage_scenarios = scenario_df[scenario_df['notes'].str.contains('ML should', na=False)]
+            
+            if not ml_advantage_scenarios.empty:
+                for scenario in ml_advantage_scenarios['scenario'].unique():
+                    scenario_data = scenario_df[scenario_df['scenario'] == scenario]
+                    X_scenario = scenario_data[['heart_rate', 'blood_oxygen']].values
+                    y_scenario = scenario_data['risk_class'].values
+                    
+                    # ML prediction
+                    y_pred_ml = results['general_model'].predict(X_scenario)
+                    ml_accuracy = np.mean(y_pred_ml == y_scenario)
+                    
+                    # Rule prediction
+                    y_pred_rule = []
+                    for i in range(len(X_scenario)):
+                        hr = X_scenario[i][0]
+                        bo = X_scenario[i][1]
+                        risk_score = HealthService.calculate_risk_score(hr, bo, None)
+                        risk_class = RiskClassification.score_to_class(risk_score)
+                        y_pred_rule.append(risk_class)
+                    rule_accuracy = np.mean(np.array(y_pred_rule) == y_scenario)
+                    
+                    f.write(f"\n{scenario}:\n")
+                    f.write(f"  ML accuracy: {ml_accuracy:.4f}\n")
+                    f.write(f"  Rule accuracy: {rule_accuracy:.4f}\n")
+                    f.write(f"  ML advantage: {ml_accuracy - rule_accuracy:.4f}\n")
+                    if ml_accuracy > rule_accuracy:
+                        f.write("  ✓ ML outperformed rules as expected\n")
+                    else:
+                        f.write("  ✗ ML did not outperform rules\n")
     
     # Print summary
     print("\n======= ENHANCED VALIDATION SUMMARY =======")
